@@ -46,24 +46,23 @@ type: "about"
 
 
 
-<!-- 修改后的欢迎区域 -->
-<div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
-  
-  <!-- 原有的GIF -->
-  <img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="右侧GIF" class="welcome-gif" />
-</div>
+<div style="text-align: center;">
 
-<!-- Twitter, Facebook, Gmail 放在欢迎区域下面 -->
-<div class="social-icons">
-  <a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
-    <i class="fab fa-twitter"></i>
-  </a>
-  <a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
-    <i class="fab fa-facebook"></i>
-  </a>
-  <a href="mailto:admin@ikun.x10.bz" class="email" title="发送邮件">
-    <i class="fas fa-envelope"></i>
-    
-  </a>
+  <div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
+  
+  <img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="欢迎GIF" class="welcome-gif" />
+
+  <div class="social-icons" style="margin-top: 15px;">
+    <a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a href="mailto:admin@ikun.x10.bz" class="email" title="发送邮件">
+      <i class="fas fa-envelope"></i>
+    </a>
+  </div>
+
 </div>
 
