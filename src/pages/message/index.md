@@ -15,7 +15,8 @@ type: "message"
 
 
 
-
+<!-- 引入 Font Awesome 图标库 -->   
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <div style="text-align: center; margin-top: 50px;">
 
   <div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
