@@ -197,7 +197,7 @@ type: "about"
   </a>
   <a href="mailto:admin@ikun.x10.bz" class="email" title="发送邮件">
     <i class="fas fa-envelope"></i>
-    <script defer src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN"></script>
+    
   </a>
 </div>
 
