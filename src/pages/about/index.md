@@ -44,26 +44,10 @@ type: "about"
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
-<!-- 新增的两个文字邮箱服务和一个图床（图标+文字） -->
-<div class="top-icons">
-  <a href="https://mail1.8888.vvvv.ee/" class="tempmail" target="_blank" title="临时邮箱1">
-    mail-1
-  </a>
-  <a href="https://mail.8888.vvvv.ee/" class="tempmail2" target="_blank" title="临时邮箱2">
-    mail-2
-  </a>
-  <a href="https://img.8888.vvvv.ee/" class="imgsite" target="_blank" title="图床网站">
-    <i class="fas fa-image"></i> 图床
-  </a>
-</div>
+
 
 <!-- 修改后的欢迎区域 -->
-<div class="welcome-container">
-  <!-- 左侧新添加的GIF -->
-  <img src="https://img.8888.vvvv.ee/file/图片/1750089446952.gif" alt="左侧GIF" class="welcome-gif" />
-  
-  <!-- 文本区域 -->
-  <div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
+<div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
   
   <!-- 原有的GIF -->
   <img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="右侧GIF" class="welcome-gif" />
