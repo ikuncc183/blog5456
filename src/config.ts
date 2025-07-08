@@ -12,7 +12,7 @@ export default {
   // 作者头像
   Avatar: 'https://img.8888.vvvv.ee/file/图片/1751855752412.jpg',
   // 网站座右铭
-  Motto: '莫闻天下无知己，天下谁人不识君',
+  Motto: '莫愁天下无知己，天下谁人不识君',
   // Cover 网站缩略图
   Cover: '/assets/images/banner/072c12ec85d2d3b5.webp',
   // 网站侧边栏公告 (不填写即不开启)
