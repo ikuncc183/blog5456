@@ -1,8 +1,8 @@
 export default {
   // 网站标题
-  Title: 'IKUN's blog',
+  Title: 'IKUN的博客',
   // 网站地址
-  Site: 'https://www.vvhan.com',
+  Site: 'https://blog.marvel.qzz.io',
   // 网站副标题
   Subtitle: '唱跳rap打篮球，我是ikun我最牛',
   // 网站描述
@@ -10,7 +10,7 @@ export default {
   // 网站作者
   Author: 'IKUN',
   // 作者头像
-  Avatar: 'https://q1.qlogo.cn/g?b=qq&nk=1655466387&s=640',
+  Avatar: 'https://img.8888.vvvv.ee/file/图片/1751855752412.jpg',
   // 网站座右铭
   Motto: '莫闻天下无知己，天下谁人不识君',
   // Cover 网站缩略图
