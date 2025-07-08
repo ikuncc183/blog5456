@@ -1,18 +1,18 @@
 export default {
   // 网站标题
-  Title: '韩小韩博客',
+  Title: 'IKUN's blog',
   // 网站地址
   Site: 'https://www.vvhan.com',
   // 网站副标题
-  Subtitle: '不曾与你分享的时间,我在进步.',
+  Subtitle: '唱跳rap打篮球，我是ikun我最牛',
   // 网站描述
-  Description: '韩小韩博客 专注于前开发与相关技术的实战分享，涵盖Vue框架、Node.js、Serverless等，并涉及Node、Python、Linux、Docker等领域。同时，博客也分享作者的生活、音乐和旅行的热爱。',
+  Description: 'IKUN博客 专注于前开发与相关技术的实战分享，涵盖Vue框架、Node.js、Serverless等，并涉及Node、Python、Linux、Docker等领域。同时，博客也分享作者的生活、音乐和旅行的热爱。',
   // 网站作者
-  Author: '.𝙃𝙖𝙣',
+  Author: 'IKUN',
   // 作者头像
   Avatar: 'https://q1.qlogo.cn/g?b=qq&nk=1655466387&s=640',
   // 网站座右铭
-  Motto: '运气是计划之外的东西.',
+  Motto: '莫闻天下无知己，天下谁人不识君',
   // Cover 网站缩略图
   Cover: '/assets/images/banner/072c12ec85d2d3b5.webp',
   // 网站侧边栏公告 (不填写即不开启)
@@ -23,7 +23,7 @@ export default {
     "I am making progress in the time I haven't shared with you.",
   ],
   // 网站创建时间
-  CreateTime: '2021-09-01',
+  CreateTime: '2025-07-01',
   // 顶部 Banner 配置
   HomeBanner: {
     enable: true,
@@ -58,7 +58,6 @@ export default {
     { text: '昔日', link: '/archives', icon: 'Nav_archives' },
     { text: '留言', link: '/message', icon: 'Nav_message' },
     { text: '关于', link: '/about', icon: 'Nav_about' },
-    { text: 'API', link: 'https://api.vvhan.com/', target: true, icon: 'Nav_link' },
   ],
   // 侧边栏个人网站
   WebSites: [
@@ -114,13 +113,6 @@ export default {
     asideAD_Slot: `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-xxxxxx" data-ad-slot="xxxxxx" data-ad-format="auto" data-full-width-responsive="true"></ins>`,
     // 文章页广告(不填不开启)
     articleAD_Slot: `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-xxxxxx" data-ad-slot="xxxxxx" data-ad-format="auto" data-full-width-responsive="true"></ins>`
-  },
-  // 文章内赞赏码
-  Reward: {
-    // 支付宝收款码
-    AliPay: '/assets/images/alipay.webp',
-    // 微信收款码
-    WeChat: '/assets/images/wechat.webp'
   },
   // 访问网页 自动推送到搜索引擎
   SeoPush: {
