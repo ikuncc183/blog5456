@@ -33,7 +33,7 @@ export default {
     // 其他页面高度
     PageHeight: '28.88rem',
     // 背景
-    background: "url('/assets/images/www.alltoall.net_7月9日_-2-_AfBnkwHvTR.gif') no-repeat center 60%/cover",
+    background: "url('/assets/images/www.alltoall.net_7月9日_4Z1MKq6eXI.gif') no-repeat center 60%/cover",
   },
   // 博客主题配置
   Theme: {
