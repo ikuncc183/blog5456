@@ -16,7 +16,7 @@ export default {
   // Cover 网站缩略图
   Cover: '/assets/images/banner/xhj29.gif',
   // 网站侧边栏公告 (不填写即不开启)
-  Tips: '<p>欢迎光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p>',
+  Tips: '<p>欢迎光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p><p>https://img.8888.vvvv.ee/file/1750054970210_picture_1749826520581.gif</p>',
   // 首页打字机文案列表
   TypeWriteList: [
     '不曾与你分享的时间,我在进步.',
