@@ -33,7 +33,7 @@ export default {
     // 其他页面高度
     PageHeight: '28.88rem',
     // 背景
-    background: "url('/assets/images/雪花飞舞_爱给网_aigei_com.gif') no-repeat center 60%/cover",
+    background: "url('/assets/images/bbad4c945b480d3b24302642f341a87e.mp4') no-repeat center 60%/cover",
   },
   // 博客主题配置
   Theme: {
