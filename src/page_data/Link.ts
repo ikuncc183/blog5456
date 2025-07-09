@@ -14,16 +14,16 @@ export default {
       "link": "https://api.vvhan.com",
       "avatar": "https://api.vvhan.com/static/images/logo.webp",
       "descr": "免费Web API数据接口调用服务平台."
-    }
+    },
     {
       "name": "清羽飞扬",
-      "link": "https://blog.liushen.fun/",
+      "link": "https://blog.liushen.fun",
       "avatar": "https://blog.liushen.fun/info/avatar.ico",
       "descr": "柳影曳曳，清酒孤灯，扬笔撒墨，心境如霜"
-    }
+    },
     {
       "name": "Diggoo博客",
-      "link": "https://blog.diggoo.xyz/",
+      "link": "https://blog.diggoo.xyz",
       "avatar": "https://img.8888.vvvv.ee/file/图片/1751857961529.png",
       "descr": "Diggoo博客"
     }
