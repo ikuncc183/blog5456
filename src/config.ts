@@ -17,7 +17,7 @@ export default {
   Cover: '/assets/images/banner/xhj29.gif',
   // 网站侧边栏公告 (不填写即不开启)
   // 网站侧边栏公告 (不填写即不开启)
-  Tips: '<p>欢迎光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p><img src="https://img.8888.vvvv.ee/file/图片/1752036063552.gif" alt="蔡徐坤 打篮球GIF 动图 表情包_爱给网_aigei_com.gif" width=100% />',
+  Tips: '<p>欢迎光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p><img src="https://img.8888.vvvv.ee/file/图片/1752036848067.webp" alt="thread_256675037668821_20190410200954_s_2504699_w_480_h_270_8998.webp" width=100% />',
   // 首页打字机文案列表
   TypeWriteList: [
     '不曾与你分享的时间,我在进步.',
