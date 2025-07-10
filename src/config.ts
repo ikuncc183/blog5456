@@ -95,13 +95,13 @@ export default {
   Comment: {
     // Twikoo 评论
     Twikoo: {
-      enable: true,
+      enable: false,
       envId: ''
     },
     // Waline 评论
     Waline: {
       enable: true,
-      serverURL: ''
+      serverURL: 'https://ikun-nine.vercel.app'
     }
   },
   // Han Analytics 统计（https://github.com/uxiaohan/HanAnalytics）
