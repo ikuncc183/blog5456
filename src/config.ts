@@ -29,9 +29,9 @@ export default {
   HomeBanner: {
     enable: true,
     // 首页高度
-    HomeHeight: '48.88rem',
+    HomeHeight: '50rem',
     // 其他页面高度
-    PageHeight: '48.88rem',
+    PageHeight: '50rem',
     // 背景
     background: "url('/assets/images/www.alltoall.net_7月9日_4Z1MKq6eXI.gif') no-repeat center 60%/cover",
   },
