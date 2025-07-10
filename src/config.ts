@@ -101,7 +101,7 @@ export default {
     // Waline 评论
     Waline: {
       enable: true,
-      serverURL: 'https://ikun-nine.vercel.app'
+      serverURL: 'https://comment.alina123.ggff.net'
     }
   },
   // Han Analytics 统计（https://github.com/uxiaohan/HanAnalytics）
