@@ -9,25 +9,172 @@ import "./Footer.less";
 	        <script defer src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
 <!-- 引入 Font Awesome 图标库 -->   
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<div style="text-align: center; margin-top: 50px;">
 
+<style>
+  body {
+    background-image: url('https://img.8888.vvvv.ee/file/图片/1750139410480.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+  }
+
+  .welcome-container {
+    display: flex; /* 改为Flex布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    margin-top: 10px;
+  }
+
+  .welcome-gif {
+    width: 200px;
+    height: 40px;
+    object-fit: contain;
+    margin: 8px;
+  }
+
+  .welcome-text {
+    font-size: 16px;
+    color: #007bff;
+    margin: 0 10px;
+  }
+
+  /* 新增三个图标/文字按钮的样式 */
+  .top-icons {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .top-icons a {
+    margin: 0 12px;
+    color: #444;
+    font-size: 16px;        /* 字体大小适中 */
+    text-decoration: none;
+    transition: transform 0.3s, color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;            /* 宽度变大，适合文字 */
+    height: 40px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .top-icons a:hover {
+    transform: scale(1.1);
+  }
+
+  /* 文字链接颜色区分 */
+  .top-icons a.tempmail {
+    color: #ff6600;
+    border-color: #ff6600;
+  }
+
+  .top-icons a.tempmail:hover {
+    color: white;
+    background-color: #ff6600;
+  }
+
+  .top-icons a.tempmail2 {
+    color: #3399ff;
+    border-color: #3399ff;
+  }
+
+  .top-icons a.tempmail2:hover {
+    color: white;
+    background-color: #3399ff;
+  }
+
+  /* 图床图标+文字 */
+  .top-icons a.imgsite {
+    color: #6f42c1;
+    border-color: #6f42c1;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .top-icons a.imgsite:hover {
+    color: white;
+    background-color: #6f42c1;
+  }
+
+  .top-icons a.imgsite i {
+    margin-right: 6px;
+  }
+
+  /* 原有社交图标样式 */
+  .social-icons {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .social-icons a {
+    margin: 0 12px;
+    color: #444;
+    font-size: 28px;
+    text-decoration: none;
+    transition: transform 0.3s, color 0.3s;
+  }
+
+  .social-icons a:hover {
+    transform: scale(1.2);
+  }
+
+  .social-icons a.twitter:hover {
+    color: #1da1f2;
+  }
+
+  .social-icons a.facebook:hover {
+    color: #3b5998;
+  }
+
+  .social-icons a.email:hover {
+    color: #d44638;
+  }
+</style>
+
+<!-- 新增的两个文字邮箱服务和一个图床（图标+文字） -->
+<div class="top-icons">
+  <a href="https://mail1.8888.vvvv.ee/" class="tempmail" target="_blank" title="临时邮箱1">
+    mail-1
+  </a>
+  <a href="https://mail.8888.vvvv.ee/" class="tempmail2" target="_blank" title="临时邮箱2">
+    mail-2
+  </a>
+  <a href="https://img.8888.vvvv.ee/" class="imgsite" target="_blank" title="图床网站">
+    <i class="fas fa-image"></i> 图床
+  </a>
+</div>
+
+<!-- 修改后的欢迎区域 -->
+<div class="welcome-container">
+  <!-- 左侧新添加的GIF -->
+  <img src="https://img.8888.vvvv.ee/file/图片/1750089446952.gif" alt="左侧GIF" class="welcome-gif" />
+  
+  <!-- 文本区域 -->
   <div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
   
-  <img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="欢迎GIF" class="welcome-gif" style="margin-top: 15px; margin-bottom: 25px;" />
-
-  <div class="social-icons">
-    <a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter" style="font-size: 1.8em; margin: 0 15px;">
-      <i class="fab fa-twitter"></i>
-    </a>
-    <a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook" style="font-size: 1.8em; margin: 0 15px;">
-      <i class="fab fa-facebook"></i>
-    </a>
-    <a href="mailto:admin@ikun.x10.bz" class="email" title="发送邮件" style="font-size: 1.8em; margin: 0 15px;">
-      <i class="fas fa-envelope"></i>
-    </a>
-  </div>
-
+  <!-- 原有的GIF -->
+  <img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="右侧GIF" class="welcome-gif" />
 </div>
+
+<!-- Twitter, Facebook, Gmail 放在欢迎区域下面 -->
+<div class="social-icons">
+  <a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
+    <i class="fab fa-twitter"></i>
+  </a>
+  <a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
+    <i class="fab fa-facebook"></i>
+  </a>
+  <a href="mailto:admin@ikun.x10.bz" class="email" title="发送邮件">
+    <i class="fas fa-envelope"></i>
+    <script defer src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN"></script>
+  </a>
+</div>
+
+
 
         </main>
 </footer>
