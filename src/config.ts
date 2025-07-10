@@ -65,7 +65,7 @@ export default {
     // 建议使用 https://tabler.io/icons 直接下载 SVG
     { text: 'Github', link: 'https://github.com/gdydg', icon: 'WebSite_github' },
     { text: '韩小韩API', link: 'https://api.vvhan.com', icon: 'WebSite_api' },
-    { text: '每日热榜', link: 'https://a.8888.vvvv.ee/', icon: 'WebSite_hot' },
+    { text: '每日热榜', link: 'https://new.idrive.qzz.io/', icon: 'WebSite_hot' },
     { text: 'ikun图床', link: 'https://img.8888.vvvv.ee/', icon: 'WebSite_img' },
     { text: 'HanAnalytics', link: 'https://analytic.idrive.qzz.io', icon: 'WebSite_analytics' },
   ],
