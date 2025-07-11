@@ -38,6 +38,18 @@ export default {
       "link": "https://linexic.top",
       "avatar": "https://linexic.top/avatar.webp",
       "descr": "难离难舍，想抱紧些"
+    },
+    {
+      "name": "無名小栈",
+      "link": "https://blog.imsyy.top",
+      "avatar": "https://pic.imgdb.cn/item/65bc52b0871b83018a06699d.png",
+      "descr": "分享技术与科技生活"
+    },
+    {
+      "name": "無名小栈",
+      "link": "https://blog.imsyy.top",
+      "avatar": "https://pic.imgdb.cn/item/65bc52b0871b83018a06699d.png",
+      "descr": "分享技术与科技生活"
     }
   ]
 }
