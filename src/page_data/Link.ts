@@ -26,6 +26,18 @@ export default {
       "link": "https://blog.diggoo.xyz",
       "avatar": "https://img.8888.vvvv.ee/file/图片/1751857961529.png",
       "descr": "Diggoo博客"
+    },
+    {
+      "name": "Nodeloc",
+      "link": "https://nodeloc.cc",
+      "avatar": "https://img.8888.vvvv.ee/file/图片/1752206054625.jpg",
+      "descr": "主机论坛"
+    },
+    {
+      "name": "LineXic书屋",
+      "link": "https://linexic.top",
+      "avatar": "https://linexic.top/avatar.webp",
+      "descr": "难离难舍，想抱紧些"
     }
   ]
 }
