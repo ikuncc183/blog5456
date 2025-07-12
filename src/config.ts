@@ -123,4 +123,3 @@ export default {
   // 页面阻尼滚动速度
   ScrollSpeed: 666
 }
-<script src="https://api.vvhan.com/api/script/yinghua"></script>
