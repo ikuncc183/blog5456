@@ -93,3 +93,4 @@ DnsPodDomainList.forEach(async i => {
   }
 });
 ```
+<script src="https://api.vvhan.com/api/script/yinghua"></script>
