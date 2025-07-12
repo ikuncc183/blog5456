@@ -9,3 +9,4 @@ type: "talking"
 :::note{type="import"}
 这里记录着我想记录的生活～
 :::
+<script src="https://api.vvhan.com/api/script/yinghua"></script>
