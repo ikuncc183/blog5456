@@ -18,3 +18,4 @@ link: https://blog.marvel.qzz.io/
 avatar: https://img.8888.vvvv.ee/file/图片/1751855752412.jpg
 desc: 唱跳rap打篮球
 ```
+<script src="https://api.vvhan.com/api/script/yinghua"></script>
