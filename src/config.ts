@@ -52,7 +52,7 @@ export default {
          <p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p>
          <img src="https://img.8888.vvvv.ee/file/图片/1752036848067.webp" alt="welcome image" width="100%" />
          <div id="visitor-info" style="margin-top: 1rem; padding: 15px; border: 1px solid #eee; border-radius: 8px; background-color: #f9f9f9; text-align: left; font-size: 14px; line-height: 1.6;">
-            <p>正在努力获取您的信息...</p>
+            <p>............</p>
          </div>`,
 
   // ... (后续所有其他配置保持不变) ...
