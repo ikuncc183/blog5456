@@ -15,9 +15,26 @@ export default {
   Motto: '莫愁天下无知己，天下谁人不识坤',
   // Cover 网站缩略图
   Cover: '/assets/images/banner/xhj29.gif',
+  
+  // ==================== 新增内容开始 ====================
+  /**
+   * 向页面的 <head> 标签中添加额外的元数据或脚本。
+   * 这是添加 sakura.js 脚本的推荐位置。
+   */
+  head: [
+    // [标签名, { 属性: 值 }]
+    ['script', { src: 'https://cdn.jsdelivr.net/gh/TaylorLottner/Fork/sakura.js' }]
+  ],
+  // ==================== 新增内容结束 ====================
+
   // 网站侧边栏公告 (不填写即不开启)
-  // 网站侧边栏公告 (不填写即不开启)
-  Tips: '<p>欢迎各位𝐼𝐾𝑈𝑁𝑆光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p><img src="https://img.8888.vvvv.ee/file/图片/1752036848067.webp" alt="thread_256675037668821_20190410200954_s_2504699_w_480_h_270_8998.webp" width=100% />',
+  // 我把你之前想加的另一个 div 也放到了这里，你可以按需修改
+  Tips: `<p>欢迎各位𝐼𝐾𝑈𝑁𝑆光临我的博客 🎉</p>
+         <p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p>
+         <img src="https://img.8888.vvvv.ee/file/图片/1752036848067.webp" alt="thread_256675037668821_20190410200954_s_2504699_w_480_h_270_8998.webp" width="100%" />
+         <div class="textwidget custom-html-widget" style="margin-top: 1rem;">
+           <img src="https://datealive.top/IP-master/index.php" />
+         </div>`,
   // 首页打字机文案列表
   TypeWriteList: [
     '不曾与你分享的时间,我在进步.',
@@ -51,8 +68,6 @@ export default {
   },
   // 导航栏 (新窗口打开 newWindow: true)
   Navs: [
-    // 仅支持 SVG 且 SVG 需放在 public/assets/images/svg/ 目录下，填入文件名即可 <不需要文件后缀名>（封装了 SVG 组件 为了极致压缩 SVG）
-    // 建议使用 https://tabler.io/icons 直接下载 SVG
     { text: '朋友', link: '/links', icon: 'Nav_friends' },
     { text: '动态', link: '/talking', icon: 'Nav_talking' },
     { text: '昔日', link: '/archives', icon: 'Nav_archives' },
@@ -61,8 +76,6 @@ export default {
   ],
   // 侧边栏个人网站
   WebSites: [
-    // 仅支持 SVG 且 SVG 需放在 public/assets/images/svg/ 目录下，填入文件名即可 <不需要文件后缀名>（封装了 SVG 组件 为了极致压缩 SVG）
-    // 建议使用 https://tabler.io/icons 直接下载 SVG
     { text: 'Github', link: 'https://github.com/gdydg', icon: 'WebSite_github' },
     { text: '韩小韩API', link: 'https://api.vvhan.com', icon: 'WebSite_api' },
     { text: '每日热榜', link: 'https://new.idrive.qzz.io/', icon: 'WebSite_hot' },
@@ -71,13 +84,9 @@ export default {
   ],
   // 侧边栏展示
   AsideShow: {
-    // 是否展示个人网站
     WebSitesShow: true,
-    // 是否展示分类
     CategoriesShow: true,
-    // 是否展示标签
     TagsShow: true,
-    // 是否展示推荐文章
     recommendArticleShow: true
   },
   // DNS预解析地址
@@ -93,25 +102,21 @@ export default {
   vhMusicApi: 'https://vh-api.4ce.cn/blog/meting',
   // 评论组件（只允许同时开启一个）
   Comment: {
-    // Twikoo 评论
     Twikoo: {
       enable: false,
       envId: ''
     },
-    // Waline 评论
     Waline: {
       enable: true,
       serverURL: 'https://comment.alina123.ggff.net'
     }
   },
-  // Han Analytics 统计（https://github.com/uxiaohan/HanAnalytics）
+  // Han Analytics 统计
   HanAnalytics: { enable: true, server: 'https://analytic.idrive.qzz.io', siteId: 'Hello-HanHexoBlog' },
   // Google 广告
   GoogleAds: {
     ad_Client: '', //ca-pub-xxxxxx
-    // 侧边栏广告(不填不开启)
     asideAD_Slot: `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-xxxxxx" data-ad-slot="xxxxxx" data-ad-format="auto" data-full-width-responsive="true"></ins>`,
-    // 文章页广告(不填不开启)
     articleAD_Slot: `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-xxxxxx" data-ad-slot="xxxxxx" data-ad-format="auto" data-full-width-responsive="true"></ins>`
   },
   // 访问网页 自动推送到搜索引擎
