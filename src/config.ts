@@ -14,7 +14,7 @@ export default {
   // 网站座右铭
   Motto: '莫愁天下无知己，天下谁人不识坤',
   // Cover 网站缩略图
-  Cover: '/assets/images/banner/icon.png',
+  Cover: '/assets/images/banner/icon.webp',
   // 网站侧边栏公告 (不填写即不开启)
   // 网站侧边栏公告 (不填写即不开启)
   Tips: '<p>欢迎各位𝐼𝐾𝑈𝑁𝑆光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p><img src="https://img.8888.vvvv.ee/file/图片/1752036848067.webp" alt="thread_256675037668821_20190410200954_s_2504699_w_480_h_270_8998.webp" width=100% />',
