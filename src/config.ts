@@ -24,7 +24,7 @@ export default {
    * 这能完美解决您遇到的页面切换时特效重叠的问题。
    */
   head: [
-    ['script', { src: 'https://cdn.jsdelivr.net/gh/TaylorLottner/Fork/sakura.js' }]
+    ['script', { src: 'https://api.vvhan.com/api/script/yinghua' }]
   ],
   
   // 网站侧边栏公告 (不填写即不开启)
