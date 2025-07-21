@@ -9,4 +9,4 @@ type: "message"
 :::note{type="info"}
 期待你的畅所欲言～
 :::
-<script src="https://api.vvhan.com/api/script/yinghua"></script>
+
