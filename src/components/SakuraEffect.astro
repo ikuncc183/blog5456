@@ -51,7 +51,7 @@
       constructor() {
         super();
         this.depth = Math.random(); // Depth determines size, speed, and opacity
-        this.size = (this.depth * 8) + 5; // Larger petals based on depth
+        this.size = ((this.depth * 8) + 5) * 7; // Larger petals based on depth, increased 7x
         this.x = Math.random() * canvas.width * 1.5 - (canvas.width * 0.25);
         this.y = Math.random() * -canvas.height;
         this.speedY = (this.depth * 0.8) + 0.7;
@@ -107,7 +107,7 @@
 
       constructor() {
         super();
-        this.size = Math.random() * 2 + 1;
+        this.size = (Math.random() * 2 + 1) * 7; // Increased size 7x
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * -canvas.height;
         this.speedY = Math.random() * 0.5 + 0.3; // Slower than petals
