@@ -57,33 +57,35 @@ import "./Layout.less";
 		<Footer />
 
 		<!-- ======================================================= -->
-		<!-- == 智能加载樱花特效脚本 (已修复重叠问题) == -->
+		<!-- == 樱花特效管理脚本 (彻底修复重叠问题) == -->
 		<!-- ======================================================= -->
 		<script is:inline>
-			// 定义一个函数来加载樱花特效
-			function loadSakuraEffect() {
-				// 检查 window 对象上是否已经有加载过的标记
-				// 如果有，说明已经加载过了，直接返回，不再执行后续代码
-				if (window.sakuraEffectLoaded) {
-					return;
+			function manageSakuraEffect() {
+				// 第一步：清理旧的特效
+				// 这个特效脚本很友好地提供了一个全局清理函数 window.StopSakura
+				// 如果这个函数存在，说明上一个页面的特效还在，我们就调用它来清理。
+				if (typeof window.StopSakura === 'function') {
+					window.StopSakura();
 				}
 
-				// 如果是第一次加载，就创建一个 script 元素
-				const script = document.createElement('script');
-				script.src = 'https://api.vvhan.com/api/script/yinghua';
-				// 将它添加到 body 的末尾，浏览器会自动加载并执行
-				document.body.appendChild(script);
+				// 为了绝对保险，我们再手动移除旧的脚本标签。
+				const oldScript = document.getElementById('sakura-effect-script');
+				if (oldScript) {
+					oldScript.remove();
+				}
 
-				// 最关键的一步：在 window 对象上设置一个标记，表示已经加载过了
-				window.sakuraEffectLoaded = true;
+				// 第二步：创建新的特效
+				// 创建一个新的 script 元素来加载樱花特效。
+				const newScript = document.createElement('script');
+				newScript.id = 'sakura-effect-script'; // 给它一个ID，方便下次清理时找到它
+				newScript.src = 'https://api.vvhan.com/api/script/yinghua';
+				document.body.appendChild(newScript);
 			}
 
-			// 首次进入页面时，立即执行一次加载函数
-			loadSakuraEffect();
-
-			// 监听 Astro 的页面加载事件
-			// 这个事件在每次通过客户端路由切换页面后都会触发
-			document.addEventListener('astro:page-load', loadSakuraEffect);
+			// 使用 Astro 的 'astro:page-load' 事件监听器。
+			// 这个事件在首次加载页面和每次客户端导航（点击链接跳转）后都会触发。
+			// 这是管理这类特效最理想的时机。
+			document.addEventListener('astro:page-load', manageSakuraEffect);
 		</script>
 
 		<script>
