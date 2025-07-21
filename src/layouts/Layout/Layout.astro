@@ -19,6 +19,10 @@ import Footer from "@/components/Footer/Footer.astro";
 import BackTop from "@/components/BackTop/BackTop.astro";
 // 导入手机端侧边栏 MobileSidebar 组件
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
+// =======================================================
+// == 1. 导入全新的、内置的樱花特效组件 ==
+// =======================================================
+import SakuraEffect from "@/components/SakuraEffect.astro";
 // 引入 Modern CSS Reset，用于重置浏览器默认样式
 import "@/styles/Reset.less";
 // 引入全局基础样式
@@ -57,41 +61,10 @@ import "./Layout.less";
 		<Footer />
 
 		<!-- ======================================================= -->
-		<!-- == 樱花特效管理脚本 (最终修复版) == -->
+		<!-- == 2. 在这里使用新的樱花特效组件 == -->
+		<!-- 它将作为网站的一部分持久存在，不会重叠或拖慢速度 -->
 		<!-- ======================================================= -->
-		<script is:inline>
-			// 定义核心的清理与重建函数
-			function manageSakuraEffect() {
-				// --- 第一步：强力清除旧特效 ---
-				// 1. 调用官方的停止函数 (如果存在)
-				if (typeof window.StopSakura === 'function') {
-					window.StopSakura();
-				}
-				// 2. 移除旧的脚本标签
-				const oldScript = document.getElementById('sakura-effect-script');
-				if (oldScript) {
-					oldScript.remove();
-				}
-				// 3. (最关键的一步) 移除所有由旧特效创建的 canvas 元素
-				document.querySelectorAll('body > canvas').forEach(canvas => {
-					canvas.remove();
-				});
-
-				// --- 第二步：创建新特效 ---
-				const newScript = document.createElement('script');
-				newScript.id = 'sakura-effect-script'; // 给它一个ID，方便下次清理时能找到它
-				newScript.src = 'https://api.vvhan.com/api/script/yinghua';
-				document.body.appendChild(newScript);
-			}
-
-			// --- 事件处理 ---
-			// 1. 首次进入页面时，直接运行一次
-			manageSakuraEffect();
-
-			// 2. 在每次客户端导航后，使用 'astro:after-swap' 事件来运行
-			// 这是在替换DOM后、渲染前，进行清理和重建的最佳时机
-			document.addEventListener('astro:after-swap', manageSakuraEffect);
-		</script>
+		<SakuraEffect />
 
 		<script>
 			// 导入并执行全局初始化脚本
