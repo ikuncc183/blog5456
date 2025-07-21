@@ -60,26 +60,22 @@ import "./Layout.less";
 		<!-- == 樱花特效管理脚本 (最终修复版) == -->
 		<!-- ======================================================= -->
 		<script is:inline>
+			// 定义核心的清理与重建函数
 			function manageSakuraEffect() {
 				// --- 第一步：强力清除旧特效 ---
-
 				// 1. 调用官方的停止函数 (如果存在)
 				if (typeof window.StopSakura === 'function') {
 					window.StopSakura();
 				}
-
 				// 2. 移除旧的脚本标签
 				const oldScript = document.getElementById('sakura-effect-script');
 				if (oldScript) {
 					oldScript.remove();
 				}
-
 				// 3. (最关键的一步) 移除所有由旧特效创建的 canvas 元素
-				// 这种特效通常会在 body 下直接创建一个 canvas 画布来绘制樱花
 				document.querySelectorAll('body > canvas').forEach(canvas => {
 					canvas.remove();
 				});
-
 
 				// --- 第二步：创建新特效 ---
 				const newScript = document.createElement('script');
@@ -88,10 +84,13 @@ import "./Layout.less";
 				document.body.appendChild(newScript);
 			}
 
-			// 仅使用 'astro:page-load' 事件监听器。
-			// Astro 保证这个事件在首次加载和后续每次页面切换后都会触发。
-			// 这是执行清理和重建任务的最可靠时机。
-			document.addEventListener('astro:page-load', manageSakuraEffect);
+			// --- 事件处理 ---
+			// 1. 首次进入页面时，直接运行一次
+			manageSakuraEffect();
+
+			// 2. 在每次客户端导航后，使用 'astro:after-swap' 事件来运行
+			// 这是在替换DOM后、渲染前，进行清理和重建的最佳时机
+			document.addEventListener('astro:after-swap', manageSakuraEffect);
 		</script>
 
 		<script>
