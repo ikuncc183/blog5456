@@ -57,34 +57,40 @@ import "./Layout.less";
 		<Footer />
 
 		<!-- ======================================================= -->
-		<!-- == 樱花特效管理脚本 (彻底修复重叠问题) == -->
+		<!-- == 樱花特效管理脚本 (最终修复版) == -->
 		<!-- ======================================================= -->
 		<script is:inline>
 			function manageSakuraEffect() {
-				// 第一步：清理旧的特效
-				// 这个特效脚本很友好地提供了一个全局清理函数 window.StopSakura
-				// 如果这个函数存在，说明上一个页面的特效还在，我们就调用它来清理。
+				// --- 第一步：强力清除旧特效 ---
+
+				// 1. 调用官方的停止函数 (如果存在)
 				if (typeof window.StopSakura === 'function') {
 					window.StopSakura();
 				}
 
-				// 为了绝对保险，我们再手动移除旧的脚本标签。
+				// 2. 移除旧的脚本标签
 				const oldScript = document.getElementById('sakura-effect-script');
 				if (oldScript) {
 					oldScript.remove();
 				}
 
-				// 第二步：创建新的特效
-				// 创建一个新的 script 元素来加载樱花特效。
+				// 3. (最关键的一步) 移除所有由旧特效创建的 canvas 元素
+				// 这种特效通常会在 body 下直接创建一个 canvas 画布来绘制樱花
+				document.querySelectorAll('body > canvas').forEach(canvas => {
+					canvas.remove();
+				});
+
+
+				// --- 第二步：创建新特效 ---
 				const newScript = document.createElement('script');
-				newScript.id = 'sakura-effect-script'; // 给它一个ID，方便下次清理时找到它
+				newScript.id = 'sakura-effect-script'; // 给它一个ID，方便下次清理时能找到它
 				newScript.src = 'https://api.vvhan.com/api/script/yinghua';
 				document.body.appendChild(newScript);
 			}
 
-			// 使用 Astro 的 'astro:page-load' 事件监听器。
-			// 这个事件在首次加载页面和每次客户端导航（点击链接跳转）后都会触发。
-			// 这是管理这类特效最理想的时机。
+			// 仅使用 'astro:page-load' 事件监听器。
+			// Astro 保证这个事件在首次加载和后续每次页面切换后都会触发。
+			// 这是执行清理和重建任务的最可靠时机。
 			document.addEventListener('astro:page-load', manageSakuraEffect);
 		</script>
 
