@@ -3,6 +3,7 @@
   - Features multiple, randomized petal shapes based on user reference.
   - Petal size has been adjusted to be 5x larger than the previous version.
   - Code has been refactored for shape variation.
+  - Removed circular shape and doubled the density.
 -->
 <canvas id="sakura-canvas"></canvas>
 
@@ -79,15 +80,8 @@
         ctx.quadraticCurveTo(scale * 2, 0, 0, 0);
         ctx.fill();
         ctx.closePath();
-      },
-      // Shape 6: A small, almost bud-like petal
-      (ctx, s) => {
-        ctx.beginPath();
-        const scale = s / 10;
-        ctx.arc(0, 0, scale, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
       }
+      // Shape 6 (circular) has been removed.
     ];
 
     class Petal {
@@ -149,8 +143,8 @@
     }
 
     function init() {
-      // Adjusted number of petals to account for much larger size
-      const numberOfPetals = Math.floor(window.innerWidth / 150);
+      // Doubled the density by dividing by a smaller number
+      const numberOfPetals = Math.floor(window.innerWidth / 75);
       for (let i = 0; i < numberOfPetals; i++) {
         petals.push(new Petal());
       }
