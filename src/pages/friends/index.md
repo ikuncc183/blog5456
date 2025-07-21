@@ -9,4 +9,4 @@ type: "friends"
 :::note{type="error"}
 如果你是我的邻居，但是没有在这里看到自己，可以立刻马上告诉我你的 RSS 订阅地址噢～
 :::
-<script src="https://api.vvhan.com/api/script/yinghua"></script>
+
