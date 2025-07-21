@@ -4,6 +4,8 @@
   - Petal size has been adjusted to be 5x larger than the previous version.
   - Code has been refactored for shape variation.
   - Removed circular shape and doubled the density.
+  - Trajectory is now a natural, random fall from the top of the screen.
+  - Density increased again by another factor of two.
 -->
 <canvas id="sakura-canvas"></canvas>
 
@@ -88,7 +90,6 @@
       x: number;
       y: number;
       size: number;
-      speedX: number;
       speedY: number;
       angle: number;
       spin: number;
@@ -101,27 +102,31 @@
         this.depth = Math.random();
         // Adjusted size to be 5x larger than the previous version
         this.size = ((this.depth * 8) + 5) * 7.5; 
-        this.x = Math.random() * canvas.width * 1.5 - (canvas.width * 0.25);
-        this.y = Math.random() * -canvas.height;
+        // Start from a random horizontal position
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * -canvas.height; // Start above the screen
         this.speedY = (this.depth * 0.8) + 0.7;
-        this.speedX = (this.depth * 0.6) + 0.5;
         this.angle = Math.random() * Math.PI * 2;
         this.spin = Math.random() < 0.5 ? -1 : 1;
-        this.sway = Math.random() * 0.8;
+        // Increased sway for more horizontal movement
+        this.sway = Math.random() * 1.5 + 0.5;
         this.color = `rgba(255, 192, 203, ${this.depth * 0.5 + 0.5})`;
         // Assign a random shape to each petal
         this.shapeId = Math.floor(Math.random() * petalShapes.length);
       }
 
       update() {
+        // Only vertical speed is fixed
         this.y += this.speedY;
-        this.x -= this.speedX;
+        // Horizontal movement is now a gentle, random sway
         this.x += Math.sin(this.angle) * this.sway;
         this.angle += 0.03 * this.spin;
 
-        if (this.y > canvas.height + this.size || this.x < -this.size) {
-          this.x = Math.random() * canvas.width * 1.5 - (canvas.width * 0.25);
-          this.y = -20;
+        // Reset petal if it goes off screen (bottom, left, or right)
+        if (this.y > canvas.height + this.size || this.x < -this.size || this.x > canvas.width + this.size) {
+          // Reset to a random position at the top
+          this.x = Math.random() * canvas.width;
+          this.y = -this.size; // Start just above the screen
         }
       }
 
@@ -143,8 +148,8 @@
     }
 
     function init() {
-      // Doubled the density by dividing by a smaller number
-      const numberOfPetals = Math.floor(window.innerWidth / 75);
+      // Density increased again by another factor of two.
+      const numberOfPetals = Math.floor(window.innerWidth / 38);
       for (let i = 0; i < numberOfPetals; i++) {
         petals.push(new Petal());
       }
