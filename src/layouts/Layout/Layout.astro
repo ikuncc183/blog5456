@@ -1,28 +1,29 @@
 ---
+// 从 Astro.props 获取页面元数据和配置
 const { title, keywords, description, pagecover, activeNav, Home } = Astro.props;
-// 网站配置
+// 导入网站全局配置
 import SITE_INFO from "@/config";
 const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
 const { ad_Client, asideAD_Slot, articleAD_Slot } = GoogleAds;
-// Head 依赖
+// 导入 Head 组件，用于管理 <head> 标签内容
 import Head from "@/components/Head/Head.astro";
-// 顶部 Header
+// 导入顶部导航栏 Header 组件
 import Header from "@/components/Header/Header.astro";
-// Main 区域 Header
+// 导入 Main 区域的 Header 组件
 import MainHeader from "@/components/MainHeader/MainHeader.astro";
-// Aside组件
+// 导入侧边栏 Aside 组件
 import Aside from "@/components/Aside/Aside.astro";
-// 底部 Footer
+// 导入底部 Footer 组件
 import Footer from "@/components/Footer/Footer.astro";
-// 返回顶部
+// 导入返回顶部 BackTop 组件
 import BackTop from "@/components/BackTop/BackTop.astro";
-// 手机端侧边栏
+// 导入手机端侧边栏 MobileSidebar 组件
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
-// A Modern CSS Reset
+// 引入 Modern CSS Reset，用于重置浏览器默认样式
 import "@/styles/Reset.less";
-// 全局基础样式
+// 引入全局基础样式
 import "@/styles/Base.less";
-// Layout 样式
+// 引入 Layout 自身的样式
 import "./Layout.less";
 ---
 
@@ -30,9 +31,9 @@ import "./Layout.less";
 	<Head Title={title} Keywords={keywords} Description={description} PageCover={pagecover}>
 		<!-- 谷歌广告JS加载项 -->
 		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
-		<!-- 彩旗🎈 -->
+		<!-- 彩旗🎈特效脚本 -->
 		<script is:inline src="/assets/js/vhCaiqi.js" defer></script>
-		<!-- 设置主题颜色 -->
+		<!-- 内联样式，用于动态设置主题颜色和Banner高度 -->
 		<Fragment
 			set:html={`<style>:root {${Object.entries(Theme)
 				.map(([key, value]) => `${key}:${value};`)
@@ -46,6 +47,7 @@ import "./Layout.less";
 			{HomeBanner.enable && <MainHeader />}
 			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
 				<section class="main-inner-content">
+					<!-- 主要页面内容将通过 slot 插入到这里 -->
 					<slot />
 				</section>
 				<Aside />
@@ -53,11 +55,17 @@ import "./Layout.less";
 			<BackTop />
 		</main>
 		<Footer />
+
+		<!-- ======================================================= -->
+		<!-- == 在这里添加了全局樱花飘落特效脚本 == -->
+		<!-- `defer` 属性确保脚本在HTML文档解析完毕后执行，不会阻塞页面渲染 -->
+		<script src="https://api.vvhan.com/api/script/yinghua" defer></script>
+		<!-- ======================================================= -->
+
 		<script>
+			// 导入并执行全局初始化脚本
 			import InitFn from "@/scripts/Init";
-			// 全局初始化
 			InitFn();
 		</script>
-                <script src="https://cdn.jsdelivr.net/gh/TaylorLottner/Fork/sakura.js"></script>
 	</body>
 </html>
