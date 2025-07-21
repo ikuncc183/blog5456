@@ -1,7 +1,7 @@
 <!-- 
   This is the final version of the SakuraEffect component.
   - Features multiple, randomized petal shapes based on user reference.
-  - Petal size has been adjusted to be 3x larger.
+  - Petal size has been adjusted to be 5x larger than the previous version.
   - Code has been refactored for shape variation.
 -->
 <canvas id="sakura-canvas"></canvas>
@@ -105,8 +105,8 @@
 
       constructor() {
         this.depth = Math.random();
-        // Adjusted size to be 3x larger
-        this.size = ((this.depth * 8) + 5) * 1.5; 
+        // Adjusted size to be 5x larger than the previous version
+        this.size = ((this.depth * 8) + 5) * 7.5; 
         this.x = Math.random() * canvas.width * 1.5 - (canvas.width * 0.25);
         this.y = Math.random() * -canvas.height;
         this.speedY = (this.depth * 0.8) + 0.7;
@@ -149,8 +149,8 @@
     }
 
     function init() {
-      // Adjusted number of petals to account for larger size
-      const numberOfPetals = Math.floor(window.innerWidth / 45);
+      // Adjusted number of petals to account for much larger size
+      const numberOfPetals = Math.floor(window.innerWidth / 150);
       for (let i = 0; i < numberOfPetals; i++) {
         petals.push(new Petal());
       }
