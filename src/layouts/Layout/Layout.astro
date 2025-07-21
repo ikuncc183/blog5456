@@ -57,10 +57,34 @@ import "./Layout.less";
 		<Footer />
 
 		<!-- ======================================================= -->
-		<!-- == 在这里添加了全局樱花飘落特效脚本 == -->
-		<!-- `defer` 属性确保脚本在HTML文档解析完毕后执行，不会阻塞页面渲染 -->
-		<script src="https://api.vvhan.com/api/script/yinghua" defer></script>
+		<!-- == 智能加载樱花特效脚本 (已修复重叠问题) == -->
 		<!-- ======================================================= -->
+		<script is:inline>
+			// 定义一个函数来加载樱花特效
+			function loadSakuraEffect() {
+				// 检查 window 对象上是否已经有加载过的标记
+				// 如果有，说明已经加载过了，直接返回，不再执行后续代码
+				if (window.sakuraEffectLoaded) {
+					return;
+				}
+
+				// 如果是第一次加载，就创建一个 script 元素
+				const script = document.createElement('script');
+				script.src = 'https://api.vvhan.com/api/script/yinghua';
+				// 将它添加到 body 的末尾，浏览器会自动加载并执行
+				document.body.appendChild(script);
+
+				// 最关键的一步：在 window 对象上设置一个标记，表示已经加载过了
+				window.sakuraEffectLoaded = true;
+			}
+
+			// 首次进入页面时，立即执行一次加载函数
+			loadSakuraEffect();
+
+			// 监听 Astro 的页面加载事件
+			// 这个事件在每次通过客户端路由切换页面后都会触发
+			document.addEventListener('astro:page-load', loadSakuraEffect);
+		</script>
 
 		<script>
 			// 导入并执行全局初始化脚本
