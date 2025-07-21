@@ -1,8 +1,8 @@
 <!-- 
-  This is a refined version of the SakuraEffect component.
-  - Petal shape is now more realistic and standard.
-  - Removed all background dust particles.
-  - Adjusted petal size to 4x the original scale.
+  This is the final version of the SakuraEffect component.
+  - Features multiple, randomized petal shapes based on user reference.
+  - Petal size has been adjusted to half of the original scale for a finer effect.
+  - Code has been refactored for shape variation.
 -->
 <canvas id="sakura-canvas"></canvas>
 
@@ -27,7 +27,69 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // The main cherry blossom petal class
+    // --- NEW: Array of functions to draw different petal shapes ---
+    const petalShapes = [
+      // Shape 1: Classic notched petal
+      (ctx, s) => {
+        ctx.beginPath();
+        const scale = s / 10;
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(scale, -scale*2, scale*2, -scale*2, scale*2, 0);
+        ctx.bezierCurveTo(scale*2, scale*2, scale, scale*2, 0, scale*4);
+        ctx.bezierCurveTo(-scale, scale*2, -scale*2, scale*2, -scale*2, 0);
+        ctx.bezierCurveTo(-scale*2, -scale*2, -scale, -scale*2, 0, 0);
+        ctx.fill();
+        ctx.closePath();
+      },
+      // Shape 2: Simple, slightly curved petal
+      (ctx, s) => {
+        ctx.beginPath();
+        const scale = s / 10;
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(scale * 2, scale * 2, scale * 4, 0);
+        ctx.quadraticCurveTo(scale * 2, -scale * 2, 0, 0);
+        ctx.fill();
+        ctx.closePath();
+      },
+      // Shape 3: Fuller, more rounded petal
+      (ctx, s) => {
+        ctx.beginPath();
+        const scale = s / 10;
+        ctx.arc(0, 0, scale * 2, 0, Math.PI);
+        ctx.quadraticCurveTo(-scale * 2, -scale * 2, 0, 0);
+        ctx.fill();
+        ctx.closePath();
+      },
+      // Shape 4: Long, thin, stretched petal
+      (ctx, s) => {
+        ctx.beginPath();
+        const scale = s / 10;
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(scale * 3, scale, scale * 3, -scale * 2, scale * 5, -scale * 3);
+        ctx.bezierCurveTo(scale * 2, -scale, 0, 0, 0, 0);
+        ctx.fill();
+        ctx.closePath();
+      },
+      // Shape 5: A slightly twisted petal
+      (ctx, s) => {
+        ctx.beginPath();
+        const scale = s / 10;
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(scale, -scale * 2, scale * 3, -scale * 2);
+        ctx.quadraticCurveTo(scale * 2, 0, 0, 0);
+        ctx.fill();
+        ctx.closePath();
+      },
+      // Shape 6: A small, almost bud-like petal
+      (ctx, s) => {
+        ctx.beginPath();
+        const scale = s / 10;
+        ctx.arc(0, 0, scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+      }
+    ];
+
     class Petal {
       x: number;
       y: number;
@@ -39,11 +101,12 @@
       sway: number;
       color: string;
       depth: number;
+      shapeId: number; // To store which shape this petal is
 
       constructor() {
-        this.depth = Math.random(); // Depth determines size, speed, and opacity
-        // Adjusted size to 4x the original base size
-        this.size = ((this.depth * 8) + 5) * 4; 
+        this.depth = Math.random();
+        // Adjusted size to half of the original base size
+        this.size = ((this.depth * 8) + 5) * 0.5; 
         this.x = Math.random() * canvas.width * 1.5 - (canvas.width * 0.25);
         this.y = Math.random() * -canvas.height;
         this.speedY = (this.depth * 0.8) + 0.7;
@@ -52,6 +115,8 @@
         this.spin = Math.random() < 0.5 ? -1 : 1;
         this.sway = Math.random() * 0.8;
         this.color = `rgba(255, 192, 203, ${this.depth * 0.5 + 0.5})`;
+        // Assign a random shape to each petal
+        this.shapeId = Math.floor(Math.random() * petalShapes.length);
       }
 
       update() {
@@ -72,28 +137,20 @@
         ctx.rotate(this.angle);
         
         ctx.shadowColor = 'rgba(255, 255, 255, 0.7)';
-        ctx.shadowBlur = 10;
-
-        ctx.beginPath();
-        // Use bezier curves to draw a more realistic petal shape with a notch
-        const s = this.size / 2; // scale factor
-        ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(s, -s, s * 2, -s, s * 2, 0);
-        ctx.bezierCurveTo(s * 2, s, s, s, 0, s * 2); // Bottom point
-        ctx.bezierCurveTo(-s, s, -s * 2, s, -s * 2, 0);
-        ctx.bezierCurveTo(-s * 2, -s, -s, -s, 0, 0);
+        ctx.shadowBlur = 5; // Reduced blur for smaller petals
 
         ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.closePath();
+        
+        // Call the specific shape drawing function
+        petalShapes[this.shapeId](ctx, this.size);
         
         ctx.restore();
       }
     }
 
     function init() {
-      // Adjusted number of particles since they are larger and there are no dust particles
-      const numberOfPetals = Math.floor(window.innerWidth / 50);
+      // Increased number of petals for a fuller effect with smaller sizes
+      const numberOfPetals = Math.floor(window.innerWidth / 15);
       for (let i = 0; i < numberOfPetals; i++) {
         petals.push(new Petal());
       }
