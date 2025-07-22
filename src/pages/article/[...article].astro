@@ -1,6 +1,6 @@
 ---
 import { getDescription, fmtTime } from "@/utils/index";
-import { type CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
 	const posts = await getCollection("blog");
@@ -16,8 +16,10 @@ const ARTICLE_COVER: string = await getCover(post.data.cover);
 import SITE_CONFIG from "@/config";
 const { Site, Title, Author, GoogleAds } = SITE_CONFIG;
 
-// 从 post.render() 获取 headings
-const { Content, headings, remarkPluginFrontmatter } = await post.render();
+// =======================================================
+// == 关键修复：使用导入的 render 函数并获取 headings ==
+// =======================================================
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
 
 // 处理文章描述和阅读时间等数据
 const description = getDescription(post.body);
@@ -40,8 +42,7 @@ import "@/styles/Article.less";
 import "@/styles/ArticleBase.less";
 ---
 
-{/* 将 headings 传递给 Layout 组件 */}
-<Layout title={post.data.title} keywords={post.data.tags} description={description} pagecover={ARTICLE_COVER} headings={headings}>
+<Layout title={post.data.title || Title} keywords={post.data.tags} description={description} pagecover={ARTICLE_COVER} headings={headings}>
 	<article class="vh-article-main vh-animation vh-animation-init">
 		<header>
 			<h1>{post.data.title}</h1>
