@@ -134,18 +134,18 @@ const hasHeadings = headings.length > 0;
 <!-- ======================================================= -->
 <script>
 	function handleTocVisibility() {
+		// 这个函数现在在 DOM 刚刚被替换后运行
 		const tocWrapper = document.getElementById('toc-aside-wrapper');
-		// The wrapper element should always exist now.
 		if (!tocWrapper) {
 			return;
 		}
 
 		const isArticlePage = window.location.pathname.startsWith('/article/');
 		
-		// Also check if the TableOfContents component actually rendered something inside.
+		// 检查目录组件是否真的渲染了内容
 		const hasContent = tocWrapper.querySelector('.toc-container');
 
-		// Only show the wrapper if it's an article page AND it has content.
+		// 只有当是文章页并且目录有内容时，才显示
 		if (isArticlePage && hasContent) {
 			tocWrapper.style.display = 'block';
 		} else {
@@ -153,8 +153,10 @@ const hasHeadings = headings.length > 0;
 		}
 	}
 
-	// Use 'astro:page-load' which is the ideal event for initializing scripts on a new page.
-	document.addEventListener('astro:page-load', handleTocVisibility);
-	// Also run it once on initial load for non-transition navigations.
-	handleTocVisibility();
+	// 关键修复：使用 'astro:after-swap' 事件
+	// 这个事件在页面切换后、其他脚本运行前触发，是操作 DOM 的最佳时机
+	document.addEventListener('astro:after-swap', handleTocVisibility);
+
+	// 同时，在首次加载时也运行一次，以应对非页面切换的访问
+	document.addEventListener('DOMContentLoaded', handleTocVisibility);
 </script>
