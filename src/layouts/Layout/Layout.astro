@@ -1,17 +1,18 @@
 ---
 // 从 Astro.props 获取页面元数据和配置
-const { title, keywords, description, pagecover, activeNav, Home } = Astro.props;
+// 新增了 headings prop，并给予一个默认空数组
+const { title, keywords, description, pagecover, activeNav, Home, headings = [] } = Astro.props;
 // 导入网站全局配置
 import SITE_INFO from "@/config";
 const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
 const { ad_Client, asideAD_Slot, articleAD_Slot } = GoogleAds;
-// 导入 Head 组件，用于管理 <head> 标签内容
+// 导入 Head 组件
 import Head from "@/components/Head/Head.astro";
-// 导入顶部导航栏 Header 组件
+// 导入 Header 组件
 import Header from "@/components/Header/Header.astro";
 // 导入 Main 区域的 Header 组件
 import MainHeader from "@/components/MainHeader/MainHeader.astro";
-// 导入侧边栏 Aside 组件
+// 导入右侧边栏 Aside 组件
 import Aside from "@/components/Aside/Aside.astro";
 // 导入底部 Footer 组件
 import Footer from "@/components/Footer/Footer.astro";
@@ -20,24 +21,27 @@ import BackTop from "@/components/BackTop/BackTop.astro";
 // 导入手机端侧边栏 MobileSidebar 组件
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
 // =======================================================
-// == 1. 导入全新的、内置的樱花特效组件 ==
+// == 新增：导入全新的文章目录组件 ==
 // =======================================================
+import TableOfContents from "@/components/TableOfContents.astro";
+// 导入樱花特效组件
 import SakuraEffect from "@/components/SakuraEffect.astro";
-// 引入 Modern CSS Reset，用于重置浏览器默认样式
+// 引入样式
 import "@/styles/Reset.less";
-// 引入全局基础样式
 import "@/styles/Base.less";
-// 引入 Layout 自身的样式
 import "./Layout.less";
+
+// 新增：判断当前页面是否为文章页
+const isArticlePage = headings && headings.length > 0;
 ---
 
 <html lang="zh-CN">
-	<Head Title={title} Keywords={keywords} Description={description} PageCover={pagecover}>
+	<Head {Title} {keywords} {description} PageCover={pagecover}>
 		<!-- 谷歌广告JS加载项 -->
 		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
 		<!-- 彩旗🎈特效脚本 -->
 		<script is:inline src="/assets/js/vhCaiqi.js" defer></script>
-		<!-- 内联样式，用于动态设置主题颜色和Banner高度 -->
+		<!-- 内联样式 -->
 		<Fragment
 			set:html={`<style>:root {${Object.entries(Theme)
 				.map(([key, value]) => `${key}:${value};`)
@@ -46,28 +50,34 @@ import "./Layout.less";
 	</Head>
 	<body>
 		<MobileSidebar />
-		<Header activeNav={activeNav} />
+		<Header {activeNav} />
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
-			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+			{/* ======================================================= */}
+			{/* == 修改：为 main-inner 添加一个 class 来控制布局 == */}
+			{/* ======================================================= */}
+			<section class:list={["main-inner", { "is-article": isArticlePage }]} style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+				
+                {/* 新增：左侧目录，只在文章页显示 */}
+                {isArticlePage && (
+                    <aside class="toc-sidebar">
+                        <TableOfContents headings={headings} />
+                    </aside>
+                )}
+
 				<section class="main-inner-content">
-					<!-- 主要页面内容将通过 slot 插入到这里 -->
 					<slot />
 				</section>
+
+                {/* 右侧边栏保持不变 */}
 				<Aside />
 			</section>
 			<BackTop />
 		</main>
 		<Footer />
-
-		<!-- ======================================================= -->
-		<!-- == 2. 在这里使用新的樱花特效组件 == -->
-		<!-- 它将作为网站的一部分持久存在，不会重叠或拖慢速度 -->
-		<!-- ======================================================= -->
 		<SakuraEffect />
 
 		<script>
-			// 导入并执行全局初始化脚本
 			import InitFn from "@/scripts/Init";
 			InitFn();
 		</script>
