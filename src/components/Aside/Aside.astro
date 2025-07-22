@@ -19,8 +19,9 @@ import TableOfContents from "@/components/TableOfContents.astro";
 import "./Aside.less";
 
 const { headings = [] } = Astro.props;
-// 我们只需要知道是否存在 headings 即可
-const hasHeadings = headings.length > 0;
+// 关键修复 1: 回归到最简单的服务器端判断逻辑
+const validHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 5);
+const hasToc = validHeadings.length > 0;
 ---
 
 <aside class="vh-aside">
@@ -113,14 +114,12 @@ const hasHeadings = headings.length > 0;
 			</section>
 		)}
 
-        {/* 目录模块：初始隐藏 */}
-        <section 
-            class="vh-aside-item toc-wrapper" 
-            id="toc-aside-wrapper" 
-            style="display: none;"
-        >
-            {hasHeadings && <TableOfContents headings={headings} />}
-        </section>
+        {/* 目录模块：仅在有标题时才会被渲染 */}
+        {hasToc && (
+            <section class="vh-aside-item toc-wrapper">
+                <TableOfContents headings={headings} />
+            </section>
+        )}
 
 		<!-- 谷歌广告块 -->
 		{GoogleAds.ad_Client && GoogleAds.asideAD_Slot && (
@@ -132,52 +131,4 @@ const hasHeadings = headings.length > 0;
 	</section>
 </aside>
 
-<script is:inline>
-    (function() {
-        // 统一处理目录可见性
-        function updateTocVisibility() {
-            const tocWrapper = document.getElementById('toc-aside-wrapper');
-            if (!tocWrapper) return;
-            
-            // 检查是否为文章页
-            const isArticlePage = window.location.pathname.startsWith('/article/');
-            
-            // 检查目录容器内是否有实际内容
-            const hasContent = tocWrapper.querySelector('.toc-container') !== null;
-            
-            // 显示条件：文章页且有目录内容
-            if (isArticlePage && hasContent) {
-                tocWrapper.style.display = 'block';
-            } else {
-                tocWrapper.style.display = 'none';
-            }
-        }
-
-        // 初始化事件监听
-        function initEvents() {
-            // Astro 页面事件
-            document.addEventListener('astro:after-swap', updateTocVisibility);
-            document.addEventListener('astro:page-load', updateTocVisibility);
-            
-            // 标准事件
-            document.addEventListener('DOMContentLoaded', updateTocVisibility);
-            window.addEventListener('load', updateTocVisibility);
-        }
-
-        // 立即执行一次
-        if (document.readyState === 'complete') {
-            updateTocVisibility();
-        } else {
-            initEvents();
-        }
-        
-        // 确保View Transitions API兼容
-        if (typeof document.startViewTransition === 'function') {
-            document.addEventListener('astro:page-load', () => {
-                document.startViewTransition(() => {
-                    updateTocVisibility();
-                });
-            });
-        }
-    })();
-</script>
+<!-- 关键修复 2: 移除所有客户端脚本 -->
