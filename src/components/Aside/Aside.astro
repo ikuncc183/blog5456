@@ -18,15 +18,8 @@ import TableOfContents from "@/components/TableOfContents.astro";
 
 import "./Aside.less";
 
+// 我们仍然需要从 props 接收 headings，因为只有文章页才知道具体的标题内容
 const { headings = [] } = Astro.props;
-
-// =======================================================
-// == 关键修复：添加 URL 路径判断，确保只在文章页显示目录 ==
-// =======================================================
-const isArticlePage = Astro.url.pathname.startsWith('/article/');
-const validHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 5);
-// 只有当是文章页，并且有有效标题时，才显示目录
-const hasToc = isArticlePage && validHeadings.length > 0;
 ---
 
 <aside class="vh-aside">
@@ -119,9 +112,9 @@ const hasToc = isArticlePage && validHeadings.length > 0;
 			</section>
 		)}
 
-        {/* 目录模块，现在位于推荐文章下方 */}
-        {hasToc && (
-            <section class="vh-aside-item toc-wrapper">
+        {/* 目录模块：仅当 headings 数组不为空时才渲染 */}
+        {headings.length > 0 && (
+            <section class="vh-aside-item toc-wrapper" id="toc-aside-wrapper">
                 <TableOfContents headings={headings} />
             </section>
         )}
@@ -135,3 +128,34 @@ const hasToc = isArticlePage && validHeadings.length > 0;
 		)}
 	</section>
 </aside>
+
+<!-- ======================================================= -->
+<!-- == 关键修复：添加客户端脚本来控制目录的显示/隐藏 == -->
+<!-- ======================================================= -->
+<script>
+	function updateTocVisibility() {
+		// 尝试获取目录的包装器元素
+		const tocWrapper = document.getElementById('toc-aside-wrapper');
+		
+		// 如果在当前页面上找不到这个元素，就直接退出
+		if (!tocWrapper) {
+			return;
+		}
+
+		// 在客户端检查当前的 URL
+		const isArticlePage = window.location.pathname.startsWith('/article/');
+
+		// 根据是否为文章页，来设置包装器的显示或隐藏
+		if (isArticlePage) {
+			tocWrapper.style.display = 'block'; // 或者 'flex', 'grid' 等，取决于你的布局
+		} else {
+			tocWrapper.style.display = 'none';
+		}
+	}
+
+	// 在页面首次加载时运行一次
+	updateTocVisibility();
+
+	// 在每次客户端导航（页面切换）后，都再次运行
+	document.addEventListener('astro:page-load', updateTocVisibility);
+</script>
