@@ -1,0 +1,76 @@
+---
+// src/components/TableOfContents.astro
+const { headings } = Astro.props;
+
+// 过滤掉一级标题(h1)，并只保留 h2, h3
+const filteredHeadings = headings.filter(h => h.depth > 1 && h.depth <= 3);
+
+// --- 新增逻辑：为标题生成层级编号 ---
+let h2Counter = 0;
+let h3Counter = 0;
+const numberedHeadings = filteredHeadings.map(heading => {
+    if (heading.depth === 2) {
+        h2Counter++;
+        h3Counter = 0; // 当遇到新的 h2 时，重置 h3 计数器
+        return { ...heading, number: `${h2Counter}.` };
+    } else if (heading.depth === 3) {
+        h3Counter++;
+        return { ...heading, number: `${h2Counter}.${h3Counter}` };
+    }
+    // 为其他层级（如果有）返回不带编号的对象
+    return { ...heading, number: '' };
+});
+
+// 引入组件专属的样式
+import "./TableOfContents.less";
+---
+
+<!-- 只在有有效标题时才渲染整个目录容器 -->
+{numberedHeadings.length > 0 && (
+    <div class="toc-container">
+        {/* 标题修改为“本页目录”，与参考网站一致 */}
+        <h3 class="toc-title">本页目录</h3>
+        {/* 使用 ul 替代 ol，因为我们现在手动生成编号 */}
+        <ul class="toc-list">
+            {numberedHeadings.map(heading => (
+                <li class={`toc-item depth-${heading.depth}`}>
+                    <a href={`#${heading.slug}`}>
+                        {/* 显示生成的编号 */}
+                        <span class="toc-number">{heading.number}</span>
+                        {/* 显示标题文本 */}
+                        <span class="toc-text">{heading.text}</span>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    </div>
+)}
+
+<script>
+    // 客户端脚本，用于实现滚动监听和高亮当前章节 (此部分无需修改)
+    document.addEventListener('DOMContentLoaded', () => {
+        const tocLinks = document.querySelectorAll('.toc-list a');
+        if (tocLinks.length === 0) return;
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocLink = document.querySelector(`.toc-list a[href="#${id}"]`);
+                
+                if (tocLink) {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.toc-list a').forEach(link => link.classList.remove('active'));
+                        tocLink.classList.add('active');
+                    }
+                }
+            });
+        }, { 
+            rootMargin: '0% 0% -80% 0%',
+            threshold: 1.0 
+        });
+
+        document.querySelectorAll('article h2[id], article h3[id]').forEach(heading => {
+            observer.observe(heading);
+        });
+    });
+</script>
