@@ -45,7 +45,7 @@ import "./Layout.less";
 					<slot />
 				</section>
                 {/* 关键：将 headings 传递给右侧边栏 */}
-				<Aside headings={headings} />
+				<Aside headings={headings} transition:key={Astro.url.pathname} />
 			</section>
 			<BackTop />
 		</main>
