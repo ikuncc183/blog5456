@@ -1,91 +1,109 @@
-/* src/components/TableOfContents.less */
+---
+// src/components/TocManager.astro
+// 这个组件是“目录”功能的大脑，它只包含客户端脚本，
+// 负责在每次页面切换后，动态地生成和管理目录。
+---
+<script>
+    // 函数：添加滚动监听，实现当前章节高亮
+    function addScrollListener() {
+        const tocLinks = document.querySelectorAll('#toc-placeholder .toc-list a');
+        if (tocLinks.length === 0) return;
 
-/* 建议在您的全局样式中定义这些CSS变量
-  :root {
-    --vh-main-color: #3b82f6; // 主题色，用于激活状态的竖线 (示例: blue-500)
-    --vh-text-color-1: #1f2937; // 主要文字颜色，用于标题和激活/悬浮状态 (示例: gray-800)
-    --vh-text-color-2: #6b7280; // 次要文字颜色，用于非激活的目录项 (示例: gray-500)
-  }
-*/
+        let currentActiveId = null;
+        const observer = new IntersectionObserver(entries => {
+            let topmostEntry = null;
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!topmostEntry || entry.boundingClientRect.top < topmostEntry.boundingClientRect.top) {
+                        topmostEntry = entry;
+                    }
+                }
+            });
 
-.toc-wrapper {
-  position: sticky;
-  top: 80px;
-}
+            if (topmostEntry) {
+                const id = topmostEntry.target.getAttribute('id');
+                if (id !== currentActiveId) {
+                    const oldActiveLink = document.querySelector(`#toc-placeholder .toc-list a.active`);
+                    if (oldActiveLink) {
+                        oldActiveLink.classList.remove('active');
+                    }
+                    
+                    const newActiveLink = document.querySelector(`#toc-placeholder .toc-list a[href="#${id}"]`);
+                    if (newActiveLink) {
+                        newActiveLink.classList.add('active');
+                        currentActiveId = id;
+                    }
+                }
+            }
+        }, { 
+            rootMargin: '-20% 0px -75% 0px', 
+            threshold: 0 
+        });
 
-.toc-title {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em; /* 字母间距 */
-  color: var(--vh-text-color-1, #1f2937);
-  margin: 0 0 1rem 0;
-  padding: 0;
-}
+        document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]').forEach(heading => {
+            observer.observe(heading);
+        });
+    }
 
-.toc-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-  max-height: calc(100vh - 180px);
-  overflow-y: auto;
-}
+    // 函数：根据扫描到的标题，构建目录的 HTML
+    function buildTocHtml(headings) {
+        const listItems = headings.map(heading => `
+            <li class="toc-item depth-${heading.depth}">
+                <a href="#${heading.slug}">
+                    <span class="toc-text">${heading.text}</span>
+                </a>
+            </li>
+        `).join('');
 
-.toc-item a {
-  display: block;
-  text-decoration: none;
-  padding: 4px 0; /* 调整垂直内边距 */
-  /* 使用 border-left 来实现激活状态的竖线，更简洁高效 */
-  border-left: 2px solid transparent;
-  transition: all 0.2s ease-in-out;
-}
+        // 关键修改：更新标题文本以匹配新设计
+        return `
+            <div class="toc-wrapper">
+                <h3 class="toc-title">ON THIS PAGE</h3>
+                <ul class="toc-list">${listItems}</ul>
+            </div>
+        `;
+    }
 
-.toc-text {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: color 0.2s ease-in-out;
-}
+    // 主函数：管理目录的显示与隐藏
+    function manageToc() {
+        const placeholder = document.getElementById('toc-placeholder');
+        if (!placeholder) return;
 
-/* --- 层级样式：缩进和字体粗细 --- */
-/* 默认 (h3 及以下) */
-.toc-item a {
-    padding-left: 1rem;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--vh-text-color-2, #6b7280);
-}
-/* h1 (在目录中通常为最高级) */
-.toc-item.depth-1 a {
-    font-weight: 500;
-}
-/* h2 */
-.toc-item.depth-2 a {
-    /* 保持默认样式 */
-}
-/* h3 */
-.toc-item.depth-3 a {
-    padding-left: 2rem;
-}
-/* h4 */
-.toc-item.depth-4 a {
-    padding-left: 3rem;
-}
-/* h5 */
-.toc-item.depth-5 a {
-    padding-left: 4rem;
-}
+        const isArticlePage = window.location.pathname.startsWith('/article/');
+        if (!isArticlePage) {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
+            return;
+        }
 
+        const headingElements = document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]');
+        
+        if (headingElements.length === 0) {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
+            return;
+        }
 
-/* --- 悬浮效果：仅改变文字颜色 --- */
-.toc-item a:hover {
-  color: var(--vh-text-color-1, #1f2937);
-}
+        const headings = Array.from(headingElements).map(el => ({
+            depth: parseInt(el.tagName.substring(1), 10),
+            // 修复：使用兼容性更好的语法替代可选链操作符
+            text: (el.textContent || '').trim(),
+            slug: el.id
+        }));
+        
+        const validHeadings = headings.filter(h => h.text && h.depth >= 1 && h.depth <= 5);
 
-/* --- 激活效果：改变文字颜色并显示左侧竖线 --- */
-.toc-item a.active {
-  color: var(--vh-text-color-1, #1f2937); /* 激活时文字变深色 */
-  font-weight: 500; /* 激活时字体加粗一点 */
-  border-left-color: var(--vh-main-color, #3b82f6); /* 显示蓝色的竖线 */
-}
+        if (validHeadings.length > 0) {
+            const tocHtml = buildTocHtml(validHeadings);
+            placeholder.innerHTML = tocHtml;
+            placeholder.style.display = 'block';
+            addScrollListener();
+        } else {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('astro:after-swap', manageToc);
+    document.addEventListener('DOMContentLoaded', manageToc);
+</script>
