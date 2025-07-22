@@ -1,0 +1,108 @@
+---
+// src/components/TocManager.astro
+// 这个组件是“目录”功能的大脑，它只包含客户端脚本，
+// 负责在每次页面切换后，动态地生成和管理目录。
+---
+<script>
+    // 函数：添加滚动监听，实现当前章节高亮
+    function addScrollListener() {
+        const tocLinks = document.querySelectorAll('#toc-placeholder .toc-list a');
+        if (tocLinks.length === 0) return;
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocLink = document.querySelector(`#toc-placeholder .toc-list a[href="#${id}"]`);
+                
+                if (tocLink) {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('#toc-placeholder .toc-list a').forEach(link => link.classList.remove('active'));
+                        tocLink.classList.add('active');
+                    }
+                }
+            });
+        }, { rootMargin: '0% 0% -80% 0%', threshold: 1.0 });
+
+        document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]').forEach(heading => {
+            observer.observe(heading);
+        });
+    }
+
+    // 函数：根据扫描到的标题，构建目录的 HTML
+    function buildTocHtml(headings) {
+        let counters = [0, 0, 0, 0, 0];
+        const numberedHeadings = headings.map(heading => {
+            const depthIndex = heading.depth - 1;
+            counters[depthIndex]++;
+            for (let i = depthIndex + 1; i < counters.length; i++) {
+                counters[i] = 0;
+            }
+            let number = '';
+            if (heading.depth === 1) number = `${counters[0]}.`;
+            else if (heading.depth === 2) number = `${counters[0]}.${counters[1]}`;
+            else if (heading.depth === 3) number = `${counters[0]}.${counters[1]}.${counters[2]}`;
+            return { ...heading, number };
+        });
+
+        const listItems = numberedHeadings.map(heading => `
+            <li class="toc-item depth-${heading.depth}">
+                <a href="#${heading.slug}">
+                    ${heading.number ? `<span class="toc-number">${heading.number}</span>` : ''}
+                    <span class="toc-text">${heading.text}</span>
+                </a>
+            </li>
+        `).join('');
+
+        return `
+            <div class="toc-container">
+                <h3 class="toc-title">本页目录</h3>
+                <ul class="toc-list">${listItems}</ul>
+            </div>
+        `;
+    }
+
+    // 主函数：管理目录的显示与隐藏
+    function manageToc() {
+        const placeholder = document.getElementById('toc-placeholder');
+        if (!placeholder) return;
+
+        const isArticlePage = window.location.pathname.startsWith('/article/');
+
+        if (!isArticlePage) {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
+            return;
+        }
+
+        const headingElements = document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]');
+        
+        if (headingElements.length === 0) {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
+            return;
+        }
+
+        const headings = Array.from(headingElements).map(el => ({
+            depth: parseInt(el.tagName.substring(1), 10),
+            text: el.textContent || '',
+            slug: el.id
+        }));
+        
+        const validHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 5);
+
+        if (validHeadings.length > 0) {
+            const tocHtml = buildTocHtml(validHeadings);
+            placeholder.innerHTML = tocHtml;
+            placeholder.style.display = 'block';
+            addScrollListener(); // 注入HTML后，立即添加滚动监听
+        } else {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
+        }
+    }
+
+    // 使用 astro:after-swap 事件，确保在DOM更新后立即执行
+    document.addEventListener('astro:after-swap', manageToc);
+    // 首次加载时也执行一次
+    document.addEventListener('DOMContentLoaded', manageToc);
+</script>
