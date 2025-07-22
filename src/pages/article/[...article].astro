@@ -16,13 +16,16 @@ const ARTICLE_COVER: string = await getCover(post.data.cover);
 import SITE_CONFIG from "@/config";
 const { Site, Title, Author, GoogleAds } = SITE_CONFIG;
 
-// =======================================================
-// == 关键修复：使用导入的 render 函数并获取 headings ==
-// =======================================================
+// 使用导入的 render 函数并获取 headings
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 
-// 处理文章描述和阅读时间等数据
-const description = getDescription(post.body);
+// =======================================================
+// == 关键修复：优化 description 的获取方式 ==
+// =======================================================
+// 优先使用 frontmatter 中的 description，如果不存在，则从文章内容安全地生成。
+// (post.body || '') 确保即使 post.body 不存在，也不会导致错误。
+const description = post.data.description || getDescription(post.body || '');
+
 const { reading_time, article_word_count } = remarkPluginFrontmatter;
 
 // 公共 Layout
