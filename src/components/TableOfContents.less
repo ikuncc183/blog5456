@@ -1,11 +1,9 @@
 /* src/components/TableOfContents.less */
+
+/* 移除 .toc-container 的外边框、背景和内边距，因为它现在由 .vh-aside-item 控制 */
 .toc-container {
   position: sticky;
-  top: 80px;
-  background-color: var(--vh-card-bg);
-  border-radius: var(--vh-main-radius);
-  padding: 1.2rem;
-  border: 1px solid var(--vh-border-color);
+  top: 20px; /* 可以微调，使其在模块内看起来更舒适 */
 }
 
 .toc-title {
@@ -19,8 +17,8 @@
 
 .toc-list {
   list-style: none;
-  padding-left: 0; // 重置 padding
-  max-height: calc(100vh - 200px);
+  padding-left: 0;
+  max-height: 280px; /* 限制一个最大高度，避免在长文章中过长 */
   overflow-y: auto;
   
   &::-webkit-scrollbar { width: 4px; }
@@ -29,12 +27,12 @@
 }
 
 .toc-item a {
-  display: flex; // 使用 flex 布局对齐编号和文本
+  display: flex;
   align-items: flex-start;
   padding: 8px;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
-  border-left: 3px solid transparent; // 用于高亮的左边框
+  border-left: 3px solid transparent;
   color: var(--vh-text-color-2);
   text-decoration: none;
   font-size: 0.9rem;
@@ -43,7 +41,7 @@
 .toc-number {
   margin-right: 0.6em;
   color: var(--vh-text-color-3);
-  min-width: 2em; // 保证对齐
+  min-width: 2em;
   text-align: right;
 }
 
