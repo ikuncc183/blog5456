@@ -1,6 +1,6 @@
 ---
-// 从 Astro.props 获取页面元数据和配置
-const { title, keywords, description, pagecover, activeNav, Home, headings = [] } = Astro.props;
+// 关键：不再需要从 props 获取 headings
+const { title, keywords, description, pagecover, activeNav, Home } = Astro.props;
 // 导入网站全局配置
 import SITE_INFO from "@/config";
 const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
@@ -14,12 +14,12 @@ import Footer from "@/components/Footer/Footer.astro";
 import BackTop from "@/components/BackTop/BackTop.astro";
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
 import SakuraEffect from "@/components/SakuraEffect.astro";
+// 导入新的目录管理器
+import TocManager from "@/components/TocManager.astro";
 // 引入样式
 import "@/styles/Reset.less";
 import "@/styles/Base.less";
 import "./Layout.less";
-
-// 我们不再需要 isArticlePage 的判断，因为 transition:key 会处理一切
 ---
 
 <html lang="zh-CN">
@@ -40,22 +40,20 @@ import "./Layout.less";
 		<Header {activeNav} />
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
-			
-			{/* ======================================================= */}
-			{/* == 最终修复：将 transition:key 应用于父级容器 == */}
-			{/* ======================================================= */}
-			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`} transition:key={Astro.url.pathname}>
+			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
 				<section class="main-inner-content">
 					<slot />
 				</section>
-                {/* 移除 Aside 上的 transition:key，因为它现在是多余的 */}
-				<Aside headings={headings} />
+                {/* 关键：Aside 组件不再需要任何 props */}
+				<Aside />
 			</section>
-
 			<BackTop />
 		</main>
 		<Footer />
 		<SakuraEffect />
+		
+		{/* 关键：在页面底部添加目录管理器 */}
+		<TocManager />
 
 		<script>
 			import InitFn from "@/scripts/Init";
