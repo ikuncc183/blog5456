@@ -153,8 +153,8 @@ const hasHeadings = headings.length > 0;
 		}
 	}
 
-	// Use 'astro:after-swap' which is the ideal event for DOM manipulations after a page transition.
-	document.addEventListener('astro:after-swap', handleTocVisibility);
+	// Use 'astro:page-load' which is the ideal event for initializing scripts on a new page.
+	document.addEventListener('astro:page-load', handleTocVisibility);
 	// Also run it once on initial load for non-transition navigations.
 	handleTocVisibility();
 </script>
