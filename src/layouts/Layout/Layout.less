@@ -12,41 +12,27 @@ main.main {
     position: relative;
     box-sizing: border-box;
     display: flex;
-    /* MODIFICATION: 移除了 flex-direction: row-reverse; */
-    /* NEW: 添加了 justify-content 和 gap 用于控制布局 */
-    justify-content: center;
-    gap: 1.5rem;
+    /* 恢复您原来的布局方向，或者使用 flex-direction: row; */
+    flex-direction: row-reverse; 
+    justify-content: center; // 让内容居中
+    gap: 1.5rem; // 在内容和侧边栏之间添加间距
     width: 100%;
     max-width: var(--vh-main-max-width);
     height: max-content;
     z-index: 1;
 
     & > .main-inner-content {
-      flex: 1 1 auto; /* 允许内容区域根据空间自动调整 */
+      flex: 1 1 0%;
       box-sizing: border-box;
       padding: 0.88rem 0.66rem;
       width: 100%;
-      /* NEW: 为中间内容区域设置一个最大宽度，提升阅读体验 */
-      max-width: 820px;
       min-width: 0;
       height: max-content;
       overflow: hidden;
     }
-
-    /* NEW: 为新增的左侧目录边栏添加样式 */
-    & > .toc-sidebar {
-      width: 250px;
-      flex-shrink: 0;
-
-      /* 在中等屏幕及以下尺寸隐藏目录侧边栏 */
-      @media (max-width: 1200px) {
-        display: none;
-      }
-    }
   }
 }
 
-/* 保持您原有的移动端布局逻辑 */
 @media screen and (max-width: 888px) {
   main.main {
     & > .main-inner {
@@ -55,7 +41,7 @@ main.main {
   }
 }
 
-/* NEW: 确保右侧边栏在平板尺寸及以下也被隐藏 */
+/* 确保右侧边栏在平板尺寸及以下被隐藏 */
 .vh-aside {
     @media (max-width: 992px) {
         display: none;
