@@ -18,6 +18,7 @@
   padding-left: 0;
   max-height: 280px;
   overflow-y: auto;
+  position: relative; // 为竖线定位提供容器
   
   &::-webkit-scrollbar { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
@@ -27,13 +28,14 @@
 .toc-item a {
   display: flex;
   align-items: flex-start;
-  padding: 8px;
-  border-radius: 4px;
+  padding: 8px 8px 8px 12px; // 增加左边距
+  border-radius: 6px; // 更圆润的边角
   transition: all 0.2s ease-in-out;
-  border-left: 3px solid transparent;
   color: var(--vh-text-color-2);
   text-decoration: none;
   font-size: 0.9rem;
+  position: relative;
+  border-left: 3px solid transparent; // 默认边框透明
 }
 
 .toc-number {
@@ -42,6 +44,7 @@
   min-width: 2em;
   text-align: right;
   flex-shrink: 0;
+  transition: color 0.2s ease-in-out;
 }
 
 .toc-text {
@@ -49,14 +52,15 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s ease-in-out;
 }
 
-/* --- 恢复为带编号的缩进样式 --- */
+/* --- 层级缩进样式 --- */
 .toc-item.depth-1 .toc-text { font-weight: 600; }
-.toc-item.depth-2 .toc-text { padding-left: 0.5rem; }
-.toc-item.depth-3 .toc-text { padding-left: 1.5rem; }
-.toc-item.depth-4 .toc-text { padding-left: 2.5rem; }
-.toc-item.depth-5 .toc-text { padding-left: 3.5rem; }
+.toc-item.depth-2 { margin-left: 1rem; }
+.toc-item.depth-3 { margin-left: 2rem; }
+.toc-item.depth-4 { margin-left: 3rem; }
+.toc-item.depth-5 { margin-left: 4rem; }
 
 
 .toc-item a:hover {
@@ -64,12 +68,25 @@
   color: var(--vh-main-color);
 }
 
+/* --- 关键修改：当前激活项的加强效果 --- */
 .toc-item a.active {
-  background-color: rgba(1, 196, 182, 0.1);
-  border-left-color: var(--vh-main-color);
+  background-color: var(--vh-main-color-16); // 使用主题色的16%透明度作为背景
   
   .toc-number, .toc-text {
     color: var(--vh-main-color);
-    font-weight: 500;
+    font-weight: 600;
+  }
+
+  // 使用 ::before 伪元素创建左侧的竖线，效果更突出
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background-color: var(--vh-main-color);
+    border-radius: 2px;
   }
 }
