@@ -18,8 +18,9 @@ import TableOfContents from "@/components/TableOfContents.astro";
 
 import "./Aside.less";
 
-// 我们仍然需要从 props 接收 headings，因为只有文章页才知道具体的标题内容
 const { headings = [] } = Astro.props;
+// 我们只需要知道是否存在 headings 即可
+const hasHeadings = headings.length > 0;
 ---
 
 <aside class="vh-aside">
@@ -112,12 +113,11 @@ const { headings = [] } = Astro.props;
 			</section>
 		)}
 
-        {/* 目录模块：仅当 headings 数组不为空时才渲染 */}
-        {headings.length > 0 && (
-            <section class="vh-aside-item toc-wrapper" id="toc-aside-wrapper">
-                <TableOfContents headings={headings} />
-            </section>
-        )}
+        {/* 目录模块：现在总是渲染包装器，但默认隐藏 */}
+        <section class="vh-aside-item toc-wrapper" id="toc-aside-wrapper" style="display: none;">
+            {/* 仅当有标题时才渲染真正的目录组件 */}
+            {hasHeadings && <TableOfContents headings={headings} />}
+        </section>
 
 		<!-- 谷歌广告块 -->
 		{GoogleAds.ad_Client && GoogleAds.asideAD_Slot && (
@@ -130,32 +130,31 @@ const { headings = [] } = Astro.props;
 </aside>
 
 <!-- ======================================================= -->
-<!-- == 关键修复：添加客户端脚本来控制目录的显示/隐藏 == -->
+<!-- == 最终修复：使用更可靠的客户端脚本来控制目录 == -->
 <!-- ======================================================= -->
 <script>
-	function updateTocVisibility() {
-		// 尝试获取目录的包装器元素
+	function handleTocVisibility() {
 		const tocWrapper = document.getElementById('toc-aside-wrapper');
-		
-		// 如果在当前页面上找不到这个元素，就直接退出
+		// The wrapper element should always exist now.
 		if (!tocWrapper) {
 			return;
 		}
 
-		// 在客户端检查当前的 URL
 		const isArticlePage = window.location.pathname.startsWith('/article/');
+		
+		// Also check if the TableOfContents component actually rendered something inside.
+		const hasContent = tocWrapper.querySelector('.toc-container');
 
-		// 根据是否为文章页，来设置包装器的显示或隐藏
-		if (isArticlePage) {
-			tocWrapper.style.display = 'block'; // 或者 'flex', 'grid' 等，取决于你的布局
+		// Only show the wrapper if it's an article page AND it has content.
+		if (isArticlePage && hasContent) {
+			tocWrapper.style.display = 'block';
 		} else {
 			tocWrapper.style.display = 'none';
 		}
 	}
 
-	// 在页面首次加载时运行一次
-	updateTocVisibility();
-
-	// 在每次客户端导航（页面切换）后，都再次运行
-	document.addEventListener('astro:page-load', updateTocVisibility);
+	// Use 'astro:after-swap' which is the ideal event for DOM manipulations after a page transition.
+	document.addEventListener('astro:after-swap', handleTocVisibility);
+	// Also run it once on initial load for non-transition navigations.
+	handleTocVisibility();
 </script>
