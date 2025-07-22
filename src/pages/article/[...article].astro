@@ -1,4 +1,5 @@
 ---
+// 关键修复 1: 重新导入并使用您原有的 getDescription 函数
 import { getDescription, fmtTime } from "@/utils/index";
 import { type CollectionEntry, getCollection, render } from "astro:content";
 
@@ -16,15 +17,15 @@ const ARTICLE_COVER: string = await getCover(post.data.cover);
 import SITE_CONFIG from "@/config";
 const { Site, Title, Author, GoogleAds } = SITE_CONFIG;
 
-// 使用导入的 render 函数并获取 headings
-const { Content, headings, remarkPluginFrontmatter } = await render(post);
+// =======================================================
+// == 关键修复 2: 分离逻辑 ==
+// =======================================================
 
-// =======================================================
-// == 关键修复：最终的、最安全的 description 获取方式 ==
-// =======================================================
-// 优先使用 frontmatter 中的 description。
-// 如果没有，则仅在 post.body 是一个非空字符串时，才从文章内容生成。
-const description = post.data.description || (typeof post.body === 'string' && post.body.length > 0 ? getDescription(post.body) : '');
+// 1. 使用您项目原有的方式获取文章描述，这可以正常工作
+const description = getDescription(post);
+
+// 2. 独立地渲染文章，以获取用于TOC的 `headings` 和用于页面的 `Content`
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
 
 const { reading_time, article_word_count } = remarkPluginFrontmatter;
 
