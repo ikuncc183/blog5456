@@ -9,26 +9,47 @@
         const tocLinks = document.querySelectorAll('#toc-placeholder .toc-list a');
         if (tocLinks.length === 0) return;
 
-        let activeLink = null;
+        // 用于跟踪当前激活的链接，避免不必要的DOM操作
+        let currentActiveId = null;
+
         const observer = new IntersectionObserver(entries => {
+            // 在所有触发的条目中，找到最靠近顶部的那一个
+            let topmostEntry = null;
             entries.forEach(entry => {
-                const id = entry.target.getAttribute('id');
-                const tocLink = document.querySelector(`#toc-placeholder .toc-list a[href="#${id}"]`);
-                
-                if (tocLink) {
-                    if (entry.isIntersecting && entry.intersectionRatio >= 1) {
-                        // 当标题完全进入视口顶部时，激活它
-                        if (activeLink) {
-                            activeLink.classList.remove('active');
-                        }
-                        tocLink.classList.add('active');
-                        activeLink = tocLink;
+                if (entry.isIntersecting) {
+                    // 如果还没有找到最顶部的，或者当前这个比已找到的更靠上，就更新它
+                    if (!topmostEntry || entry.boundingClientRect.top < topmostEntry.boundingClientRect.top) {
+                        topmostEntry = entry;
                     }
                 }
             });
+
+            // 如果在检测区域内找到了标题，就激活它
+            if (topmostEntry) {
+                const id = topmostEntry.target.getAttribute('id');
+                if (id !== currentActiveId) {
+                    // 移除旧的激活状态
+                    const oldActiveLink = document.querySelector(`#toc-placeholder .toc-list a.active`);
+                    if (oldActiveLink) {
+                        oldActiveLink.classList.remove('active');
+                    }
+                    
+                    // 添加新的激活状态
+                    const newActiveLink = document.querySelector(`#toc-placeholder .toc-list a[href="#${id}"]`);
+                    if (newActiveLink) {
+                        newActiveLink.classList.add('active');
+                        currentActiveId = id; // 更新当前激活的ID
+                    }
+                }
+            }
+            // 注意：如果没有标题在检测区域内，我们保持上一个标题的激活状态，这样滚动时高亮不会突然消失。
+
         }, { 
-            rootMargin: '0px 0px -85% 0px', // 调整rootMargin，当标题达到视口上方15%的位置时触发
-            threshold: 1.0 
+            // rootMargin 定义了一个从视口顶部下方20%开始，高度占视口5%的“检测区域”
+            // 当标题进入这个横向区域时，就会被监听到。
+            rootMargin: '-20% 0px -75% 0px', 
+            // threshold: 0 表示只要有1像素进入该区域，就触发。
+            threshold: 0 
         });
 
         document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]').forEach(heading => {
@@ -49,7 +70,7 @@
         // 关键修改：更新标题为“本页目录”
         return `
             <div class="toc-wrapper">
-                <h3 class="toc-title">目录</h3>
+                <h3 class="toc-title">本页目录</h3>
                 <ul class="toc-list">${listItems}</ul>
             </div>
         `;
