@@ -1,54 +1,85 @@
 /* src/components/TableOfContents.less */
-.toc-container {
+
+/* 建议在您的全局样式中定义这些CSS变量
+  :root {
+    --vh-main-color: #0ea5e9; // 主题色 (示例: sky-500)
+    --vh-main-color-16: rgba(14, 165, 233, 0.16); // 主题色 16% 透明度
+    --vh-text-color-1: #111827; // 主要文字颜色 (示例: gray-900)
+    --vh-text-color-2: #6b7280; // 次要文字颜色 (示例: gray-500)
+    --vh-hover-bg: #f3f4f6; // 悬浮背景色 (示例: gray-100)
+    --vh-border-color: #e5e7eb; // 边框颜色 (示例: gray-200)
+  }
+*/
+
+// 使用新的 .toc-wrapper 作为最外层容器
+.toc-wrapper {
   position: sticky;
-  top: 20px;
+  top: 80px; /* 目录与页面顶部的距离 */
+  padding-left: 12px; /* 为左侧的竖线留出空间 */
+  position: relative;
+
+  // 整体的背景竖线（灰色）
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px; // 微调位置，与标题对齐
+    bottom: 8px;
+    width: 2px;
+    background-color: var(--vh-border-color, #e5e7eb);
+    border-radius: 1px;
+  }
 }
 
 .toc-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  border-left: 4px solid var(--vh-main-color);
-  padding-left: 0.8rem;
-  color: var(--vh-text-color-1);
+  font-size: 0.9rem; // 调整字体大小
+  font-weight: 700; // 加粗
+  margin: 0 0 1rem 0.75rem; // 调整外边距
+  color: var(--vh-text-color-1, #111827);
+  position: relative;
+  display: inline-block;
+
+  // 标题左侧的主题色竖线
+  &::before {
+    content: '';
+    position: absolute;
+    left: -19px; // 定位到 .toc-wrapper 的 padding 区域
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 100%;
+    background-color: var(--vh-main-color, #0ea5e9);
+    border-radius: 2px;
+  }
 }
 
 .toc-list {
   list-style: none;
   padding-left: 0;
-  max-height: 280px;
+  margin: 0;
+  max-height: calc(100vh - 220px); // 动态计算最大高度，防止过长
   overflow-y: auto;
-  position: relative; // 为竖线定位提供容器
-  
+  padding-right: 8px;
+
   &::-webkit-scrollbar { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: var(--vh-border-color); border-radius: 4px; }
+  &::-webkit-scrollbar-thumb { background: var(--vh-border-color, #e5e7eb); border-radius: 2px; }
 }
 
 .toc-item a {
-  display: flex;
-  align-items: flex-start;
-  padding: 8px 8px 8px 12px; // 增加左边距
-  border-radius: 6px; // 更圆润的边角
+  display: block;
+  padding: 6px 12px; // 调整内边距
+  margin-left: -12px; // 负边距使背景高亮能覆盖到左侧
+  border-radius: 6px;
   transition: all 0.2s ease-in-out;
-  color: var(--vh-text-color-2);
+  color: var(--vh-text-color-2, #6b7280);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.875rem; // 14px
   position: relative;
-  border-left: 3px solid transparent; // 默认边框透明
-}
-
-.toc-number {
-  margin-right: 0.6em;
-  color: var(--vh-text-color-3);
-  min-width: 2em;
-  text-align: right;
-  flex-shrink: 0;
-  transition: color 0.2s ease-in-out;
 }
 
 .toc-text {
-  flex: 1;
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -56,37 +87,40 @@
 }
 
 /* --- 层级缩进样式 --- */
-.toc-item.depth-1 .toc-text { font-weight: 600; }
-.toc-item.depth-2 { margin-left: 1rem; }
-.toc-item.depth-3 { margin-left: 2rem; }
-.toc-item.depth-4 { margin-left: 3rem; }
-.toc-item.depth-5 { margin-left: 4rem; }
+/* 使用 padding-left 实现，效果更好 */
+.toc-item.depth-1 a { padding-left: 12px; }
+.toc-item.depth-2 a { padding-left: 24px; }
+.toc-item.depth-3 a { padding-left: 36px; }
+.toc-item.depth-4 a { padding-left: 48px; }
+.toc-item.depth-5 a { padding-left: 60px; }
 
 
+/* --- 悬浮效果 --- */
 .toc-item a:hover {
-  background-color: var(--vh-hover-bg);
-  color: var(--vh-main-color);
+  background-color: var(--vh-hover-bg, #f3f4f6);
+  color: var(--vh-text-color-1, #111827);
 }
 
 /* --- 关键修改：当前激活项的加强效果 --- */
 .toc-item a.active {
-  background-color: var(--vh-main-color-16); // 使用主题色的16%透明度作为背景
+  background-color: var(--vh-main-color-16, rgba(14, 165, 233, 0.16));
   
-  .toc-number, .toc-text {
-    color: var(--vh-main-color);
-    font-weight: 600;
+  .toc-text {
+    color: var(--vh-main-color, #0ea5e9);
+    font-weight: 600; // 激活时加粗
   }
 
-  // 使用 ::before 伪元素创建左侧的竖线，效果更突出
+  // 使用 ::before 伪元素创建独立的、更粗的左侧激活竖线
   &::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: -12px; // 定位到 .toc-wrapper 的 padding 区域
     top: 50%;
     transform: translateY(-50%);
-    width: 4px;
-    height: 60%;
-    background-color: var(--vh-main-color);
+    width: 4px; // 更粗的竖线
+    height: 60%; // 竖线高度
+    background-color: var(--vh-main-color, #0ea5e9);
     border-radius: 2px;
+    transition: all 0.2s ease-in-out;
   }
 }
