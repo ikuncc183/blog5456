@@ -25,24 +25,38 @@
 }
 
 .toc-item a {
-  display: block;
-  padding: 6px 8px;
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
   border-left: 3px solid transparent;
   color: var(--vh-text-color-2);
   text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.toc-number {
+  margin-right: 0.6em;
+  color: var(--vh-text-color-3);
+  min-width: 2em;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.toc-text {
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* --- 关键修改：用字体大小和缩进区分层级 --- */
-.toc-item.depth-1 a { font-size: 1em; font-weight: 600; }
-.toc-item.depth-2 a { font-size: 0.95em; padding-left: 20px; }
-.toc-item.depth-3 a { font-size: 0.9em; padding-left: 32px; }
-.toc-item.depth-4 a { font-size: 0.85em; padding-left: 44px; color: var(--vh-text-color-3); }
-.toc-item.depth-5 a { font-size: 0.85em; padding-left: 56px; color: var(--vh-text-color-3); }
+/* --- 恢复为带编号的缩进样式 --- */
+.toc-item.depth-1 .toc-text { font-weight: 600; }
+.toc-item.depth-2 .toc-text { padding-left: 0.5rem; }
+.toc-item.depth-3 .toc-text { padding-left: 1.5rem; }
+.toc-item.depth-4 .toc-text { padding-left: 2.5rem; }
+.toc-item.depth-5 .toc-text { padding-left: 3.5rem; }
 
 
 .toc-item a:hover {
@@ -54,7 +68,7 @@
   background-color: rgba(1, 196, 182, 0.1);
   border-left-color: var(--vh-main-color);
   
-  .toc-text {
+  .toc-number, .toc-text {
     color: var(--vh-main-color);
     font-weight: 500;
   }
