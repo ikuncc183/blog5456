@@ -1,0 +1,76 @@
+/* src/components/TableOfContents.less */
+.toc-container {
+  position: sticky;
+  top: 80px;
+  background-color: var(--vh-card-bg);
+  border-radius: var(--vh-main-radius);
+  padding: 1.2rem;
+  border: 1px solid var(--vh-border-color);
+}
+
+.toc-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  border-left: 4px solid var(--vh-main-color);
+  padding-left: 0.8rem;
+  color: var(--vh-text-color-1);
+}
+
+.toc-list {
+  list-style: none;
+  padding-left: 0; // 重置 padding
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--vh-border-color); border-radius: 4px; }
+}
+
+.toc-item a {
+  display: flex; // 使用 flex 布局对齐编号和文本
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  border-left: 3px solid transparent; // 用于高亮的左边框
+  color: var(--vh-text-color-2);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.toc-number {
+  margin-right: 0.6em;
+  color: var(--vh-text-color-3);
+  min-width: 2em; // 保证对齐
+  text-align: right;
+}
+
+.toc-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-item.depth-3 {
+  .toc-text {
+    padding-left: 1.2rem;
+  }
+}
+
+.toc-item a:hover {
+  background-color: var(--vh-hover-bg);
+  color: var(--vh-main-color);
+}
+
+.toc-item a.active {
+  background-color: rgba(1, 196, 182, 0.1);
+  border-left-color: var(--vh-main-color);
+  
+  .toc-number, .toc-text {
+    color: var(--vh-main-color);
+    font-weight: 500;
+  }
+}
