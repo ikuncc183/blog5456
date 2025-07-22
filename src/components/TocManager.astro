@@ -28,27 +28,11 @@
         });
     }
 
-    // 函数：根据扫描到的标题，构建带编号的目录 HTML
+    // 函数：根据扫描到的标题，构建目录的 HTML (已移除编号)
     function buildTocHtml(headings) {
-        let counters = [0, 0, 0, 0, 0];
-        const numberedHeadings = headings.map(heading => {
-            const depthIndex = heading.depth - 1;
-            counters[depthIndex]++;
-            for (let i = depthIndex + 1; i < counters.length; i++) {
-                counters[i] = 0;
-            }
-            let number = '';
-            if (heading.depth === 1) number = `${counters[0]}.`;
-            else if (heading.depth === 2) number = `${counters[0]}.${counters[1]}`;
-            else if (heading.depth === 3) number = `${counters[0]}.${counters[1]}.${counters[2]}`;
-            // H4 and H5 will not have numbers, only indentation
-            return { ...heading, number };
-        });
-
-        const listItems = numberedHeadings.map(heading => `
+        const listItems = headings.map(heading => `
             <li class="toc-item depth-${heading.depth}">
                 <a href="#${heading.slug}">
-                    <span class="toc-number">${heading.number}</span>
                     <span class="toc-text">${heading.text}</span>
                 </a>
             </li>
