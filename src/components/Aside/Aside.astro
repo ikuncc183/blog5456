@@ -19,8 +19,8 @@ import TableOfContents from "@/components/TableOfContents.astro";
 import "./Aside.less";
 
 const { headings = [] } = Astro.props;
-// 关键修复 1: 在服务器端就计算好这个页面是否应该有目录
-const shouldHaveToc = headings.length > 0;
+// 我们只需要知道是否存在 headings 即可
+const hasHeadings = headings.length > 0;
 ---
 
 <aside class="vh-aside">
@@ -51,7 +51,7 @@ const shouldHaveToc = headings.length > 0;
 		<section class="vh-aside-item tips">
 			<span>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path stroke="none" d="M0 0h24v24HH0z" fill="none" />
+					<path stroke="none" d="M0 0h24v24H0z" fill="none" />
 					<path d="M3 9.662c2 2.338 2 4.338 0 6.338c3 .5 4.5 1 5 4c2 -3 6 -4 9 0c0 -3 1 -4 4 -4.004q -3 -2.995 0 -5.996c-3 0 -5 -2 -5 -5c-2 4 -5 3 -7.5 -1c-.5 3 -2.5 5 -5.5 5.662" />
 				</svg>
 				公告
@@ -116,7 +116,7 @@ const shouldHaveToc = headings.length > 0;
         {/* 目录模块：我们总是渲染这个容器 */}
         <section class="vh-aside-item toc-wrapper" id="toc-aside-wrapper">
             {/* 但只在服务器端确认有标题时，才渲染真正的目录内容 */}
-            {shouldHaveToc && <TableOfContents headings={headings} />}
+            {hasHeadings && <TableOfContents headings={headings} />}
         </section>
 
 		<!-- 谷歌广告块 -->
@@ -130,25 +130,31 @@ const shouldHaveToc = headings.length > 0;
 </aside>
 
 <!-- ======================================================= -->
-<!-- == 最终修复：使用 define:vars 将服务器状态传递给客户端 == -->
+<!-- == 最终修复：使用更可靠的客户端脚本来控制目录 == -->
 <!-- ======================================================= -->
-<script define:vars={{ shouldHaveToc }}>
+<script>
 	function handleTocVisibility() {
 		const tocWrapper = document.getElementById('toc-aside-wrapper');
 		if (!tocWrapper) return;
 
-		// 客户端只负责检查 URL
+		// 检查 1: 当前 URL 是否为文章页
 		const isArticlePage = window.location.pathname.startsWith('/article/');
 		
-		// 关键：我们现在使用从服务器直接传递过来的 shouldHaveToc 变量
-		// 这个值对于当前页面永远是准确的
-		if (isArticlePage && shouldHaveToc) {
+		// 检查 2: 目录包装器内是否真的有内容
+		const hasContent = tocWrapper.querySelector('.toc-container');
+
+		// 只有当是文章页并且目录有内容时，才显示
+		if (isArticlePage && hasContent) {
 			tocWrapper.style.display = 'block';
 		} else {
 			tocWrapper.style.display = 'none';
 		}
 	}
 
-	// astro:page-load 是最稳妥的事件，它在所有内容加载完毕后触发
-	document.addEventListener('astro:page-load', handleTocVisibility);
+	// 关键修复：使用 'astro:after-swap' 事件
+	// 这个事件在页面切换后、其他脚本运行前触发，是操作 DOM 的最佳时机
+	document.addEventListener('astro:after-swap', handleTocVisibility);
+
+	// 同时，在首次加载时也运行一次，以应对非页面切换的访问
+	document.addEventListener('DOMContentLoaded', handleTocVisibility);
 </script>
