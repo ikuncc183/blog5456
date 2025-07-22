@@ -113,9 +113,12 @@ const hasHeadings = headings.length > 0;
 			</section>
 		)}
 
-        {/* 目录模块：我们总是渲染这个容器 */}
-        <section class="vh-aside-item toc-wrapper" id="toc-aside-wrapper">
-            {/* 但只在服务器端确认有标题时，才渲染真正的目录内容 */}
+        {/* 目录模块：初始隐藏 */}
+        <section 
+            class="vh-aside-item toc-wrapper" 
+            id="toc-aside-wrapper" 
+            style="display: none;"
+        >
             {hasHeadings && <TableOfContents headings={headings} />}
         </section>
 
@@ -129,32 +132,52 @@ const hasHeadings = headings.length > 0;
 	</section>
 </aside>
 
-<!-- ======================================================= -->
-<!-- == 最终修复：使用更可靠的客户端脚本来控制目录 == -->
-<!-- ======================================================= -->
-<script>
-	function handleTocVisibility() {
-		const tocWrapper = document.getElementById('toc-aside-wrapper');
-		if (!tocWrapper) return;
+<script is:inline>
+    (function() {
+        // 统一处理目录可见性
+        function updateTocVisibility() {
+            const tocWrapper = document.getElementById('toc-aside-wrapper');
+            if (!tocWrapper) return;
+            
+            // 检查是否为文章页
+            const isArticlePage = window.location.pathname.startsWith('/article/');
+            
+            // 检查目录容器内是否有实际内容
+            const hasContent = tocWrapper.querySelector('.toc-container') !== null;
+            
+            // 显示条件：文章页且有目录内容
+            if (isArticlePage && hasContent) {
+                tocWrapper.style.display = 'block';
+            } else {
+                tocWrapper.style.display = 'none';
+            }
+        }
 
-		// 检查 1: 当前 URL 是否为文章页
-		const isArticlePage = window.location.pathname.startsWith('/article/');
-		
-		// 检查 2: 目录包装器内是否真的有内容
-		const hasContent = tocWrapper.querySelector('.toc-container');
+        // 初始化事件监听
+        function initEvents() {
+            // Astro 页面事件
+            document.addEventListener('astro:after-swap', updateTocVisibility);
+            document.addEventListener('astro:page-load', updateTocVisibility);
+            
+            // 标准事件
+            document.addEventListener('DOMContentLoaded', updateTocVisibility);
+            window.addEventListener('load', updateTocVisibility);
+        }
 
-		// 只有当是文章页并且目录有内容时，才显示
-		if (isArticlePage && hasContent) {
-			tocWrapper.style.display = 'block';
-		} else {
-			tocWrapper.style.display = 'none';
-		}
-	}
-
-	// 关键修复：使用 'astro:after-swap' 事件
-	// 这个事件在页面切换后、其他脚本运行前触发，是操作 DOM 的最佳时机
-	document.addEventListener('astro:after-swap', handleTocVisibility);
-
-	// 同时，在首次加载时也运行一次，以应对非页面切换的访问
-	document.addEventListener('DOMContentLoaded', handleTocVisibility);
+        // 立即执行一次
+        if (document.readyState === 'complete') {
+            updateTocVisibility();
+        } else {
+            initEvents();
+        }
+        
+        // 确保View Transitions API兼容
+        if (typeof document.startViewTransition === 'function') {
+            document.addEventListener('astro:page-load', () => {
+                document.startViewTransition(() => {
+                    updateTocVisibility();
+                });
+            });
+        }
+    })();
 </script>
