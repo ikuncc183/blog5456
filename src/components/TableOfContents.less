@@ -1,9 +1,7 @@
 /* src/components/TableOfContents.less */
-
-/* 移除 .toc-container 的外边框、背景和内边距，因为它现在由 .vh-aside-item 控制 */
 .toc-container {
   position: sticky;
-  top: 20px; /* 可以微调，使其在模块内看起来更舒适 */
+  top: 20px;
 }
 
 .toc-title {
@@ -18,7 +16,7 @@
 .toc-list {
   list-style: none;
   padding-left: 0;
-  max-height: 280px; /* 限制一个最大高度，避免在长文章中过长 */
+  max-height: 280px;
   overflow-y: auto;
   
   &::-webkit-scrollbar { width: 4px; }
@@ -52,11 +50,13 @@
   text-overflow: ellipsis;
 }
 
-.toc-item.depth-3 {
-  .toc-text {
-    padding-left: 1.2rem;
-  }
-}
+/* --- 新增：为所有层级添加缩进 --- */
+.toc-item.depth-1 .toc-text { padding-left: 0rem; font-weight: 600; }
+.toc-item.depth-2 .toc-text { padding-left: 1rem; }
+.toc-item.depth-3 .toc-text { padding-left: 2rem; }
+.toc-item.depth-4 .toc-text { padding-left: 3rem; }
+.toc-item.depth-5 .toc-text { padding-left: 4rem; }
+
 
 .toc-item a:hover {
   background-color: var(--vh-hover-bg);
