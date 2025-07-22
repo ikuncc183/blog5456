@@ -1,123 +1,91 @@
----
-// src/components/TocManager.astro
-// 这个组件是“目录”功能的大脑，它只包含客户端脚本，
-// 负责在每次页面切换后，动态地生成和管理目录。
----
-<script>
-    // 函数：添加滚动监听，实现当前章节高亮
-    function addScrollListener() {
-        const tocLinks = document.querySelectorAll('#toc-placeholder .toc-list a');
-        if (tocLinks.length === 0) return;
+/* src/components/TableOfContents.less */
 
-        // 用于跟踪当前激活的链接，避免不必要的DOM操作
-        let currentActiveId = null;
+/* 建议在您的全局样式中定义这些CSS变量
+  :root {
+    --vh-main-color: #3b82f6; // 主题色，用于激活状态的竖线 (示例: blue-500)
+    --vh-text-color-1: #1f2937; // 主要文字颜色，用于标题和激活/悬浮状态 (示例: gray-800)
+    --vh-text-color-2: #6b7280; // 次要文字颜色，用于非激活的目录项 (示例: gray-500)
+  }
+*/
 
-        const observer = new IntersectionObserver(entries => {
-            // 在所有触发的条目中，找到最靠近顶部的那一个
-            let topmostEntry = null;
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 如果还没有找到最顶部的，或者当前这个比已找到的更靠上，就更新它
-                    if (!topmostEntry || entry.boundingClientRect.top < topmostEntry.boundingClientRect.top) {
-                        topmostEntry = entry;
-                    }
-                }
-            });
+.toc-wrapper {
+  position: sticky;
+  top: 80px;
+}
 
-            // 如果在检测区域内找到了标题，就激活它
-            if (topmostEntry) {
-                const id = topmostEntry.target.getAttribute('id');
-                if (id !== currentActiveId) {
-                    // 移除旧的激活状态
-                    const oldActiveLink = document.querySelector(`#toc-placeholder .toc-list a.active`);
-                    if (oldActiveLink) {
-                        oldActiveLink.classList.remove('active');
-                    }
-                    
-                    // 添加新的激活状态
-                    const newActiveLink = document.querySelector(`#toc-placeholder .toc-list a[href="#${id}"]`);
-                    if (newActiveLink) {
-                        newActiveLink.classList.add('active');
-                        currentActiveId = id; // 更新当前激活的ID
-                    }
-                }
-            }
-            // 注意：如果没有标题在检测区域内，我们保持上一个标题的激活状态，这样滚动时高亮不会突然消失。
+.toc-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em; /* 字母间距 */
+  color: var(--vh-text-color-1, #1f2937);
+  margin: 0 0 1rem 0;
+  padding: 0;
+}
 
-        }, { 
-            // rootMargin 定义了一个从视口顶部下方20%开始，高度占视口5%的“检测区域”
-            // 当标题进入这个横向区域时，就会被监听到。
-            rootMargin: '-20% 0px -75% 0px', 
-            // threshold: 0 表示只要有1像素进入该区域，就触发。
-            threshold: 0 
-        });
+.toc-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
 
-        document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]').forEach(heading => {
-            observer.observe(heading);
-        });
-    }
+.toc-item a {
+  display: block;
+  text-decoration: none;
+  padding: 4px 0; /* 调整垂直内边距 */
+  /* 使用 border-left 来实现激活状态的竖线，更简洁高效 */
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
 
-    // 函数：根据扫描到的标题，构建目录的 HTML (已移除编号)
-    function buildTocHtml(headings) {
-        const listItems = headings.map(heading => `
-            <li class="toc-item depth-${heading.depth}">
-                <a href="#${heading.slug}">
-                    <span class="toc-text">${heading.text}</span>
-                </a>
-            </li>
-        `).join('');
+.toc-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease-in-out;
+}
 
-        // 关键修改：更新标题为“本页目录”
-        return `
-            <div class="toc-wrapper">
-                <h3 class="toc-title">目录</h3>
-                <ul class="toc-list">${listItems}</ul>
-            </div>
-        `;
-    }
+/* --- 层级样式：缩进和字体粗细 --- */
+/* 默认 (h3 及以下) */
+.toc-item a {
+    padding-left: 1rem;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--vh-text-color-2, #6b7280);
+}
+/* h1 (在目录中通常为最高级) */
+.toc-item.depth-1 a {
+    font-weight: 500;
+}
+/* h2 */
+.toc-item.depth-2 a {
+    /* 保持默认样式 */
+}
+/* h3 */
+.toc-item.depth-3 a {
+    padding-left: 2rem;
+}
+/* h4 */
+.toc-item.depth-4 a {
+    padding-left: 3rem;
+}
+/* h5 */
+.toc-item.depth-5 a {
+    padding-left: 4rem;
+}
 
-    // 主函数：管理目录的显示与隐藏
-    function manageToc() {
-        const placeholder = document.getElementById('toc-placeholder');
-        if (!placeholder) return;
 
-        const isArticlePage = window.location.pathname.startsWith('/article/');
+/* --- 悬浮效果：仅改变文字颜色 --- */
+.toc-item a:hover {
+  color: var(--vh-text-color-1, #1f2937);
+}
 
-        if (!isArticlePage) {
-            placeholder.innerHTML = '';
-            placeholder.style.display = 'none';
-            return;
-        }
-
-        const headingElements = document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]');
-        
-        if (headingElements.length === 0) {
-            placeholder.innerHTML = '';
-            placeholder.style.display = 'none';
-            return;
-        }
-
-        const headings = Array.from(headingElements).map(el => ({
-            depth: parseInt(el.tagName.substring(1), 10),
-            text: el.textContent?.trim() || '', // 使用 trim() 清理文本前后空格
-            slug: el.id
-        }));
-        
-        const validHeadings = headings.filter(h => h.text && h.depth >= 1 && h.depth <= 5);
-
-        if (validHeadings.length > 0) {
-            const tocHtml = buildTocHtml(validHeadings);
-            placeholder.innerHTML = tocHtml;
-            placeholder.style.display = 'block';
-            addScrollListener(); // 注入HTML后，立即添加滚动监听
-        } else {
-            placeholder.innerHTML = '';
-            placeholder.style.display = 'none';
-        }
-    }
-
-    // 使用 astro:after-swap 事件，确保在DOM更新后立即执行
-    document.addEventListener('astro:after-swap', manageToc);
-    // 首次加载时也执行一次
-    document.addEventListener('DOMContentLoaded', manageToc);
-</script>
+/* --- 激活效果：改变文字颜色并显示左侧竖线 --- */
+.toc-item a.active {
+  color: var(--vh-text-color-1, #1f2937); /* 激活时文字变深色 */
+  font-weight: 500; /* 激活时字体加粗一点 */
+  border-left-color: var(--vh-main-color, #3b82f6); /* 显示蓝色的竖线 */
+}
