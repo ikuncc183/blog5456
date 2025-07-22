@@ -1,42 +1,28 @@
 ---
 // 从 Astro.props 获取页面元数据和配置
+// 仍然需要 headings，以便传递给 Aside 组件
 const { title, keywords, description, pagecover, activeNav, Home, headings = [] } = Astro.props;
 // 导入网站全局配置
 import SITE_INFO from "@/config";
 const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
 const { ad_Client, asideAD_Slot, articleAD_Slot } = GoogleAds;
-// 导入 Head 组件
+// 导入各个组件
 import Head from "@/components/Head/Head.astro";
-// 导入 Header 组件
 import Header from "@/components/Header/Header.astro";
-// 导入 Main 区域的 Header 组件
 import MainHeader from "@/components/MainHeader/MainHeader.astro";
-// 导入右侧边栏 Aside 组件
 import Aside from "@/components/Aside/Aside.astro";
-// 导入底部 Footer 组件
 import Footer from "@/components/Footer/Footer.astro";
-// 导入返回顶部 BackTop 组件
 import BackTop from "@/components/BackTop/BackTop.astro";
-// 导入手机端侧边栏 MobileSidebar 组件
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
-// 导入全新的文章目录组件
-import TableOfContents from "@/components/TableOfContents.astro";
-// 导入樱花特效组件
 import SakuraEffect from "@/components/SakuraEffect.astro";
 // 引入样式
 import "@/styles/Reset.less";
 import "@/styles/Base.less";
 import "./Layout.less";
-
-// 判断当前页面是否为文章页
-const isArticlePage = headings && headings.length > 0;
 ---
 
 <html lang="zh-CN">
-	{/* ======================================================= */}
-	{/* == 关键修复：将 {Title} 修改为 {title} == */}
-	{/* ======================================================= */}
-	<Head Title={title} keywords={keywords} description={description} PageCover={pagecover}>
+	<Head {title} {keywords} {description} PageCover={pagecover}>
 		<!-- 谷歌广告JS加载项 -->
 		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
 		<!-- 彩旗🎈特效脚本 -->
@@ -53,22 +39,13 @@ const isArticlePage = headings && headings.length > 0;
 		<Header {activeNav} />
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
-			<!-- 为 main-inner 添加一个 class 来控制布局 -->
-			<section class:list={["main-inner", { "is-article": isArticlePage }]} style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
-				
-                <!-- 左侧目录：只在文章页显示 -->
-                {isArticlePage && (
-                    <aside class="toc-sidebar">
-                        <TableOfContents headings={headings} />
-                    </aside>
-                )}
-
+			{/* 恢复为简单的两列布局结构 */}
+			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
 				<section class="main-inner-content">
 					<slot />
 				</section>
-
-                <!-- 右侧边栏 -->
-				<Aside />
+                {/* 关键：将 headings 传递给右侧边栏 */}
+				<Aside headings={headings} />
 			</section>
 			<BackTop />
 		</main>
