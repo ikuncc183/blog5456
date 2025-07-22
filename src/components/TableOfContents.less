@@ -8,12 +8,13 @@
   }
 */
 
-.toc-wrapper {
+/* 使用 #toc-placeholder ID 来提高所有规则的优先级 */
+#toc-placeholder .toc-wrapper {
   position: sticky;
   top: 80px;
 }
 
-.toc-title {
+#toc-placeholder .toc-title {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -23,7 +24,7 @@
   padding: 0;
 }
 
-.toc-list {
+#toc-placeholder .toc-list {
   list-style: none;
   padding-left: 0;
   margin: 0;
@@ -31,16 +32,15 @@
   overflow-y: auto;
 }
 
-.toc-item a {
+#toc-placeholder .toc-item a {
   display: block;
   text-decoration: none;
   padding: 4px 0; /* 调整垂直内边距 */
-  /* 使用 border-left 来实现激活状态的竖线，更简洁高效 */
   border-left: 2px solid transparent;
   transition: all 0.2s ease-in-out;
 }
 
-.toc-text {
+#toc-placeholder .toc-text {
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -49,42 +49,37 @@
 }
 
 /* --- 层级样式：缩进和字体粗细 --- */
-/* 默认 (h3 及以下) */
-.toc-item a {
+#toc-placeholder .toc-item a {
     padding-left: 1rem;
     font-size: 14px;
     font-weight: 400;
     color: var(--vh-text-color-2, #6b7280);
 }
-/* h1 (在目录中通常为最高级) */
-.toc-item.depth-1 a {
+#toc-placeholder .toc-item.depth-1 a {
     font-weight: 500;
 }
-/* h2 */
-.toc-item.depth-2 a {
+#toc-placeholder .toc-item.depth-2 a {
     /* 保持默认样式 */
 }
-/* h3 */
-.toc-item.depth-3 a {
+#toc-placeholder .toc-item.depth-3 a {
     padding-left: 2rem;
 }
-/* h4 */
-.toc-item.depth-4 a {
+#toc-placeholder .toc-item.depth-4 a {
     padding-left: 3rem;
 }
-/* h5 */
-.toc-item.depth-5 a {
+#toc-placeholder .toc-item.depth-5 a {
     padding-left: 4rem;
 }
 
 
 /* --- 悬浮效果：仅改变文字颜色 --- */
-.toc-item a:hover {
+#toc-placeholder .toc-item a:hover {
   color: var(--vh-text-color-1, #1f2937);
 }
 
 /* --- 激活效果：改变文字颜色并显示左侧竖线 --- */
-.toc-item a.active {
+/* 这是关键的修复，使用了更高优先级的选择器 */
+#toc-placeholder .toc-item a.active {
   color: var(--vh-text-color-1, #1f2937); /* 激活时文字变深色 */
   font-weight: 500; /* 激活时字体加粗一点 */
   border-left-color: var(--vh-main-color, #3b82f6); /* 显示蓝色的竖线 */
