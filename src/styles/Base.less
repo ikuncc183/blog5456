@@ -24,10 +24,10 @@
 	--vh-main-color-16: rgb(from var(--vh-main-color) r g b / 16%);
 	--vh-main-color-6: rgb(from var(--vh-main-color) r g b / 6%);
 
-	// Default 
+	// Default 
 	--vh-default: #BEC4CC;
 	--vh-default-hover: #BEC4CC18;
-	// Info 
+	// Info 
 	--vh-info: #3253b4;
 	--vh-info-hover: #3253b418;
 	// Success
@@ -73,6 +73,8 @@ html {
 	overflow-wrap: break-word;
 	font-size: 16px;
 	font-weight: 400;
+    /* --- 新增：平滑滚动效果 --- */
+    scroll-behavior: smooth;
 
 	&>body {
 		position: relative;
@@ -124,7 +126,7 @@ img[data-vh-lz-src] {
 }
 
 
-// ===================================================================== Other 
+// ===================================================================== Other 
 // 悬浮背景 a 标签
 .vh-hover {
 	position: relative;
