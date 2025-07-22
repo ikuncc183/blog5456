@@ -19,8 +19,14 @@ import TableOfContents from "@/components/TableOfContents.astro";
 import "./Aside.less";
 
 const { headings = [] } = Astro.props;
+
+// =======================================================
+// == 关键修复：添加 URL 路径判断，确保只在文章页显示目录 ==
+// =======================================================
+const isArticlePage = Astro.url.pathname.startsWith('/article/');
 const validHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 5);
-const hasToc = validHeadings.length > 0;
+// 只有当是文章页，并且有有效标题时，才显示目录
+const hasToc = isArticlePage && validHeadings.length > 0;
 ---
 
 <aside class="vh-aside">
