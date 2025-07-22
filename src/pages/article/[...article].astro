@@ -20,20 +20,11 @@ const { Site, Title, Author, GoogleAds } = SITE_CONFIG;
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 
 // =======================================================
-// == 关键修复：再次优化 description 的获取方式 ==
+// == 关键修复：最终的、最安全的 description 获取方式 ==
 // =======================================================
-// 这是一个更健壮的方法来获取描述，以防止构建错误。
-let description = ''; // 1. 从一个安全的默认值开始。
-
-// 2. 首先尝试从文章的 frontmatter 中获取描述。
-if (post.data.description) {
-  description = post.data.description;
-} 
-// 3. 如果 frontmatter 中没有，并且文章正文存在且为字符串，则从正文生成。
-else if (post.body && typeof post.body === 'string') {
-  description = getDescription(post.body);
-}
-// 4. 如果以上都失败，description 将保持为空字符串。
+// 优先使用 frontmatter 中的 description。
+// 如果没有，则仅在 post.body 是一个非空字符串时，才从文章内容生成。
+const description = post.data.description || (typeof post.body === 'string' && post.body.length > 0 ? getDescription(post.body) : '');
 
 const { reading_time, article_word_count } = remarkPluginFrontmatter;
 
