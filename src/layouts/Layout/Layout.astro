@@ -1,6 +1,5 @@
 ---
 // 从 Astro.props 获取页面元数据和配置
-// 新增了 headings prop，并给予一个默认空数组
 const { title, keywords, description, pagecover, activeNav, Home, headings = [] } = Astro.props;
 // 导入网站全局配置
 import SITE_INFO from "@/config";
@@ -20,9 +19,7 @@ import Footer from "@/components/Footer/Footer.astro";
 import BackTop from "@/components/BackTop/BackTop.astro";
 // 导入手机端侧边栏 MobileSidebar 组件
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
-// =======================================================
-// == 新增：导入全新的文章目录组件 ==
-// =======================================================
+// 导入全新的文章目录组件
 import TableOfContents from "@/components/TableOfContents.astro";
 // 导入樱花特效组件
 import SakuraEffect from "@/components/SakuraEffect.astro";
@@ -31,12 +28,15 @@ import "@/styles/Reset.less";
 import "@/styles/Base.less";
 import "./Layout.less";
 
-// 新增：判断当前页面是否为文章页
+// 判断当前页面是否为文章页
 const isArticlePage = headings && headings.length > 0;
 ---
 
 <html lang="zh-CN">
-	<Head {Title} {keywords} {description} PageCover={pagecover}>
+	{/* ======================================================= */}
+	{/* == 关键修复：将 {Title} 修改为 {title} == */}
+	{/* ======================================================= */}
+	<Head Title={title} keywords={keywords} description={description} PageCover={pagecover}>
 		<!-- 谷歌广告JS加载项 -->
 		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
 		<!-- 彩旗🎈特效脚本 -->
@@ -53,12 +53,10 @@ const isArticlePage = headings && headings.length > 0;
 		<Header {activeNav} />
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
-			{/* ======================================================= */}
-			{/* == 修改：为 main-inner 添加一个 class 来控制布局 == */}
-			{/* ======================================================= */}
+			<!-- 为 main-inner 添加一个 class 来控制布局 -->
 			<section class:list={["main-inner", { "is-article": isArticlePage }]} style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
 				
-                {/* 新增：左侧目录，只在文章页显示 */}
+                <!-- 左侧目录：只在文章页显示 -->
                 {isArticlePage && (
                     <aside class="toc-sidebar">
                         <TableOfContents headings={headings} />
@@ -69,7 +67,7 @@ const isArticlePage = headings && headings.length > 0;
 					<slot />
 				</section>
 
-                {/* 右侧边栏保持不变 */}
+                <!-- 右侧边栏 -->
 				<Aside />
 			</section>
 			<BackTop />
