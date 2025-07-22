@@ -9,19 +9,27 @@
         const tocLinks = document.querySelectorAll('#toc-placeholder .toc-list a');
         if (tocLinks.length === 0) return;
 
+        let activeLink = null;
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 const id = entry.target.getAttribute('id');
                 const tocLink = document.querySelector(`#toc-placeholder .toc-list a[href="#${id}"]`);
                 
                 if (tocLink) {
-                    if (entry.isIntersecting) {
-                        document.querySelectorAll('#toc-placeholder .toc-list a').forEach(link => link.classList.remove('active'));
+                    if (entry.isIntersecting && entry.intersectionRatio >= 1) {
+                        // 当标题完全进入视口顶部时，激活它
+                        if (activeLink) {
+                            activeLink.classList.remove('active');
+                        }
                         tocLink.classList.add('active');
+                        activeLink = tocLink;
                     }
                 }
             });
-        }, { rootMargin: '0% 0% -80% 0%', threshold: 1.0 });
+        }, { 
+            rootMargin: '0px 0px -85% 0px', // 调整rootMargin，当标题达到视口上方15%的位置时触发
+            threshold: 1.0 
+        });
 
         document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]').forEach(heading => {
             observer.observe(heading);
@@ -38,9 +46,10 @@
             </li>
         `).join('');
 
+        // 关键修改：更新标题为“本页目录”
         return `
-            <div class="toc-container">
-                <h3 class="toc-title">目录</h3>
+            <div class="toc-wrapper">
+                <h3 class="toc-title">本页目录</h3>
                 <ul class="toc-list">${listItems}</ul>
             </div>
         `;
@@ -69,11 +78,11 @@
 
         const headings = Array.from(headingElements).map(el => ({
             depth: parseInt(el.tagName.substring(1), 10),
-            text: el.textContent || '',
+            text: el.textContent?.trim() || '', // 使用 trim() 清理文本前后空格
             slug: el.id
         }));
         
-        const validHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 5);
+        const validHeadings = headings.filter(h => h.text && h.depth >= 1 && h.depth <= 5);
 
         if (validHeadings.length > 0) {
             const tocHtml = buildTocHtml(validHeadings);
