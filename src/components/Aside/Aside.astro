@@ -12,16 +12,12 @@ const tags = getTags();
 const CountInfo = getCountInfo();
 const recommendArticles = getRecommendArticles();
 
-// 导入 Google 广告和目录组件
+// 只需导入 GoogleAd
 import GoogleAd from "@/components/GoogleAd/GoogleAd.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
 
 import "./Aside.less";
 
-const { headings = [] } = Astro.props;
-// 关键修复 1: 回归到最简单的服务器端判断逻辑
-const validHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 5);
-const hasToc = validHeadings.length > 0;
+// 不再需要接收 headings
 ---
 
 <aside class="vh-aside">
@@ -114,12 +110,8 @@ const hasToc = validHeadings.length > 0;
 			</section>
 		)}
 
-        {/* 目录模块：仅在有标题时才会被渲染 */}
-        {hasToc && (
-            <section class="vh-aside-item toc-wrapper">
-                <TableOfContents headings={headings} />
-            </section>
-        )}
+        {/* 关键：这里是目录的“占位符”，脚本会自动填充内容 */}
+        <section class="vh-aside-item toc-wrapper" id="toc-placeholder"></section>
 
 		<!-- 谷歌广告块 -->
 		{GoogleAds.ad_Client && GoogleAds.asideAD_Slot && (
@@ -130,5 +122,3 @@ const hasToc = validHeadings.length > 0;
 		)}
 	</section>
 </aside>
-
-<!-- 关键修复 2: 移除所有客户端脚本 -->
