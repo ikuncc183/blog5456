@@ -1,6 +1,5 @@
 ---
 // 从 Astro.props 获取页面元数据和配置
-// 仍然需要 headings，以便传递给 Aside 组件
 const { title, keywords, description, pagecover, activeNav, Home, headings = [] } = Astro.props;
 // 导入网站全局配置
 import SITE_INFO from "@/config";
@@ -19,6 +18,8 @@ import SakuraEffect from "@/components/SakuraEffect.astro";
 import "@/styles/Reset.less";
 import "@/styles/Base.less";
 import "./Layout.less";
+
+// 我们不再需要 isArticlePage 的判断，因为 transition:key 会处理一切
 ---
 
 <html lang="zh-CN">
@@ -39,14 +40,18 @@ import "./Layout.less";
 		<Header {activeNav} />
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
-			{/* 恢复为简单的两列布局结构 */}
-			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+			
+			{/* ======================================================= */}
+			{/* == 最终修复：将 transition:key 应用于父级容器 == */}
+			{/* ======================================================= */}
+			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`} transition:key={Astro.url.pathname}>
 				<section class="main-inner-content">
 					<slot />
 				</section>
-                {/* 关键：将 headings 传递给右侧边栏 */}
-				<Aside headings={headings} transition:key={Astro.url.pathname} />
+                {/* 移除 Aside 上的 transition:key，因为它现在是多余的 */}
+				<Aside headings={headings} />
 			</section>
+
 			<BackTop />
 		</main>
 		<Footer />
