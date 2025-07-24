@@ -53,43 +53,4 @@ const data = await res.json();
 // }
 ```
 
-### 取优选IP中的最优选 (延迟比较)
 
-```js
-// 取最优选IP IPv4
-const CM_IP_V4 = data.v4.CM.reduce((minItem, currentItem) => {
-  return currentItem.latency < minItem.latency ? currentItem : minItem;
-}, data.v4.CM[0]);
-const CU_IP_V4 = data.v4.CU.reduce((minItem, currentItem) => {
-  return currentItem.latency < minItem.latency ? currentItem : minItem;
-}, data.v4.CU[0]);
-const CT_IP_V4 = data.v4.CT.reduce((minItem, currentItem) => {
-  return currentItem.latency < minItem.latency ? currentItem : minItem;
-}, data.v4.CT[0]);
-const DNS_DATA_V4 = { 移动: CM_IP_V4.ip, 联通: CM_IP_V4.ip, 电信: CU_IP_V4.ip, 默认: CT_IP_V4.ip };
-
-// 取最优选IP IPv6
-const CM_IP_V6 = data.v6.CM.reduce((minItem, currentItem) => {
-  return currentItem.latency < minItem.latency ? currentItem : minItem;
-}, data.v6.CM[0]);
-const CU_IP_V6 = data.v6.CU.reduce((minItem, currentItem) => {
-  return currentItem.latency < minItem.latency ? currentItem : minItem;
-}, data.v6.CU[0]);
-const CT_IP_V6 = data.v6.CT.reduce((minItem, currentItem) => {
-  return currentItem.latency < minItem.latency ? currentItem : minItem;
-}, data.v6.CT[0]);
-const DNS_DATA_V6 = { 移动: CM_IP_V6.ip, 联通: CM_IP_V6.ip, 电信: CU_IP_V6.ip, 默认: CT_IP_V6.ip };
-```
-
-### 循环替换优选IP
-
-```js
-DnsPodDomainList.forEach(async i => {
-  try {
-    const res = await client.ModifyRecord({ Domain, RecordType: i.Type, RecordLine: "", RecordLineId: i.LineId, Value: i.Type == "A" ? DNS_DATA_V4[i.Line] : DNS_DATA_V6[i.Line], RecordId: i.RecordId, SubDomain });
-    console.log(res);
-  } catch (error) {
-    console.log(error);
-  }
-});
-```
