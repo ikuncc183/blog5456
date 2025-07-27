@@ -22,6 +22,18 @@ export default {
       "descr": "柳影曳曳，清酒孤灯，扬笔撒墨，心境如霜"
     },
     {
+      "name": "NodeSeek",
+      "link": "https://www.nodeseek.com",
+      "avatar": "https://img.8888.vvvv.ee/file/图片/1753631267680.ico",
+      "descr": "论坛社区"
+    },
+    {
+      "name": "Linux Do",
+      "link": "https://linux.do",
+      "avatar": "https://img.8888.vvvv.ee/file/图片/1753631134216.ico",
+      "descr": "新的理想型社区"
+    },
+    {
       "name": "Diggoo博客",
       "link": "https://blog.diggoo.xyz",
       "avatar": "https://img.8888.vvvv.ee/file/图片/1751857961529.png",
