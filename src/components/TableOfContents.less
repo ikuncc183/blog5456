@@ -1,5 +1,4 @@
 /* src/components/TableOfContents.less */
-
 /* 建议在您的全局样式中定义这些CSS变量
   :root {
     --vh-main-color: #3b82f6; // 主题色，用于激活状态的竖线 (示例: blue-500)
@@ -38,6 +37,10 @@
   padding: 4px 0; /* 调整垂直内边距 */
   border-left: 2px solid transparent;
   transition: all 0.2s ease-in-out;
+  padding-left: 1rem;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--vh-text-color-2, #6b7280);
 }
 
 #toc-placeholder .toc-text {
@@ -49,38 +52,42 @@
 }
 
 /* --- 层级样式：缩进和字体粗细 --- */
-#toc-placeholder .toc-item a {
-    padding-left: 1rem;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--vh-text-color-2, #6b7280);
-}
 #toc-placeholder .toc-item.depth-1 a {
     font-weight: 500;
 }
+
 #toc-placeholder .toc-item.depth-2 a {
     /* 保持默认样式 */
 }
+
 #toc-placeholder .toc-item.depth-3 a {
     padding-left: 2rem;
 }
+
 #toc-placeholder .toc-item.depth-4 a {
     padding-left: 3rem;
 }
+
 #toc-placeholder .toc-item.depth-5 a {
     padding-left: 4rem;
 }
 
-
 /* --- 悬浮效果：仅改变文字颜色 --- */
 #toc-placeholder .toc-item a:hover {
-  color: var(--vh-text-color-1, #1f2937);
+  color: var(--vh-text-color-1, #1f2937) !important;
 }
 
 /* --- 激活效果：改变文字颜色并显示左侧竖线 --- */
-/* 这是关键的修复，使用了更高优先级的选择器 */
+/* 使用更高优先级的选择器并添加 !important */
+#toc-placeholder .toc-list .toc-item a.active,
 #toc-placeholder .toc-item a.active {
-  color: var(--vh-text-color-1, #1f2937); /* 激活时文字变深色 */
-  font-weight: 500; /* 激活时字体加粗一点 */
-  border-left-color: var(--vh-main-color, #3b82f6); /* 显示蓝色的竖线 */
+  color: var(--vh-text-color-1, #1f2937) !important; /* 激活时文字变深色 */
+  font-weight: 500 !important; /* 激活时字体加粗一点 */
+  border-left-color: var(--vh-main-color, #3b82f6) !important; /* 显示蓝色的竖线 */
+}
+
+/* 确保激活状态的文字颜色优先级最高 */
+#toc-placeholder .toc-list .toc-item a.active .toc-text,
+#toc-placeholder .toc-item a.active .toc-text {
+  color: inherit !important;
 }
