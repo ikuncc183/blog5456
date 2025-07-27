@@ -1,11 +1,10 @@
 /* src/components/TableOfContents.less */
-/* 建议在您的全局样式中定义这些CSS变量
-  :root {
-    --vh-main-color: #3b82f6; // 主题色，用于激活状态的竖线 (示例: blue-500)
-    --vh-text-color-1: #1f2937; // 主要文字颜色，用于标题和激活/悬浮状态 (示例: gray-800)
-    --vh-text-color-2: #6b7280; // 次要文字颜色，用于非激活的目录项 (示例: gray-500)
-  }
-*/
+/* 使用主题自带的CSS变量，与vhAstro-Theme保持一致 */
+
+/* 添加全局样式，确保在vhAstro-Theme中正常工作 */
+:global(#toc-placeholder) {
+  /* 确保目录容器样式不被主题覆盖 */
+}
 
 /* 使用 #toc-placeholder ID 来提高所有规则的优先级 */
 #toc-placeholder .toc-wrapper {
@@ -18,7 +17,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em; /* 字母间距 */
-  color: var(--vh-text-color-1, #1f2937);
+  color: var(--vh-main-color, #01C4B6); /* 使用主题主色 */
   margin: 0 0 1rem 0;
   padding: 0;
 }
@@ -40,7 +39,7 @@
   padding-left: 1rem;
   font-size: 14px;
   font-weight: 400;
-  color: var(--vh-text-color-2, #6b7280);
+  color: var(--vh-font-color, #34495e); /* 使用主题字体颜色 */
 }
 
 #toc-placeholder .toc-text {
@@ -74,16 +73,16 @@
 
 /* --- 悬浮效果：仅改变文字颜色 --- */
 #toc-placeholder .toc-item a:hover {
-  color: var(--vh-text-color-1, #1f2937) !important;
+  color: var(--vh-main-color, #01C4B6) !important;
 }
 
 /* --- 激活效果：改变文字颜色并显示左侧竖线 --- */
 /* 使用更高优先级的选择器并添加 !important */
 #toc-placeholder .toc-list .toc-item a.active,
 #toc-placeholder .toc-item a.active {
-  color: var(--vh-text-color-1, #1f2937) !important; /* 激活时文字变深色 */
+  color: var(--vh-main-color, #01C4B6) !important; /* 激活时文字变主题色 */
   font-weight: 500 !important; /* 激活时字体加粗一点 */
-  border-left-color: var(--vh-main-color, #3b82f6) !important; /* 显示蓝色的竖线 */
+  border-left-color: var(--vh-main-color, #01C4B6) !important; /* 显示主题色的竖线 */
 }
 
 /* 确保激活状态的文字颜色优先级最高 */
