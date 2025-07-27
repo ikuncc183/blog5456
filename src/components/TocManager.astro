@@ -51,12 +51,12 @@
                 }
             }
         }, { 
-            rootMargin: '-10% 0px -80% 0px', 
-            threshold: 0.1
+            rootMargin: '-10% 0px -70% 0px', 
+            threshold: [0, 0.25, 0.5, 0.75, 1]
         });
 
-        // 观察所有标题元素
-        const headingSelector = '.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]';
+        // 观察所有标题元素 - 适配vhAstro-Theme的文章结构
+        const headingSelector = '.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id], .main-inner-content h6[id], article h1[id], article h2[id], article h3[id], article h4[id], article h5[id], article h6[id]';
         const headings = document.querySelectorAll(headingSelector);
         
         headings.forEach(heading => {
@@ -111,7 +111,7 @@
             return;
         }
 
-        const headingElements = document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id]');
+        const headingElements = document.querySelectorAll('.main-inner-content h1[id], .main-inner-content h2[id], .main-inner-content h3[id], .main-inner-content h4[id], .main-inner-content h5[id], .main-inner-content h6[id], article h1[id], article h2[id], article h3[id], article h4[id], article h5[id], article h6[id]');
         
         if (headingElements.length === 0) {
             placeholder.innerHTML = '';
@@ -125,7 +125,7 @@
             slug: el.id
         }));
         
-        const validHeadings = headings.filter(h => h.text && h.slug && h.depth >= 1 && h.depth <= 5);
+        const validHeadings = headings.filter(h => h.text && h.slug && h.depth >= 1 && h.depth <= 6);
 
         if (validHeadings.length > 0) {
             const tocHtml = buildTocHtml(validHeadings);
