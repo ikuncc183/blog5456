@@ -25,6 +25,15 @@ import "./Aside.less";
 // 不再需要接收 headings
 ---
 
+<!-- ================================================================= -->
+<!-- 1. 新增：移动端切换按钮和背景遮罩层 -->
+<!-- ================================================================= -->
+<button id="aside-toggle-btn" class="aside-toggle-btn" aria-label="Toggle sidebar">
+	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+</button>
+<div id="aside-overlay" class="aside-overlay"></div>
+
+
 <aside class="vh-aside">
 	<!-- 头像块 -->
 	{AsideShow.WebSitesShow && (
@@ -48,10 +57,10 @@ import "./Aside.less";
 		</section>
 	)}
 
-    {/* ================================================================= */}
-    {/* 2. 在头像块和公告块之间，插入访客信息组件                       */}
-    <VisitorInfo />
-    {/* ================================================================= */}
+    {/* ================================================================= */}
+    {/* 2. 在头像块和公告块之间，插入访客信息组件                       */}
+    <VisitorInfo />
+    {/* ================================================================= */}
 
 	<!-- 公告块 -->
 	{SITE_CONFIG.Tips && (
@@ -132,3 +141,130 @@ import "./Aside.less";
 		)}
 	</section>
 </aside>
+
+<!-- ================================================================= -->
+<!-- 2. 新增：用于控制侧边栏的 CSS 样式 -->
+<!-- is:global 确保这些样式在客户端 JS 切换 class 时能够生效 -->
+<!-- ================================================================= -->
+<style is:global>
+/* 侧边栏切换按钮 */
+.aside-toggle-btn {
+	display: none; /* 桌面端默认隐藏 */
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+	z-index: 1001;
+	background-color: var(--card-bg, white);
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 50%;
+	width: 44px;
+	height: 44px;
+	padding: 8px;
+	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease-in-out;
+}
+
+.aside-toggle-btn:hover {
+	transform: scale(1.1);
+}
+
+.aside-toggle-btn svg {
+	width: 100%;
+	height: 100%;
+	stroke: var(--text-color, #374151);
+}
+
+/* 背景遮罩层 */
+.aside-overlay {
+	position: fixed;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.aside-overlay.is-visible {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.3s ease;
+}
+
+/* 媒体查询：当屏幕宽度小于 992px 时应用以下样式 */
+@media (max-width: 992px) {
+	/* 显示切换按钮 */
+	.aside-toggle-btn {
+		display: block;
+	}
+
+	/* 侧边栏样式调整 */
+	.vh-aside {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 280px; /* 侧边栏宽度 */
+		z-index: 1000;
+		transform: translateX(-100%); /* 默认移出屏幕外 */
+		transition: transform 0.3s ease-in-out;
+		overflow-y: auto; /* 当内容超出时允许滚动 */
+		background-color: var(--card-bg, white); /* 添加背景色以防透明 */
+		border-right: 1px solid var(--border-color, #e5e7eb);
+	}
+
+	/* 侧边栏打开时的状态 */
+	.vh-aside.is-open {
+		transform: translateX(0); /* 移入屏幕 */
+	}
+}
+</style>
+
+
+<!-- ================================================================= -->
+<!-- 3. 新增：用于控制侧边栏显示/隐藏的客户端脚本 -->
+<!-- ================================================================= -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const toggleBtn = document.getElementById('aside-toggle-btn');
+	const aside = document.querySelector('.vh-aside');
+	const overlay = document.getElementById('aside-overlay');
+
+	if (!toggleBtn || !aside || !overlay) {
+		return;
+	}
+
+	// 打开侧边栏
+	const openSidebar = () => {
+		aside.classList.add('is-open');
+		overlay.classList.add('is-visible');
+	};
+
+	// 关闭侧边栏
+	const closeSidebar = () => {
+		aside.classList.remove('is-open');
+		overlay.classList.remove('is-visible');
+	};
+
+	// 按钮点击事件：切换侧边栏状态
+	toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+		if (aside.classList.contains('is-open')) {
+			closeSidebar();
+		} else {
+			openSidebar();
+		}
+	});
+
+	// 遮罩层点击事件：关闭侧边栏
+	overlay.addEventListener('click', closeSidebar);
+
+	// 点击侧边栏中的链接后，自动关闭侧边栏，方便移动端跳转
+	aside.addEventListener('click', (event) => {
+		if (event.target.tagName === 'A') {
+			closeSidebar();
+		}
+	});
+});
+</script>
