@@ -28,7 +28,7 @@ export default defineConfig({
 
     // 以下是您原有的配置，已全部保留
     site: SITE_INFO.Site,
-    build: { assets: 'vh_static' },
+    // build: { assets: 'vh_static' }, // 关键：移除此行以解决 Cloudflare 部署错误。在服务器模式下，适配器会自动处理资源。
     integrations: [swup({
         theme: false,
         animationClass: "vh-animation-",
