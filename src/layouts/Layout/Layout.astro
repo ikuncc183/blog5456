@@ -59,5 +59,58 @@ import "./Layout.less";
 			import InitFn from "@/scripts/Init";
 			InitFn();
 		</script>
+
+        {/* --- 新增：修复侧边栏滑动效果的脚本 --- */}
+        <script>
+          // 这个函数用于初始化侧边栏按钮的功能
+          function initializeSidebarToggle() {
+            const toggleBtn = document.getElementById('aside-toggle-btn');
+            const sidebar = document.querySelector('.vh-aside');
+            const overlay = document.getElementById('aside-overlay');
+
+            // 如果页面上没有这些元素，就什么也不做
+            if (!toggleBtn || !sidebar || !overlay) {
+              return;
+            }
+
+            // 检查按钮是否已经绑定过事件，防止重复绑定
+            if (toggleBtn.dataset.listenerAttached) {
+                return;
+            }
+
+            const closeSidebar = () => {
+              sidebar.classList.remove('is-open');
+              overlay.classList.remove('is-visible');
+            };
+
+            const openSidebar = () => {
+              sidebar.classList.add('is-open');
+              overlay.classList.add('is-visible');
+            };
+
+            // 为按钮添加点击事件
+            toggleBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (sidebar.classList.contains('is-open')) {
+                closeSidebar();
+              } else {
+                openSidebar();
+              }
+            });
+
+            // 为遮罩层添加点击事件，用于关闭侧边栏
+            overlay.addEventListener('click', closeSidebar);
+            
+            // 给按钮做一个标记，表示已经绑定过事件了
+            toggleBtn.dataset.listenerAttached = 'true';
+          }
+
+          // 页面首次加载时，运行一次初始化函数
+          document.addEventListener('DOMContentLoaded', initializeSidebarToggle);
+
+          // 在Astro的页面切换（视图转换）完成后，再次运行初始化函数
+          // 这是确保按钮在站内跳转后依然有效的关键
+          document.addEventListener('astro:after-swap', initializeSidebarToggle);
+        </script>
 	</body>
 </html>
