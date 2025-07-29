@@ -103,6 +103,11 @@
         min-width: 60px;
         color: var(--text-color, #374151);
     }
+    /* --- 新增的修复代码 --- */
+    .vh-aside-item .info-item span:last-child {
+        word-break: break-all; /* 允许在任意字符处换行 */
+        overflow-wrap: break-word; /* 确保长单词或字符串能被正确断开 */
+    }
 </style>
 
 <script>
