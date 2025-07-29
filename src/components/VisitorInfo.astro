@@ -153,23 +153,23 @@
     document.getElementById('os').textContent = getOS();
     document.getElementById('browser').textContent = getBrowser();
 
-    // 2. 使用对国内友好的 ip-api.com 服务
-    fetch('https://ip-api.com/json')
+    // 2. 使用更稳定的 ip.sb 服务
+    fetch('https://api.ip.sb/geoip')
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'success') {
-            document.getElementById('ip-address').textContent = data.query || '获取失败';
+        if (data && data.ip) {
+            document.getElementById('ip-address').textContent = data.ip || '获取失败';
             document.getElementById('location').textContent = `${data.country || ''}, ${data.city || ''}`;
-            document.getElementById('isp').textContent = data.isp || '获取失败';
+            document.getElementById('isp').textContent = data.organization || '获取失败';
             
-            if (data.lat && data.lon) {
-                const dist = calculateDistance(BLOGGER_LAT, BLOGGER_LON, data.lat, data.lon);
+            if (data.latitude && data.longitude) {
+                const dist = calculateDistance(BLOGGER_LAT, BLOGGER_LON, data.latitude, data.longitude);
                 document.getElementById('distance').textContent = `约 ${dist} 公里`;
             } else {
                 document.getElementById('distance').textContent = '无法计算';
             }
         } else {
-            throw new Error('Failed to get IP info');
+            throw new Error('Failed to get IP info from ip.sb');
         }
       })
       .catch(error => {
