@@ -1,4 +1,4 @@
-// astro.config.mjs (最终修正版)
+// astro.config.mjs (已合并您的配置)
 import path from "path";
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -28,10 +28,7 @@ export default defineConfig({
 
     // 以下是您原有的配置，已全部保留
     site: SITE_INFO.Site,
-
-    // 注意：我们已从此配置中完全移除了 build: { assets: '...' } 这一行。
-    // 在服务器模式下，适配器会自动处理资源路径，无需手动指定，否则会导致部署错误。
-
+    build: { assets: 'vh_static' },
     integrations: [swup({
         theme: false,
         animationClass: "vh-animation-",
@@ -48,7 +45,6 @@ export default defineConfig({
     Compress({ CSS: false, Image: false, Action: { Passed: async () => true } }),
     sitemap({
         changefreq: 'weekly', priority: 0.7, lastmod: new Date(),
-        // 处理末尾带 / 的 url
         serialize: (item) => ({ ...item, url: item.url.endsWith('/') ? item.url.slice(0, -1) : item.url })
     }), mdx({ extendMarkdownConfig: false })],
     markdown: {
