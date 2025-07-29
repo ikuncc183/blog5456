@@ -15,6 +15,11 @@ const recommendArticles = getRecommendArticles();
 // 只需导入 GoogleAd
 import GoogleAd from "@/components/GoogleAd/GoogleAd.astro";
 
+// =================================================================
+// 1. 在这里导入新的访客信息组件
+import VisitorInfo from '@/components/VisitorInfo.astro';
+// =================================================================
+
 import "./Aside.less";
 
 // 不再需要接收 headings
@@ -42,6 +47,11 @@ import "./Aside.less";
 			<canvas class="vh-aside-canvas" width="888" height="1888" />
 		</section>
 	)}
+
+    {/* ================================================================= */}
+    {/* 2. 在头像块和公告块之间，插入访客信息组件                       */}
+    <VisitorInfo />
+    {/* ================================================================= */}
 
 	<!-- 公告块 -->
 	{SITE_CONFIG.Tips && (
@@ -110,8 +120,8 @@ import "./Aside.less";
 			</section>
 		)}
 
-        {/* 关键：这里是目录的“占位符”，脚本会自动填充内容 */}
-        <section class="vh-aside-item toc-wrapper" id="toc-placeholder"></section>
+        {/* 关键：这里是目录的“占位符”，脚本会自动填充内容 */}
+        <section class="vh-aside-item toc-wrapper" id="toc-placeholder"></section>
 
 		<!-- 谷歌广告块 -->
 		{GoogleAds.ad_Client && GoogleAds.asideAD_Slot && (
