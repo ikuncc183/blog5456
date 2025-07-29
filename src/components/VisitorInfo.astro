@@ -1,0 +1,120 @@
+---
+// src/components/VisitorInfo.astro
+// 这是一个新的组件，用于显示访客信息
+---
+
+<div id="visitor-info-card" class="card-widget">
+  <div class="card-title">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-500"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+    <span>访客信息</span>
+  </div>
+  <div class="card-content">
+    <div class="info-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7M10.5 14h3a5.5 5.5 0 0 1 5.5 5.5v1h-14v-1A5.5 5.5 0 0 1 10.5 14M2 12c0 5.523 4.477 10 10 10s10-4.477 10-10S17.523 2 12 2S2 6.477 2 12"></path></svg>
+      <span>IP 地址:</span>
+      <span id="ip-address">正在加载...</span>
+    </div>
+    <div class="info-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7"></path></svg>
+      <span>地理位置:</span>
+      <span id="location">正在加载...</span>
+    </div>
+    <div class="info-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg>
+      <span>运 营 商:</span>
+      <span id="isp">正在加载...</span>
+    </div>
+    <div class="info-item">
+       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M2 6v12h20V6zm18 10H4V8h16z"></path></svg>
+      <span>操作系统:</span>
+      <span id="os">正在加载...</span>
+    </div>
+    <div class="info-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m-4-8a4 4 0 0 1 4-4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4Z"></path></svg>
+      <span>浏 览 器:</span>
+      <span id="browser">正在加载...</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* 确保样式与你的主题匹配 */
+  .card-widget {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease-in-out;
+  }
+  .card-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--card-border-color);
+  }
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .info-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-color-light);
+  }
+  .info-item svg {
+    margin-right: 0.75rem;
+    flex-shrink: 0; /* 防止图标被压缩 */
+  }
+  .info-item span:first-of-type {
+    min-width: 60px; /* 确保标签对齐 */
+  }
+</style>
+
+<script>
+  // 客户端脚本，用于获取和显示信息
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. 获取操作系统和浏览器信息
+    const getOS = () => {
+      const ua = navigator.userAgent;
+      if (ua.indexOf('Win') !== -1) return 'Windows';
+      if (ua.indexOf('Mac') !== -1) return 'MacOS';
+      if (ua.indexOf('Linux') !== -1) return 'Linux';
+      if (ua.indexOf('Android') !== -1) return 'Android';
+      if (ua.indexOf('like Mac') !== -1) return 'iOS';
+      return 'Unknown';
+    };
+
+    const getBrowser = () => {
+      const ua = navigator.userAgent;
+      if (ua.indexOf('Chrome') > -1 && ua.indexOf('Safari') > -1 && ua.indexOf('Edge') == -1) return 'Chrome';
+      if (ua.indexOf('Safari') > -1 && ua.indexOf('Chrome') == -1) return 'Safari';
+      if (ua.indexOf('Firefox') > -1) return 'Firefox';
+      if (ua.indexOf('Edge') > -1) return 'Edge';
+      return 'Unknown';
+    };
+
+    document.getElementById('os').textContent = getOS();
+    document.getElementById('browser').textContent = getBrowser();
+
+    // 2. 使用第三方 API 获取 IP 和地理位置信息
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('ip-address').textContent = data.ip || '获取失败';
+        document.getElementById('location').textContent = `${data.country_name || ''}, ${data.city || ''}`;
+        document.getElementById('isp').textContent = data.org || '获取失败';
+      })
+      .catch(error => {
+        console.error('Error fetching IP info:', error);
+        document.getElementById('ip-address').textContent = '获取失败';
+        document.getElementById('location').textContent = '获取失败';
+        document.getElementById('isp').textContent = '获取失败';
+      });
+  });
+</script>
