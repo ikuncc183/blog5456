@@ -399,23 +399,76 @@ html.is-animating {
 	}
 }
 
-/* --- 新增：强制显示侧边栏切换按钮 --- */
-#aside-toggle-btn {
-    display: block !important; /* 强制显示 */
-    position: fixed !important; /* 固定在屏幕上，防止被覆盖 */
-    top: 70px;                 /* 距离顶部70px */
-    right: 20px;               /* 距离右侧20px */
-    width: 44px;               /* 设置宽度 */
-    height: 44px;              /* 设置高度 */
-    background: rgba(255, 255, 255, 0.8); /* 给个背景色，方便看到 */
-    border: 1px solid #eee;    /* 加个边框 */
-    border-radius: 50%;        /* 圆角 */
-    z-index: 9999 !important;  /* 确保在最顶层 */
-    cursor: pointer;
-    backdrop-filter: blur(10px); /* 毛玻璃效果，和你的主题匹配 */
-}
+/* --- 新增：手机端侧边栏滑动效果 --- */
+/* 使用 992px 作为断点，覆盖平板和手机 */
+@media screen and (max-width: 992px) {
+    /* 1. 侧边栏按钮 */
+    #aside-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 12px;
+        right: 60px; /* 放在顶部导航菜单按钮的旁边 */
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(5px);
+        z-index: 1001; /* 比顶栏高 */
+        cursor: pointer;
+        border: 1px solid var(--vh-font-6);
+        transition: transform 0.2s ease;
+    }
 
-/* 确保按钮里的图标也是可见的 */
-#aside-toggle-btn svg {
-    stroke: #333 !important; /* 设置图标颜色 */
+    #aside-toggle-btn:hover {
+        transform: scale(1.1);
+    }
+
+    #aside-toggle-btn svg {
+        stroke: var(--vh-font-color);
+        width: 20px;
+        height: 20px;
+    }
+
+    /* 2. 侧边栏本身 */
+    .vh-aside {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: var(--vh-aside-width);
+        max-width: 80vw; /* 最大宽度不超过屏幕的80% */
+        background-color: var(--vh-body-bg);
+        transform: translateX(100%); /* 默认隐藏在右侧 */
+        transition: transform 0.3s ease-in-out;
+        z-index: 1002;
+        overflow-y: auto; /* 内容过多时可以滚动 */
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    }
+
+    /* 3. 侧边栏打开时的状态 */
+    .vh-aside.is-open {
+        transform: translateX(0); /* 滑入屏幕 */
+    }
+
+    /* 4. 遮罩层 */
+    #aside-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        z-index: 1000;
+    }
+
+    /* 5. 遮罩层显示时的状态 */
+    #aside-overlay.is-visible {
+        opacity: 1;
+        visibility: visible;
+    }
 }
