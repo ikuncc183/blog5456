@@ -1,4 +1,6 @@
 ---
+// src/components/Aside.astro (修改后)
+
 // 导入 Svg, 时间处理, 网站配置等
 import Svg from "@/components/Svg/Svg.astro";
 import { fmtTime } from "@/utils/index";
@@ -14,6 +16,9 @@ const recommendArticles = getRecommendArticles();
 
 // 只需导入 GoogleAd
 import GoogleAd from "@/components/GoogleAd/GoogleAd.astro";
+
+// 关键: 1. 导入您的访客卡片组件
+import VisitorCard from "./widget/VisitorCard.astro"; 
 
 import "./Aside.less";
 
@@ -42,6 +47,9 @@ import "./Aside.less";
 			<canvas class="vh-aside-canvas" width="888" height="1888" />
 		</section>
 	)}
+
+    {/* 关键: 2. 在头像块和公告块之间放置访客卡片 */}
+    <VisitorCard />
 
 	<!-- 公告块 -->
 	{SITE_CONFIG.Tips && (
@@ -110,8 +118,8 @@ import "./Aside.less";
 			</section>
 		)}
 
-        {/* 关键：这里是目录的“占位符”，脚本会自动填充内容 */}
-        <section class="vh-aside-item toc-wrapper" id="toc-placeholder"></section>
+        {/* 关键：这里是目录的“占位符”，脚本会自动填充内容 */}
+        <section class="vh-aside-item toc-wrapper" id="toc-placeholder"></section>
 
 		<!-- 谷歌广告块 -->
 		{GoogleAds.ad_Client && GoogleAds.asideAD_Slot && (
