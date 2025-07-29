@@ -398,3 +398,24 @@ html.is-animating {
 		transform: translateX(0);
 	}
 }
+
+/* --- 新增：强制显示侧边栏切换按钮 --- */
+#aside-toggle-btn {
+    display: block !important; /* 强制显示 */
+    position: fixed !important; /* 固定在屏幕上，防止被覆盖 */
+    top: 70px;                 /* 距离顶部70px */
+    right: 20px;               /* 距离右侧20px */
+    width: 44px;               /* 设置宽度 */
+    height: 44px;              /* 设置高度 */
+    background: rgba(255, 255, 255, 0.8); /* 给个背景色，方便看到 */
+    border: 1px solid #eee;    /* 加个边框 */
+    border-radius: 50%;        /* 圆角 */
+    z-index: 9999 !important;  /* 确保在最顶层 */
+    cursor: pointer;
+    backdrop-filter: blur(10px); /* 毛玻璃效果，和你的主题匹配 */
+}
+
+/* 确保按钮里的图标也是可见的 */
+#aside-toggle-btn svg {
+    stroke: #333 !important; /* 设置图标颜色 */
+}
