@@ -1,4 +1,4 @@
-// astro.config.mjs (已合并您的配置)
+// astro.config.mjs (最终修正版)
 import path from "path";
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
