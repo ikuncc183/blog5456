@@ -19,7 +19,6 @@ recommend: true
 
 [示例站点](https://nas.ssss.bio/)
 
-<img src="https://img.8888.vvvv.ee/file/图片/1753804764350.png" alt="屏幕截图 2025-07-28 181802.png" width=100% />
 
 
 
