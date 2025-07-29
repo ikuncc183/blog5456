@@ -114,8 +114,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     // 在这里修改为你自己所在地的经纬度
-    const BLOGGER_LAT = 23.0575; // 例如：北京的纬度
-    const BLOGGER_LON = 112.4536; // 例如：北京的经度
+    const BLOGGER_LAT = 23.0575; // 例如：肇庆的纬度
+    const BLOGGER_LON = 112.4536; // 例如：肇庆的经度
     // =================================================================
 
     // 计算两点间距离的函数 (Haversine formula)
@@ -153,20 +153,23 @@
     document.getElementById('os').textContent = getOS();
     document.getElementById('browser').textContent = getBrowser();
 
-    // 2. 使用第三方 API 获取 IP 和地理位置信息
-    fetch('https://ipapi.co/json/')
+    // 2. 使用对国内友好的 ip-api.com 服务
+    fetch('https://ip-api.com/json')
       .then(response => response.json())
       .then(data => {
-        document.getElementById('ip-address').textContent = data.ip || '获取失败';
-        document.getElementById('location').textContent = `${data.country_name || ''}, ${data.city || ''}`;
-        document.getElementById('isp').textContent = data.org || '获取失败';
-        
-        // 如果成功获取访客坐标，则计算距离
-        if (data.latitude && data.longitude) {
-            const dist = calculateDistance(BLOGGER_LAT, BLOGGER_LON, data.latitude, data.longitude);
-            document.getElementById('distance').textContent = `约 ${dist} 公里`;
+        if (data.status === 'success') {
+            document.getElementById('ip-address').textContent = data.query || '获取失败';
+            document.getElementById('location').textContent = `${data.country || ''}, ${data.city || ''}`;
+            document.getElementById('isp').textContent = data.isp || '获取失败';
+            
+            if (data.lat && data.lon) {
+                const dist = calculateDistance(BLOGGER_LAT, BLOGGER_LON, data.lat, data.lon);
+                document.getElementById('distance').textContent = `约 ${dist} 公里`;
+            } else {
+                document.getElementById('distance').textContent = '无法计算';
+            }
         } else {
-            document.getElementById('distance').textContent = '无法计算';
+            throw new Error('Failed to get IP info');
         }
       })
       .catch(error => {
