@@ -4,10 +4,10 @@ date: 2025-07-29 23:48:00
 categories: code
 tags:
   - 导航站
-  - cloudflare
+  - CF
 
-id: Cloudflare pages+D1部署的导航站+书签收藏
-cover: https://img.8888.vvvv.ee/file/图片/1753804252353.png
+id: CF pages+D1部署的导航站+书签收藏
+cover: https://img.8888.vvvv.ee/file/图片/1753804764350.png
 recommend: true
 ---
 
@@ -19,7 +19,7 @@ recommend: true
 
 [示例站点](https://nas.ssss.bio/)
 
-![屏幕截图 2025-07-28 181802.png](upload://g5fGSIVqhwhCDglLcq1iibKZhMv.jpeg)
+<img src="https://img.8888.vvvv.ee/file/图片/1753804764350.png" alt="屏幕截图 2025-07-28 181802.png" width=100% />
 
 
 
@@ -42,9 +42,10 @@ recommend: true
 （2）分类拖拽排序：在管理面板中，可以通过拖拽直观地调整侧边栏和顶部栏分类的显示顺序，并一键保存。
 
 （3）自动图标获取：添加网站时，只需输入网址，系统会自动尝试抓取网站的 favicon 图标，简化操作。
-<img src="upload://qYCYzK8CnCJZYeVx2fJkbBnJhZR.jpeg" alt="屏幕截图 2025-07-28 143848.png" width="100%">
 
-<img src="upload://A9Dq6X3fzvoJFeM0OTawy2xaMgH.png" alt="屏幕截图 2025-07-28 133333.png" width="100%">
+<img src="https://img.8888.vvvv.ee/file/图片/1753804966666.png" alt="屏幕截图 2025-07-28 133333.png" width=100% />
+
+<img src="https://img.8888.vvvv.ee/file/图片/1753804963793.png" alt="屏幕截图 2025-07-28 143848.png" width=100% />
 
 3.优秀的用户体验
 
@@ -62,7 +63,7 @@ recommend: true
 
 为了更好地理解本项目的优势，我们可以将它与市面上常见的两类导航站进行对比：传统的静态导航站和商业化在线服务。
 
-<img src="upload://c2Jira9LA6pcIvP0g1WoOz8cCcB.png" alt="屏幕截图 2025-07-28 155349.png" width="100%">
+<img src="https://img.8888.vvvv.ee/file/图片/1753804964367.png" alt="屏幕截图 2025-07-28 155349.png" width=100% />
 
 ## 三、总结
 
