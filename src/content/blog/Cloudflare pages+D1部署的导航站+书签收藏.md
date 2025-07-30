@@ -42,9 +42,9 @@ recommend: true
 
 （3）自动图标获取：添加网站时，只需输入网址，系统会自动尝试抓取网站的 favicon 图标，简化操作。
 
-<img src="https://img.8888.vvvv.ee/file/图片/1753804966666.png" alt="屏幕截图 2025-07-28 133333.png" width=100% />
+<img src="https://iili.io/FScvZjp.png" alt="屏幕截图 2025-07-28 133333.png" width=100% />
 
-<img src="https://img.8888.vvvv.ee/file/图片/1753804963793.png" alt="屏幕截图 2025-07-28 143848.png" width=100% />
+<img src="https://iili.io/FSc8Kt2.png" alt="屏幕截图 2025-07-28 143848.png" width=100% />
 
 3.优秀的用户体验
 
@@ -62,7 +62,7 @@ recommend: true
 
 为了更好地理解本项目的优势，我们可以将它与市面上常见的两类导航站进行对比：传统的静态导航站和商业化在线服务。
 
-<img src="https://img.8888.vvvv.ee/file/图片/1753804964367.png" alt="屏幕截图 2025-07-28 155349.png" width=100% />
+<img src="https://iili.io/FScrr7e.png" alt="屏幕截图 2025-07-28 155349.png" width=100% />
 
 ## 三、总结
 
