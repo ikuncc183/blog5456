@@ -7,7 +7,7 @@ tags:
   - Cloudflare
 
 id: Cloudflare pages+D1部署的导航站+书签收藏
-cover: https://iili.io/FSaC4mg.png
+cover: https://iili.io/FSaorxa.png
 recommend: true
 ---
 
