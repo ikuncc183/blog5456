@@ -4,10 +4,10 @@ date: 2025-07-29 23:48:00
 categories: code
 tags:
   - 导航站
-  - CF
+  - Cloudflare
 
-id: CF pages+D1部署的导航站+书签收藏
-cover: https://img.8888.vvvv.ee/file/图片/1753804764350.png
+id: Cloudflare pages+D1部署的导航站+书签收藏
+cover: https://iili.io/FSaC4mg.png
 recommend: true
 ---
 
