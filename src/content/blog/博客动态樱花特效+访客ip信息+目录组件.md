@@ -359,34 +359,36 @@ recommend: true
         setInfo('distance', '获取失败');
     };
 
-    // 定义所有API端点和它们的数据解析器，优先使用国内API
     const apiEndpoints = [
         { name: 'ip.sb', url: 'https://api.ip.sb/geoip', parser: data => ({ ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.organization, lat: data.latitude, lon: data.longitude }) },
+        { 
+            name: 'ipinfo.io', 
+            url: 'https://ipinfo.io/json', 
+            parser: data => {
+                const [lat, lon] = data.loc ? data.loc.split(',') : [null, null];
+                return { ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.org, lat: lat, lon: lon };
+            }
+        },
         {
             name: 'api.vore.top',
             url: 'https://api.vore.top/api/IPdata',
             parser: (data) => {
                 if(data.code !== 200 || !data.ipinfo) return null;
-                return {
-                    ip: data.ipinfo.ip,
-                    location: `${data.ipinfo.info.country || ''}, ${data.ipinfo.info.province || ''}, ${data.ipinfo.info.city || ''}`.replace(/, $/, ''),
-                    isp: data.ipinfo.info.isp,
-                    lat: data.ipinfo.adcode.lat,
-                    lon: data.ipinfo.adcode.lng,
-                }
+                return { ip: data.ipinfo.ip, location: `${data.ipinfo.info.country || ''}, ${data.ipinfo.info.province || ''}, ${data.ipinfo.info.city || ''}`.replace(/, $/, ''), isp: data.ipinfo.info.isp, lat: data.ipinfo.adcode.lat, lon: data.ipinfo.adcode.lng }
             }
         },
         {
-            name: 'api.oioweb.cn',
-            url: 'https://api.oioweb.cn/api/ip/ipaddress',
+            name: 'ipwho.is',
+            url: 'https://ipwho.is/',
             parser: (data) => {
-                if(data.code !== 200 || !data.result) return null;
-                return {
-                    ip: data.result.ip,
-                    location: `${data.result.country || ''}, ${data.result.province || ''}, ${data.result.city || ''}`.replace(/, $/, ''),
-                    isp: data.result.isp,
-                };
+                if (!data.success) return null;
+                return { ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.isp, lat: data.latitude, lon: data.longitude }
             }
+        },
+        { 
+            name: 'freegeoip.app', 
+            url: 'https://freegeoip.app/json/', 
+            parser: data => ({ ip: data.ip, location: `${data.country_name || ''}, ${data.city || ''}`, isp: '', lat: data.latitude, lon: data.longitude }) 
         },
         { name: 'ipapi.co', url: 'https://ipapi.co/json/', parser: data => ({ ip: data.ip, location: `${data.country_name || ''}, ${data.city || ''}`, isp: data.org, lat: data.latitude, lon: data.longitude }) },
         { name: 'vvhan.com', url: 'https://api.vvhan.com/api/ipInfo?type=json', parser: data => data.success ? { ip: data.ip, location: `${data.info.country || ''}, ${data.info.city || ''}`, isp: data.info.isp } : null },
