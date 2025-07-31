@@ -18,6 +18,7 @@ recommend: true
 ## 代码
 
 ### 一、樱花特效`SakuraEffect.astro`
+<img src="https://iili.io/FUSWhxe.png" alt="ikun" width=100% />
 
 ```
 <!-- 
@@ -199,6 +200,9 @@ recommend: true
 </script>
 ```
 ### 二、访客ip信息`VisitorInfo.astro`
+
+<img src="https://iili.io/FUSv2Hb.png" alt="ikun" width=100% />
+
 ```
 ---
 // src/components/VisitorInfo.astro
@@ -447,6 +451,9 @@ recommend: true
 </script>
 ```
 ### 三、目录组件有两个文件`TocManager.astro`和`TableOfContents.less`
+
+<img src="https://iili.io/FUSSiUF.png" alt="ikun" width=100% />
+
 ```
 ---
 // src/components/TocManager.astro
