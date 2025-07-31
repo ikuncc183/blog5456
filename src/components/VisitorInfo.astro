@@ -155,6 +155,14 @@
 
     const apiEndpoints = [
         { name: 'ip.sb', url: 'https://api.ip.sb/geoip', parser: data => ({ ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.organization, lat: data.latitude, lon: data.longitude }) },
+        { 
+            name: 'ipinfo.io', 
+            url: 'https://ipinfo.io/json', 
+            parser: data => {
+                const [lat, lon] = data.loc ? data.loc.split(',') : [null, null];
+                return { ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.org, lat: lat, lon: lon };
+            }
+        },
         {
             name: 'api.vore.top',
             url: 'https://api.vore.top/api/IPdata',
@@ -171,14 +179,10 @@
                 return { ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.isp, lat: data.latitude, lon: data.longitude }
             }
         },
-        {
-            name: 'KeyCDN',
-            url: 'https://tools.keycdn.com/geo.json',
-            parser: (data) => {
-                if (data.status !== 'success' || !data.data.geo) return null;
-                const geo = data.data.geo;
-                return { ip: geo.ip, location: `${geo.country_name || ''}, ${geo.city || ''}`, isp: geo.isp, lat: geo.latitude, lon: geo.longitude }
-            }
+        { 
+            name: 'freegeoip.app', 
+            url: 'https://freegeoip.app/json/', 
+            parser: data => ({ ip: data.ip, location: `${data.country_name || ''}, ${data.city || ''}`, isp: '', lat: data.latitude, lon: data.longitude }) 
         },
         { name: 'ipapi.co', url: 'https://ipapi.co/json/', parser: data => ({ ip: data.ip, location: `${data.country_name || ''}, ${data.city || ''}`, isp: data.org, lat: data.latitude, lon: data.longitude }) },
         { name: 'vvhan.com', url: 'https://api.vvhan.com/api/ipInfo?type=json', parser: data => data.success ? { ip: data.ip, location: `${data.info.country || ''}, ${data.info.city || ''}`, isp: data.info.isp } : null },
