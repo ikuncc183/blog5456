@@ -7,7 +7,7 @@ tags:
   - 代码
 
 id: 博客动态樱花特效+访客ip信息+目录组件
-cover: '/assets/images/banner/072c12ec85d2d3b5.webp'
+cover: '/assets/images/banner/06f04260f04ee5d6.webp'
 recommend: true
 ---
 
