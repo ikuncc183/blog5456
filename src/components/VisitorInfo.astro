@@ -163,6 +163,7 @@
                 return { ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.org, lat: lat, lon: lon };
             }
         },
+        { name: 'ping0.cc', url: 'https://ip.ping0.cc/', parser: data => ({ ip: data.ip, location: data.geo, isp: data.isp }) },
         {
             name: 'api.vore.top',
             url: 'https://api.vore.top/api/IPdata',
