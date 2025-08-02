@@ -1,0 +1,63 @@
+---
+// 关键：不再需要从 props 获取 headings
+const { title, keywords, description, pagecover, activeNav, Home } = Astro.props;
+// 导入网站全局配置
+import SITE_INFO from "@/config";
+const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
+const { ad_Client, asideAD_Slot, articleAD_Slot } = GoogleAds;
+// 导入各个组件
+import Head from "@/components/Head/Head.astro";
+import Header from "@/components/Header/Header.astro";
+import MainHeader from "@/components/MainHeader/MainHeader.astro";
+import Aside from "@/components/Aside/Aside.astro";
+import Footer from "@/components/Footer/Footer.astro";
+import BackTop from "@/components/BackTop/BackTop.astro";
+import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
+import SakuraEffect from "@/components/SakuraEffect.astro";
+// 导入新的目录管理器
+import TocManager from "@/components/TocManager.astro";
+// 引入样式
+import "@/styles/Reset.less";
+import "@/styles/Base.less";
+import "./Layout.less";
+---
+
+<html lang="zh-CN">
+	<Head {title} {keywords} {description} PageCover={pagecover}>
+		<!-- 谷歌广告JS加载项 -->
+		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
+		<!-- 彩旗🎈特效脚本 -->
+		<script is:inline src="/assets/js/vhCaiqi.js" defer></script>
+		<!-- 内联样式 -->
+		<Fragment
+			set:html={`<style>:root {${Object.entries(Theme)
+				.map(([key, value]) => `${key}:${value};`)
+				.join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
+		/>
+	</Head>
+	<body>
+		<MobileSidebar />
+		<Header {activeNav} />
+		<main class="main">
+			{HomeBanner.enable && <MainHeader />}
+			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+				<section class="main-inner-content">
+					<slot />
+				</section>
+                {/* 关键：Aside 组件不再需要任何 props */}
+				<Aside />
+			</section>
+			<BackTop />
+		</main>
+		<Footer />
+		<SakuraEffect />
+		
+		{/* 关键：在页面底部添加目录管理器 */}
+		<TocManager />
+
+		<script>
+			import InitFn from "@/scripts/Init";
+			InitFn();
+		</script>
+	</body>
+</html>
