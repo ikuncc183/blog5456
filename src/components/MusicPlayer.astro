@@ -1,0 +1,209 @@
+---
+// 文件路径: src/components/MusicPlayer.astro
+// 这是一个功能完整的音乐播放器Astro组件 (API版本)
+---
+
+<div id="music-player-container" class="fixed bottom-5 left-5 z-50 bg-white/60 dark:bg-black/40 backdrop-blur-lg rounded-xl shadow-2xl p-4 w-80 max-w-[calc(100vw-2.5rem)] text-gray-800 dark:text-gray-200 transition-all duration-500 transform translate-y-[200%] ease-in-out">
+    <audio id="audio-player"></audio>
+
+    <div class="flex items-center">
+        <!-- 专辑封面 -->
+        <div class="w-16 h-16 mr-4 flex-shrink-0">
+            <img id="album-cover" src="https://placehold.co/100x100/2d3748/e2e8f0?text=Music" alt="Album Cover" class="w-full h-full rounded-md object-cover shadow-md transition-transform duration-300 hover:scale-105">
+        </div>
+
+        <!-- 歌曲信息与控制 -->
+        <div class="flex-grow overflow-hidden">
+            <!-- 歌曲详情 -->
+            <div class="mb-2">
+                <h3 id="song-title" class="font-bold text-sm truncate">未选择歌曲</h3>
+                <p id="song-artist" class="text-xs text-gray-600 dark:text-gray-400 truncate">播放器已就绪</p>
+            </div>
+
+            <!-- 控制按钮 -->
+            <div class="flex items-center space-x-3">
+                <button id="prev-btn" title="上一首" class="p-1 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50" disabled>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14.03V5.969a1 1 0 00-1.555-.832L4.12 9.168a1 1 0 000 1.664l4.325 4.001zM14.445 14.832A1 1 0 0016 14.03V5.969a1 1 0 00-1.555-.832L10.12 9.168a1 1 0 000 1.664l4.325 4.001z"></path></svg>
+                </button>
+                <button id="play-pause-btn" title="播放/暂停" class="p-1 bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <svg id="play-icon" class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                    <svg id="pause-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 4h3a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1zm7 0h3a1 1 0 011 1v10a1 1 0 01-1 1h-3a1 1 0 01-1-1V5a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                </button>
+                <button id="next-btn" title="下一首" class="p-1 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50" disabled>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M5.555 5.168A1 1 0 004 5.969v8.062a1 1 0 001.555.832l4.325-4.031a1 1 0 000-1.664L5.555 5.168zM11.555 5.168A1 1 0 0010 5.969v8.062a1 1 0 001.555.832l4.325-4.031a1 1 0 000-1.664l-4.325-4.031z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 进度条 -->
+    <div class="mt-3">
+        <div id="progress-container" class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full cursor-pointer group">
+            <div id="progress-bar" class="h-full bg-blue-500 rounded-full w-0 transition-all duration-100 relative">
+                 <div class="absolute right-0 top-1/2 -mt-1.5 w-3 h-3 bg-white rounded-full shadow border border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+        </div>
+        <div class="flex justify-between text-xs mt-1 text-gray-500 dark:text-gray-400">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const playerContainer = document.getElementById('music-player-container');
+        if (!playerContainer || playerContainer.dataset.initialized) {
+            return;
+        }
+        playerContainer.dataset.initialized = 'true';
+
+        const audio = document.getElementById('audio-player') as HTMLAudioElement;
+        const playPauseBtn = document.getElementById('play-pause-btn') as HTMLButtonElement;
+        const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
+        const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const albumCover = document.getElementById('album-cover') as HTMLImageElement;
+        const songTitle = document.getElementById('song-title');
+        const songArtist = document.getElementById('song-artist');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+
+        let playlist = [];
+        let currentSongIndex = 0;
+        let isPlaying = false;
+
+        // --- 🎵 API 配置 ---
+        // 你可以更改这里的歌单ID来获取不同的歌曲列表
+        // 推荐歌单ID: 3778678  (网易云音乐飙升榜)
+        // 推荐歌单ID: 19723756 (网易云音乐热歌榜)
+        const playlistId = '3778678';
+        const apiUrl = `https://api.i-meto.com/meting/api?server=netease&type=playlist&id=${playlistId}`;
+
+        async function fetchPlaylist() {
+            songArtist.textContent = '正在加载歌单...';
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // 格式化API数据以匹配播放器结构
+                playlist = data.map(song => ({
+                    title: song.name,
+                    artist: song.artist.join(' / '),
+                    src: song.url,
+                    cover: song.pic,
+                }));
+
+                if (playlist.length > 0) {
+                    loadSong(currentSongIndex);
+                    // 解除按钮禁用
+                    playPauseBtn.disabled = false;
+                    prevBtn.disabled = false;
+                    nextBtn.disabled = false;
+                    songArtist.textContent = playlist[currentSongIndex].artist;
+                } else {
+                   songTitle.textContent = '歌单为空';
+                   songArtist.textContent = '无法加载歌曲';
+                }
+            } catch (error) {
+                console.error("无法获取歌单:", error);
+                songTitle.textContent = '加载失败';
+                songArtist.textContent = '请检查网络或API';
+            }
+        }
+
+
+        function loadSong(songIndex: number) {
+            if (playlist.length === 0) return;
+            const song = playlist[songIndex];
+            songTitle.textContent = song.title;
+            songArtist.textContent = song.artist;
+            audio.src = song.src;
+            albumCover.src = song.cover;
+            albumCover.onerror = () => {
+                albumCover.src = 'https://placehold.co/100x100/2d3748/e2e8f0?text=Error';
+            };
+        }
+
+        function playSong() {
+            if (playlist.length === 0) return;
+            isPlaying = true;
+            playerContainer.classList.remove('translate-y-[200%]');
+            playerContainer.classList.add('translate-y-0');
+            audio.play().catch(error => console.error("Playback failed:", error));
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+        }
+
+        function pauseSong() {
+            isPlaying = false;
+            audio.pause();
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+        }
+        
+        function togglePlayPause() {
+            if (playlist.length === 0) return;
+            isPlaying ? pauseSong() : playSong();
+        }
+
+        function nextSong() {
+            if (playlist.length === 0) return;
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            loadSong(currentSongIndex);
+            playSong();
+        }
+
+        function prevSong() {
+            if (playlist.length === 0) return;
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            loadSong(currentSongIndex);
+            playSong();
+        }
+
+        function updateProgress(e: Event) {
+            const { duration, currentTime } = e.target as HTMLAudioElement;
+            if (duration) {
+                const progressPercent = (currentTime / duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                durationEl.textContent = formatTime(duration);
+                currentTimeEl.textContent = formatTime(currentTime);
+            }
+        }
+
+        function setProgress(e: MouseEvent) {
+            if (playlist.length === 0) return;
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            if (duration) {
+                audio.currentTime = (clickX / width) * duration;
+            }
+        }
+
+        function formatTime(seconds: number): string {
+            if (isNaN(seconds)) return '0:00';
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // --- 事件监听 ---
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        nextBtn.addEventListener('click', nextSong);
+        prevBtn.addEventListener('click', prevSong);
+        audio.addEventListener('timeupdate', updateProgress);
+        audio.addEventListener('ended', nextSong);
+        audio.addEventListener('loadedmetadata', updateProgress);
+        progressContainer.addEventListener('click', setProgress);
+
+        // --- 初始加载 ---
+        fetchPlaylist();
+    });
+</script>
