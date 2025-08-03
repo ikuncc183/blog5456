@@ -23,27 +23,27 @@
     const ap = new APlayer({
       container: document.getElementById('aplayer'),
       fixed: true, // 固定在左下角
-      mini: true, // 默认以迷你模式显示
+      mini: true, // 【修复】设置为 true，默认以最小化形式显示
       theme: '#2980b9', // 主题色
       lrcType: 1, // 启用歌词
-      audio: [ // 【核心】这里是直接嵌入的歌曲列表
+      audio: [ // 这里是直接嵌入的歌曲列表
         {
-          name: '离别开出花',
-          artist: '就是南方凯',
-          url: 'https://music.163.com/song/media/outer/url?id=2062653392.mp3',
-          cover: 'https://p2.music.126.net/vC4s6n2gY-2yW9n0-NqY_A==/109951168819077984.jpg',
+          name: '夏天的风',
+          artist: '温岚',
+          url: 'https://cdn.jsdelivr.net/gh/honjun/honjun.github.io@master/music/4.mp3',
+          cover: 'https://p2.music.126.net/wiVASu23g_wT34p-nI2TfQ==/109951163242941589.jpg',
         },
         {
-          name: '若月亮没来',
-          artist: '王宇宙Leto / 乔浚丞',
-          url: 'https://music.163.com/song/media/outer/url?id=2056598125.mp3',
-          cover: 'https://p1.music.126.net/PJMfCo2I8gH5yLo2ol2iAA==/109951168725875681.jpg',
+          name: '晴天',
+          artist: '周杰伦',
+          url: 'https://cdn.jsdelivr.net/gh/honjun/honjun.github.io@master/music/1.mp3',
+          cover: 'https://p2.music.126.net/t_9Z329g-4O9-A_2l9i1Gg==/109951164969299442.jpg',
         },
         {
-          name: '我会等',
-          artist: '承桓',
-          url: 'https://music.163.com/song/media/outer/url?id=2017750835.mp3',
-          cover: 'https://p1.music.126.net/Nf2s35FotyNB8X5uY2d_9Q==/109951168285511203.jpg',
+          name: '七里香',
+          artist: '周杰伦',
+          url: 'https://cdn.jsdelivr.net/gh/honjun/honjun.github.io@master/music/2.mp3',
+          cover: 'https://p1.music.126.net/w_U-p7-p-uQy_3-c7-P_9Q==/109951165885234562.jpg',
         }
       ]
     });
@@ -51,8 +51,7 @@
 </script>
 
 <!--
-  我们仍然保留这个强制样式，以确保播放器在最顶层显示。
-  如果播放器正常出现，你可以删除这个 <style> 标签。
+  我们保留这个强制样式，以确保播放器在最顶层显示。
 -->
 <style is:global>
   .aplayer.aplayer-fixed {
@@ -60,6 +59,4 @@
     left: 15px !important;
     bottom: 15px !important;
     z-index: 2147483647 !important; /* 使用最高的 z-index */
-    border: 2px solid lime !important; /* 添加一个亮绿色边框，方便一眼看到 */
   }
-</style>
