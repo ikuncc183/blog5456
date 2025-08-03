@@ -68,10 +68,3 @@ const customApi = `https://met.iiliu.cn/meting/api?server=${server}&type=${type}
   }
 </style>
 ```
-
-### 主要改动
-
-1.  **添加了 `api` 属性**：在 `<meting-js>` 标签中，我加入了 `api={customApi}`。这个 `customApi` 变量会构建一个与你参考网站类似的请求地址，去获取音乐列表。这是本次修复最核心的部分。
-2.  **添加了其他属性**：同时，我也加上了 `mutex="true"` 和 `preload="auto"` 这两个属性，使其行为与参考示例更接近。
-
-现在，请用上面的代码更新你的 `MusicPlayer.astro` 文件，然后清除浏览器缓存并刷新页面。播放器这次应该可以正常显示和播放了。如果成功了，你可以将新版组件中 `<style>` 标签里的样式删除，去掉调试用的红色
