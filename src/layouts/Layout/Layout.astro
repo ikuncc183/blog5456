@@ -74,10 +74,3 @@ import "./Layout.less";
 	</body>
 </html>
 ```
-
-我主要做了两处修改：
-
-1.  在文件头部的 `---` 脚本区域，导入了你之前创建的 `MusicPlayer.astro` 组件。
-2.  在 `</body>` 标签关闭之前，添加了 `<MusicPlayer />` 组件，这样播放器就会在所有页面加载了。
-
-现在，只要确保 `MusicPlayer.astro` 文件位于 `src/components/` 目录下，你的博客网站左下角就应该会出现音乐播放
