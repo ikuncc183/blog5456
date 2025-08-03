@@ -23,16 +23,15 @@ const {
   id = '3778678',       // 默认使用网易云音乐热歌榜作为示例
 } = Astro.props;
 
-// 这是从你的参考截图中找到的关键部分：一个可用的 Meting API 地址。
-const customApi = `https://met.iiliu.cn/meting/api?server=${server}&type=${type}&id=${id}&r=${Math.random()}`;
+// 【修复】我们换用一个更稳定、公开的 Meting API 服务
+const reliableApi = `https://api.i-meto.com/meting/api?server=${server}&type=${type}&id=${id}&r=${Math.random()}`;
 ---
 
 <!-- 
-  我们现在添加了 `api` 属性，并使用了 `mutex` 和 `preload` 属性，
-  这与你提供的参考截图中的配置一致。
+  我们使用新的 `api` 属性指向更可靠的服务地址。
 -->
 <meting-js
-  api={customApi}
+  api={reliableApi}
   server={server}
   type={type}
   id={id}
@@ -42,7 +41,6 @@ const customApi = `https://met.iiliu.cn/meting/api?server=${server}&type=${type}
   lrc-type="1"
   volume="0.7"
   mini="true"
-  mutex="true"
   preload="auto"
 >
 </meting-js>
@@ -53,18 +51,20 @@ const customApi = `https://met.iiliu.cn/meting/api?server=${server}&type=${type}
 <script is:inline src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
 <!--
-  我们保留了调试样式，以防万一。
-  如果播放器正常显示了，你可以删除或注释掉这个 <style> 标签。
+  【修复】使用更强的CSS样式来强制显示播放器，以防被主题的其他样式覆盖。
+  如果播放器正常显示，你可以删除这个 <style> 标签。
 -->
 <style is:global>
   .aplayer.aplayer-fixed {
-    /* 定位 */
+    position: fixed !important;
     left: 15px !important;
     bottom: 15px !important;
-
-    /* --- 用于调试的样式 (如果播放器正常显示，可以删除) --- */
-    z-index: 99999 !important; /* 强制设置到最顶层 */
-    /* border: 2px solid red !important; */ /* 暂时注释掉边框 */
+    width: 280px !important; /* 确保有宽度 */
+    height: 66px !important; /* 确保有高度 */
+    z-index: 2147483647 !important; /* 使用最高的 z-index，确保在最顶层 */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    border: 2px solid lime !important; /* 添加一个亮绿色边框，方便一眼看到 */
   }
 </style>
-```
