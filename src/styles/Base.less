@@ -229,7 +229,8 @@ html.is-changing {
 html.is-animating {
 	.vh-animation {
 		&.vh-animation-init {
-			transform: translateY(0.88rem);
+            /* --- 修复：移除了 transform 属性 --- */
+			/* transform: translateY(0.88rem); */
 			opacity: 0;
 		}
 	}
@@ -311,7 +312,8 @@ html.is-animating {
 
 @keyframes vh-init-show {
 	0% {
-		transform: translateY(2rem);
+        /* --- 修复：移除了 transform 属性 --- */
+		/* transform: translateY(2rem); */
 		opacity: 0;
 	}
 
@@ -333,12 +335,13 @@ html.is-animating {
 
 @-webkit-keyframes vh-init-show {
 	0% {
-		transform: translateY(2rem);
+        /* --- 修复：移除了 transform 属性 --- */
+		/* -webkit-transform: translateY(2rem); */
 		opacity: 0;
 	}
 
 	100% {
-		transform: translateY(0);
+		-webkit-transform: translateY(0);
 		opacity: 1;
 	}
 }
@@ -398,3 +401,11 @@ html.is-animating {
 		transform: translateX(0);
 	}
 }
+```
+
+### 后续步骤
+
+1.  **更新 `Base.less`**: 将上面代码块中的全部内容复制并替换你现有的 `src/styles/Base.less` 文件。
+2.  **确认 `Layout.astro`**: 请继续使用我在**上一次回复中提供给你的 `Layout.astro` 版本**（也就是你在 Canvas 中打开的那个版本），那个版本将播放器放到了 `page-wrapper` 外部，这个结构依然是正确的。
+
+同时更新这两个文件后，你的音乐播放器就能够真正地固定在屏幕左下
