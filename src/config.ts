@@ -64,7 +64,7 @@ export default {
   WebSites: [
     { text: 'Github', link: 'https://github.com/gdydg', icon: 'WebSite_github' },
     { text: '韩小韩API', link: 'https://api.vvhan.com', icon: 'WebSite_api' },
-    { text: '每日热榜', link: 'https://new.idrive.qzz.io/', icon: 'WebSite_hot' },
+    { text: '每日热榜', link: 'https://news.ssss.bio/', icon: 'WebSite_hot' },
     { text: 'IKUN导航', link: 'https://nas.marvellab.tech/', icon: 'ballpen' },
     { text: 'ikun图床', link: 'https://img.8888.vvvv.ee/', icon: 'WebSite_img' },
     { text: 'HanAnalytics', link: 'https://analytic.idrive.qzz.io', icon: 'WebSite_analytics' },
