@@ -1,0 +1,84 @@
+---
+// src/components/MusicPlayer.astro
+//
+// 使用说明:
+// 1. 将此文件保存到你的 Astro 项目的 `src/components/` 目录下。
+// 2. 在你的主布局文件 (例如 `src/layouts/Layout.astro`) 中导入并使用它。
+//    在 </head> 标签前添加 <MusicPlayer.Head />
+//    在 </body> 标签前添加 <MusicPlayer />
+//
+// 自定义配置:
+// 你可以修改下面的 `props` 来更换不同的音乐平台和歌单。
+// - server: 音乐平台。可选值: "netease", "tencent", "kugou", "kuwo", "bilibili", "xiami"
+//   - netease: 网易云音乐
+//   - tencent: QQ音乐
+// - type: 类型。可选值: "song", "playlist", "album", "search", "artist"
+//   - playlist: 歌单
+// - id: 对应类型的 ID。例如，网易云歌单的 ID。
+//
+// 如何获取歌单 ID (以网易云音乐为例):
+// 1. 在浏览器中打开网易云音乐网站。
+// 2. 找到你喜欢的歌单并点击进入。
+// 3. 查看浏览器地址栏的 URL，例如 `https://music.163.com/#/playlist?id=123456789`。
+// 4. 其中 `id=` 后面的数字 `123456789` 就是歌单 ID。
+
+export interface Props {
+  server?: 'netease' | 'tencent' | 'kugou' | 'kuwo' | 'bilibili' | 'xiami';
+  type?: 'song' | 'playlist' | 'album' | 'search' | 'artist';
+  id?: string;
+}
+
+const {
+  server = 'netease', // 默认使用网易云音乐
+  type = 'playlist',   // 默认类型为歌单
+  id = '3778678',       // 默认使用网易云音乐热歌榜作为示例
+} = Astro.props;
+---
+
+<!-- 
+  MetingJS 会自动处理 APlayer 的加载和初始化。
+  `fixed="true"`: 将播放器固定在页面上。
+  `theme="#2980b9"`: 设置主题颜色。
+  `order="random"`: 随机播放。
+  `lrc-type="1"`: 启用歌词显示。
+  `volume="0.7"`: 设置默认音量。
+  `mini="true"`: 初始时以迷你模式显示。
+  这些属性都会被传递给 APlayer 实例。
+-->
+<meting-js
+  server={server}
+  type={type}
+  id={id}
+  fixed="true"
+  theme="#2980b9"
+  order="random"
+  lrc-type="1"
+  volume="0.7"
+  mini="true"
+>
+</meting-js>
+
+<!-- 
+  MetingJS 需要在页面中加载它的脚本文件。
+  我们使用 `is:inline` 来确保脚本被正确注入。
+  这个脚本会自动加载 APlayer 的 CSS 和 JS，所以我们不需要手动引入它们。
+-->
+<script is:inline src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+<!--
+  虽然 MetingJS 会处理大部分样式，但我们可以添加一些自定义 CSS
+  来微调播放器在左下角的位置，确保它不会遮挡重要内容。
+-->
+<style is:global>
+  /*
+    MetingJS 生成的播放器容器 class 是 .aplayer.aplayer-fixed
+    我们可以通过这个选择器来精确调整它的位置。
+  */
+  .aplayer.aplayer-fixed {
+    /* 默认是在左下角，但可能没有边距，我们加一点 */
+    left: 15px !important;
+    bottom: 15px !important;
+    /* 提高 z-index 确保它在最上层 */
+    z-index: 9999 !important;
+  }
+</style>
