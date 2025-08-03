@@ -16,6 +16,12 @@ import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
 import SakuraEffect from "@/components/SakuraEffect.astro";
 // 导入新的目录管理器
 import TocManager from "@/components/TocManager.astro";
+
+// --- 新增代码开始 ---
+// 1. 导入音乐播放器组件
+import MusicPlayer from "@/components/MusicPlayer.astro";
+// --- 新增代码结束 ---
+
 // 引入样式
 import "@/styles/Reset.less";
 import "@/styles/Base.less";
@@ -55,9 +61,23 @@ import "./Layout.less";
 		{/* 关键：在页面底部添加目录管理器 */}
 		<TocManager />
 
+        {/* --- 新增代码开始 --- */}
+        {/* 2. 在 body 结束前添加音乐播放器组件 */}
+        {/* 你可以自定义这里的 server 和 id 来更换歌单 */}
+        <MusicPlayer server="netease" type="playlist" id="3778678" />
+        {/* --- 新增代码结束 --- */}
+
 		<script>
 			import InitFn from "@/scripts/Init";
 			InitFn();
 		</script>
 	</body>
 </html>
+```
+
+我主要做了两处修改：
+
+1.  在文件头部的 `---` 脚本区域，导入了你之前创建的 `MusicPlayer.astro` 组件。
+2.  在 `</body>` 标签关闭之前，添加了 `<MusicPlayer />` 组件，这样播放器就会在所有页面加载了。
+
+现在，只要确保 `MusicPlayer.astro` 文件位于 `src/components/` 目录下，你的博客网站左下角就应该会出现音乐播放
