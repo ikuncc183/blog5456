@@ -16,7 +16,7 @@ import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
 import SakuraEffect from "@/components/SakuraEffect.astro";
 // 导入新的目录管理器
 import TocManager from "@/components/TocManager.astro";
-// 新增：导入音乐播放器组件
+// 导入音乐播放器组件
 import ApiMusicPlayer from "@/components/ApiMusicPlayer.astro";
 // 引入样式
 import "@/styles/Reset.less";
@@ -38,31 +38,34 @@ import "./Layout.less";
 		/>
 	</Head>
 	<body>
-		<MobileSidebar />
-		<Header {activeNav} />
-		<main class="main">
-			{HomeBanner.enable && <MainHeader />}
-			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
-				<section class="main-inner-content">
-					<slot />
+		<!-- 修复：将页面主要内容包裹起来，以便隔离播放器 -->
+		<div id="page-wrapper" style="position: relative; z-index: 1;">
+			<MobileSidebar />
+			<Header {activeNav} />
+			<main class="main">
+				{HomeBanner.enable && <MainHeader />}
+				<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+					<section class="main-inner-content">
+						<slot />
+					</section>
+	                {/* 关键：Aside 组件不再需要任何 props */}
+					<Aside />
 				</section>
-                {/* 关键：Aside 组件不再需要任何 props */}
-				<Aside />
-			</section>
-			<BackTop />
-		</main>
-		<Footer />
-		<SakuraEffect />
-		
-		{/* 关键：在页面底部添加目录管理器 */}
-		<TocManager />
+				<BackTop />
+			</main>
+			<Footer />
+			<SakuraEffect />
+			
+			{/* 关键：在页面底部添加目录管理器 */}
+			<TocManager />
 
-		{/* 新增：在这里添加音乐播放器组件 */}
+			<script>
+				import InitFn from "@/scripts/Init";
+				InitFn();
+			</script>
+		</div>
+
+		<!-- 修复：将音乐播放器移到 wrapper 外部，确保它相对于窗口定位 -->
         <ApiMusicPlayer />
-
-		<script>
-			import InitFn from "@/scripts/Init";
-			InitFn();
-		</script>
 	</body>
 </html>
