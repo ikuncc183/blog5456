@@ -1,76 +1,70 @@
 ---
-// 关键：不再需要从 props 获取 headings
-const { title, keywords, description, pagecover, activeNav, Home } = Astro.props;
-// 导入网站全局配置
-import SITE_INFO from "@/config";
-const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
-const { ad_Client, asideAD_Slot, articleAD_Slot } = GoogleAds;
-// 导入各个组件
-import Head from "@/components/Head/Head.astro";
-import Header from "@/components/Header/Header.astro";
-import MainHeader from "@/components/MainHeader/MainHeader.astro";
-import Aside from "@/components/Aside/Aside.astro";
-import Footer from "@/components/Footer/Footer.astro";
-import BackTop from "@/components/BackTop/BackTop.astro";
-import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
-import SakuraEffect from "@/components/SakuraEffect.astro";
-// 导入新的目录管理器
-import TocManager from "@/components/TocManager.astro";
+// src/components/MusicPlayer.astro
+//
+// 使用说明:
+// 1. 将此文件保存到你的 Astro 项目的 `src/components/` 目录下。
+// 2. 在你的主布局文件 (例如 `src/layouts/Layout.astro`) 中导入并使用它。
+//
+// 自定义配置:
+// 你可以修改下面的 `props` 来更换不同的音乐平台和歌单。
+// - server: 音乐平台。可选值: "netease", "tencent", "kugou", "kuwo", "bilibili", "xiami"
+// - type: 类型。可选值: "song", "playlist", "album", "search", "artist"
+// - id: 对应类型的 ID。例如，网易云歌单的 ID。
 
-// --- 新增代码开始 ---
-// 1. 导入音乐播放器组件
-import MusicPlayer from "@/components/MusicPlayer.astro";
-// --- 新增代码结束 ---
+export interface Props {
+  server?: 'netease' | 'tencent' | 'kugou' | 'kuwo' | 'bilibili' | 'xiami';
+  type?: 'song' | 'playlist' | 'album' | 'search' | 'artist';
+  id?: string;
+}
 
-// 引入样式
-import "@/styles/Reset.less";
-import "@/styles/Base.less";
-import "./Layout.less";
+const {
+  server = 'netease', // 默认使用网易云音乐
+  type = 'playlist',   // 默认类型为歌单
+  id = '3778678',       // 默认使用网易云音乐热歌榜作为示例
+} = Astro.props;
+
+// 这是从你的参考截图中找到的关键部分：一个可用的 Meting API 地址。
+const customApi = `https://met.iiliu.cn/meting/api?server=${server}&type=${type}&id=${id}&r=${Math.random()}`;
 ---
 
-<html lang="zh-CN">
-	<Head {title} {keywords} {description} PageCover={pagecover}>
-		<!-- 谷歌广告JS加载项 -->
-		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
-		<!-- 彩旗🎈特效脚本 -->
-		<script is:inline src="/assets/js/vhCaiqi.js" defer></script>
-		<!-- 内联样式 -->
-		<Fragment
-			set:html={`<style>:root {${Object.entries(Theme)
-				.map(([key, value]) => `${key}:${value};`)
-				.join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
-		/>
-	</Head>
-	<body>
-		<MobileSidebar />
-		<Header {activeNav} />
-		<main class="main">
-			{HomeBanner.enable && <MainHeader />}
-			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
-				<section class="main-inner-content">
-					<slot />
-				</section>
-                {/* 关键：Aside 组件不再需要任何 props */}
-				<Aside />
-			</section>
-			<BackTop />
-		</main>
-		<Footer />
-		<SakuraEffect />
-		
-		{/* 关键：在页面底部添加目录管理器 */}
-		<TocManager />
+<!-- 
+  我们现在添加了 `api` 属性，并使用了 `mutex` 和 `preload` 属性，
+  这与你提供的参考截图中的配置一致。
+-->
+<meting-js
+  api={customApi}
+  server={server}
+  type={type}
+  id={id}
+  fixed="true"
+  theme="#2980b9"
+  order="random"
+  lrc-type="1"
+  volume="0.7"
+  mini="true"
+  mutex="true"
+  preload="auto"
+>
+</meting-js>
 
-        {/* --- 新增代码开始 --- */}
-        {/* 2. 在 body 结束前添加音乐播放器组件 */}
-        {/* 你可以自定义这里的 server 和 id 来更换歌单 */}
-        <MusicPlayer server="netease" type="playlist" id="3778678" />
-        {/* --- 新增代码结束 --- */}
+<!-- 
+  加载 MetingJS 的脚本文件。
+-->
+<script is:inline src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
-		<script>
-			import InitFn from "@/scripts/Init";
-			InitFn();
-		</script>
-	</body>
-</html>
+<!--
+  我们保留了调试样式，以防万一。
+  如果播放器正常显示了，你可以删除或注释掉这个 <style> 标签。
+-->
+<style is:global>
+  .aplayer.aplayer-fixed {
+    /* 定位 */
+    left: 15px !important;
+    bottom: 15px !important;
+
+    /* --- 用于调试的样式 (如果播放器正常显示，可以删除) --- */
+    z-index: 99999 !important; /* 强制设置到最顶层 */
+    /* border: 2px solid red !important; */ /* 暂时注释掉边框 */
+  }
+</style>
 ```
