@@ -1,62 +1,128 @@
 ---
 // src/components/MusicPlayer.astro
-//
-// 【重大更新】
-// 我们不再使用 MetingJS 来动态加载歌单，因为 API 请求似乎在你的环境中被阻止了。
-// 现在，我们直接使用 APlayer，并将一个固定的歌曲列表嵌入到组件中。
-// 这能确保播放器本身一定会被创建和显示。
+// 【最终方案】
+// 我们现在直接从你网站的 public 目录加载本地音乐文件。
+// 这是最稳定、最可靠的方法，不会有任何网络或权限问题。
 ---
 
-<!-- 1. 直接引入 APlayer 的 CSS 文件 -->
+<!-- 1. 引入 APlayer 的 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
-<!-- 2. 这是 APlayer 播放器将会挂载的 HTML 元素 -->
+<!-- 2. APlayer 播放器的挂载点 -->
 <div id="aplayer"></div>
 
-<!-- 3. 直接引入 APlayer 的 JS 文件 -->
+<!-- 3. 引入 APlayer 的 JS -->
 <script is:inline src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<!-- 4. 初始化 APlayer 的脚本 -->
+<!-- 4. 初始化 APlayer -->
 <script is:inline>
-  // 等待 DOM 加载完成后再初始化播放器
   document.addEventListener('DOMContentLoaded', function () {
     const ap = new APlayer({
       container: document.getElementById('aplayer'),
-      fixed: true, // 固定在左下角
-      mini: true, // 【修复】设置为 true，默认以最小化形式显示
-      theme: '#2980b9', // 主题色
-      lrcType: 1, // 启用歌词
-      audio: [ // 这里是直接嵌入的歌曲列表
+      fixed: true,
+      mini: true,
+      theme: '#2980b9',
+      audio: [
         {
-          name: '夏天的风',
-          artist: '温岚',
-          url: 'https://cdn.jsdelivr.net/gh/honjun/honjun.github.io@master/music/4.mp3',
-          cover: 'https://p2.music.126.net/wiVASu23g_wT34p-nI2TfQ==/109951163242941589.jpg',
+          name: '爱在西元前', // 改成你的歌曲名
+          artist: '周杰伦', // 改成歌手名
+          url: '/music/爱在西元前 - 周杰伦.mp3', // 【重要】对应 public/music/song1.mp3
+          cover: 'https://iili.io/F4lPWkG.jpg', // 【重要】对应 public/music/cover1.jpg
         },
         {
-          name: '晴天',
-          artist: '周杰伦',
-          url: 'https://cdn.jsdelivr.net/gh/honjun/honjun.github.io@master/music/1.mp3',
-          cover: 'https://p2.music.126.net/t_9Z329g-4O9-A_2l9i1Gg==/109951164969299442.jpg',
-        },
-        {
-          name: '七里香',
-          artist: '周杰伦',
-          url: 'https://cdn.jsdelivr.net/gh/honjun/honjun.github.io@master/music/2.mp3',
-          cover: 'https://p1.music.126.net/w_U-p7-p-uQy_3-c7-P_9Q==/109951165885234562.jpg',
+          name: '曹操',
+          artist: '林俊杰',
+          url: '/music/曹操 - 林俊杰.mp3', // 【重要】对应 public/music/song2.mp3
+          cover: 'https://iili.io/F4lPWkG.jpg', // 【重要】对应 public/music/cover2.png
         }
+        // 你可以按这个格式添加更多歌曲
       ]
     });
   });
 </script>
 
-<!--
-  我们保留这个强制样式，以确保播放器在最顶层显示。
--->
 <style is:global>
   .aplayer.aplayer-fixed {
     position: fixed !important;
     left: 15px !important;
     bottom: 15px !important;
-    z-index: 2147483647 !important; /* 使用最高的 z-index */
+    z-index: 2147483647 !important;
   }
+</style>
+```
+
+接下来，按照你的要求，我已将 Canvas 中的 `Layout.astro` 文件**恢复到你之前的版本**，重新启用了 `InitFn()` 脚本。
+
+
+```astro
+---
+// 关键：不再需要从 props 获取 headings
+const { title, keywords, description, pagecover, activeNav, Home } = Astro.props;
+// 导入网站全局配置
+import SITE_INFO from "@/config";
+const { GoogleAds, Theme, HomeBanner } = SITE_INFO;
+const { ad_Client, asideAD_Slot, articleAD_Slot } = GoogleAds;
+// 导入各个组件
+import Head from "@/components/Head/Head.astro";
+import Header from "@/components/Header/Header.astro";
+import MainHeader from "@/components/MainHeader/MainHeader.astro";
+import Aside from "@/components/Aside/Aside.astro";
+import Footer from "@/components/Footer/Footer.astro";
+import BackTop from "@/components/BackTop/BackTop.astro";
+import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
+import SakuraEffect from "@/components/SakuraEffect.astro";
+// 导入新的目录管理器
+import TocManager from "@/components/TocManager.astro";
+
+// 1. 导入音乐播放器组件
+import MusicPlayer from "@/components/MusicPlayer.astro";
+
+// 引入样式
+import "@/styles/Reset.less";
+import "@/styles/Base.less";
+import "./Layout.less";
+---
+
+<html lang="zh-CN">
+	<Head {title} {keywords} {description} PageCover={pagecover}>
+		<!-- 谷歌广告JS加载项 -->
+		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
+		<!-- 彩旗🎈特效脚本 -->
+		<script is:inline src="/assets/js/vhCaiqi.js" defer></script>
+		<!-- 内联样式 -->
+		<Fragment
+			set:html={`<style>:root {${Object.entries(Theme)
+				.map(([key, value]) => `${key}:${value};`)
+				.join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
+		/>
+	</Head>
+	<body>
+		<MobileSidebar />
+		<Header {activeNav} />
+		<main class="main">
+			{HomeBanner.enable && <MainHeader />}
+			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+				<section class="main-inner-content">
+					<slot />
+				</section>
+                {/* 关键：Aside 组件不再需要任何 props */}
+				<Aside />
+			</section>
+			<BackTop />
+		</main>
+		<Footer />
+		<SakuraEffect />
+		
+		{/* 关键：在页面底部添加目录管理器 */}
+		<TocManager />
+
+        {/* 2. 在 body 结束前添加音乐播放器组件 */}
+        <MusicPlayer />
+
+		{/* --- 恢复了你原来的脚本 --- */}
+		<script>
+			import InitFn from "@/scripts/Init";
+			InitFn();
+		</script>
+	</body>
+</html>
