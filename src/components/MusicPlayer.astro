@@ -1,46 +1,34 @@
 ---
 // src/components/MusicPlayer.astro
-// 【最终方案】
-// 我们现在直接从你网站的 public 目录加载本地音乐文件。
-// 这是最稳定、最可靠的方法，不会有任何网络或权限问题。
+// 【更新】
+// 切换回 MetingJS API 的方式来加载音乐。
 ---
 
-<!-- 1. 引入 APlayer 的 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<!-- 
+  MetingJS 会自动处理 APlayer 的加载和初始化。
+  我们使用了你提供的 API 地址和歌单 ID。
+-->
+<meting-js
+  id="3199232581"
+  server="netease"
+  type="playlist"
+  fixed="true"
+  mini="true"
+  preload="auto"
+  order="random"
+  volume="0.7"
+  api="https://music.ikun.pp.ua/api?server=:server&type=:type&id=:id"
+>
+</meting-js>
 
-<!-- 2. APlayer 播放器的挂载点 -->
-<div id="aplayer"></div>
+<!-- 
+  加载 MetingJS 的脚本文件。
+-->
+<script is:inline src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
-<!-- 3. 引入 APlayer 的 JS -->
-<script is:inline src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-
-<!-- 4. 初始化 APlayer -->
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', function () {
-    const ap = new APlayer({
-      container: document.getElementById('aplayer'),
-      fixed: true,
-      mini: true,
-      theme: '#2980b9',
-      audio: [
-        {
-          name: '爱在西元前', // 改成你的歌曲名
-          artist: '周杰伦', // 改成歌手名
-          url: '/music/爱在西元前 - 周杰伦.mp3', // 【重要】对应 public/music/song1.mp3
-          cover: '/music/F4lPWkG.jpg', // 【重要】对应 public/music/cover1.jpg
-        },
-        {
-          name: '曹操',
-          artist: '林俊杰',
-          url: '/music/曹操 - 林俊杰.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: '/music/F4lPWkG.jpg', // 【重要】对应 public/music/cover2.png
-        }
-        // 你可以按这个格式添加更多歌曲
-      ]
-    });
-  });
-</script>
-
+<!--
+  添加一些样式来确保播放器位置和层级正确。
+-->
 <style is:global>
   .aplayer.aplayer-fixed {
     position: fixed !important;
