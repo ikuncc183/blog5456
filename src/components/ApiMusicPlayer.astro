@@ -1,15 +1,17 @@
 ---
 // 文件路径: src/components/ApiMusicPlayer.astro
-// 一个独立的、由 API 驱动的悬浮音乐播放器按钮
+// 一个独立的、由 API 驱动的悬浮音乐播放器按钮 (JavaScript 自动定位版)
 
 // MetingJS 配置
-// 你可以根据自己的喜好修改这些值
 const server = "netease"; // 音乐平台: netease, tencent, kugou, xiami, baidu
 const type = "playlist";   // 类型: song, playlist, album, search, artist
 const id = "7499827393";  // 对应的歌单ID、歌曲ID等
 ---
 
-<!-- 播放器容器，固定在左下角 -->
+<!-- 
+  播放器容器。
+  它会被下面的脚本自动移动到 <body> 的直接子节点，以确保 position:fixed 生效。
+-->
 <div id="music-player-container" class="fixed bottom-8 left-8 z-50">
     <!-- 自定义的播放/暂停按钮 -->
     <button 
@@ -51,7 +53,7 @@ const id = "7499827393";  // 对应的歌单ID、歌曲ID等
 
 <style>
   /* 当按钮有 'playing' 类时，应用旋转动画 */
-  #custom-play-pause-btn.playing {
+  #music-player-container.playing #custom-play-pause-btn {
     animation: spin 4s linear infinite;
   }
 
@@ -64,49 +66,47 @@ const id = "7499827393";  // 对应的歌单ID、歌曲ID等
 
 <script>
     function setupMusicPlayer() {
+        const playerContainer = document.getElementById('music-player-container');
+        if (!playerContainer) return;
+
+        // --- 核心修复 ---
+        // 为了确保 position:fixed 不受父级 transform 影响，
+        // 我们将播放器容器直接移动到 <body> 的末尾。
+        if (playerContainer.parentElement !== document.body) {
+            document.body.appendChild(playerContainer);
+        }
+
         const customBtn = document.getElementById('custom-play-pause-btn');
         const playIcon = document.getElementById('play-icon');
         const pauseIcon = document.getElementById('pause-icon');
 
-        if (!customBtn || !playIcon || !pauseIcon) {
-            return;
-        }
+        if (!customBtn || !playIcon || !pauseIcon) return;
 
         // 轮询检查 aplayer 实例是否准备好
         const interval = setInterval(() => {
             const ap = (window as any).ap; 
             if (ap) {
-                clearInterval(interval); // 找到实例，停止轮询
+                clearInterval(interval);
 
-                // 隐藏 MetingJS 默认的播放器 UI
                 const metingContainer = document.querySelector('.aplayer');
-                if (metingContainer) {
-                    (metingContainer as HTMLElement).style.display = 'none';
-                }
+                if (metingContainer) (metingContainer as HTMLElement).style.display = 'none';
 
                 const updateUI = () => {
                     if (ap.audio.paused) {
-                        customBtn.classList.remove('playing');
+                        playerContainer.classList.remove('playing');
                         playIcon.classList.remove('hidden');
                         pauseIcon.classList.add('hidden');
                     } else {
-                        customBtn.classList.add('playing');
+                        playerContainer.classList.add('playing');
                         playIcon.classList.add('hidden');
                         pauseIcon.classList.remove('hidden');
                     }
                 };
 
-                // 初始化 UI
                 updateUI();
-
-                // 监听事件来同步按钮状态
                 ap.on('play', updateUI);
                 ap.on('pause', updateUI);
-
-                // 点击我们的按钮时，控制播放器
-                customBtn.addEventListener('click', () => {
-                    ap.toggle();
-                });
+                customBtn.addEventListener('click', () => ap.toggle());
             }
         }, 100);
     }
