@@ -1,70 +1,65 @@
 ---
 // src/components/MusicPlayer.astro
 //
-// 使用说明:
-// 1. 将此文件保存到你的 Astro 项目的 `src/components/` 目录下。
-// 2. 在你的主布局文件 (例如 `src/layouts/Layout.astro`) 中导入并使用它。
-//
-// 自定义配置:
-// 你可以修改下面的 `props` 来更换不同的音乐平台和歌单。
-// - server: 音乐平台。可选值: "netease", "tencent", "kugou", "kuwo", "bilibili", "xiami"
-// - type: 类型。可选值: "song", "playlist", "album", "search", "artist"
-// - id: 对应类型的 ID。例如，网易云歌单的 ID。
-
-export interface Props {
-  server?: 'netease' | 'tencent' | 'kugou' | 'kuwo' | 'bilibili' | 'xiami';
-  type?: 'song' | 'playlist' | 'album' | 'search' | 'artist';
-  id?: string;
-}
-
-const {
-  server = 'netease', // 默认使用网易云音乐
-  type = 'playlist',   // 默认类型为歌单
-  id = '3778678',       // 默认使用网易云音乐热歌榜作为示例
-} = Astro.props;
-
-// 【修复】我们换用一个更稳定、公开的 Meting API 服务
-const reliableApi = `https://api.i-meto.com/meting/api?server=${server}&type=${type}&id=${id}&r=${Math.random()}`;
+// 【重大更新】
+// 我们不再使用 MetingJS 来动态加载歌单，因为 API 请求似乎在你的环境中被阻止了。
+// 现在，我们直接使用 APlayer，并将一个固定的歌曲列表嵌入到组件中。
+// 这能确保播放器本身一定会被创建和显示。
 ---
 
-<!-- 
-  我们使用新的 `api` 属性指向更可靠的服务地址。
--->
-<meting-js
-  api={reliableApi}
-  server={server}
-  type={type}
-  id={id}
-  fixed="true"
-  theme="#2980b9"
-  order="random"
-  lrc-type="1"
-  volume="0.7"
-  mini="true"
-  preload="auto"
->
-</meting-js>
+<!-- 1. 直接引入 APlayer 的 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
-<!-- 
-  加载 MetingJS 的脚本文件。
--->
-<script is:inline src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<!-- 2. 这是 APlayer 播放器将会挂载的 HTML 元素 -->
+<div id="aplayer"></div>
+
+<!-- 3. 直接引入 APlayer 的 JS 文件 -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<!-- 4. 初始化 APlayer 的脚本 -->
+<script is:inline>
+  // 等待 DOM 加载完成后再初始化播放器
+  document.addEventListener('DOMContentLoaded', function () {
+    const ap = new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true, // 固定在左下角
+      mini: true, // 默认以迷你模式显示
+      theme: '#2980b9', // 主题色
+      lrcType: 1, // 启用歌词
+      audio: [ // 【核心】这里是直接嵌入的歌曲列表
+        {
+          name: '离别开出花',
+          artist: '就是南方凯',
+          url: 'https://music.163.com/song/media/outer/url?id=2062653392.mp3',
+          cover: 'https://p2.music.126.net/vC4s6n2gY-2yW9n0-NqY_A==/109951168819077984.jpg',
+        },
+        {
+          name: '若月亮没来',
+          artist: '王宇宙Leto / 乔浚丞',
+          url: 'https://music.163.com/song/media/outer/url?id=2056598125.mp3',
+          cover: 'https://p1.music.126.net/PJMfCo2I8gH5yLo2ol2iAA==/109951168725875681.jpg',
+        },
+        {
+          name: '我会等',
+          artist: '承桓',
+          url: 'https://music.163.com/song/media/outer/url?id=2017750835.mp3',
+          cover: 'https://p1.music.126.net/Nf2s35FotyNB8X5uY2d_9Q==/109951168285511203.jpg',
+        }
+      ]
+    });
+  });
+</script>
 
 <!--
-  【修复】使用更强的CSS样式来强制显示播放器，以防被主题的其他样式覆盖。
-  如果播放器正常显示，你可以删除这个 <style> 标签。
+  我们仍然保留这个强制样式，以确保播放器在最顶层显示。
+  如果播放器正常出现，你可以删除这个 <style> 标签。
 -->
 <style is:global>
   .aplayer.aplayer-fixed {
     position: fixed !important;
     left: 15px !important;
     bottom: 15px !important;
-    width: 280px !important; /* 确保有宽度 */
-    height: 66px !important; /* 确保有高度 */
-    z-index: 2147483647 !important; /* 使用最高的 z-index，确保在最顶层 */
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    z-index: 2147483647 !important; /* 使用最高的 z-index */
     border: 2px solid lime !important; /* 添加一个亮绿色边框，方便一眼看到 */
   }
 </style>
