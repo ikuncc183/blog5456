@@ -16,6 +16,8 @@ import MobileSidebar from "@/components/MobileSidebar/MobileSidebar.astro";
 import SakuraEffect from "@/components/SakuraEffect.astro";
 // 导入新的目录管理器
 import TocManager from "@/components/TocManager.astro";
+// 新增：导入音乐播放器组件
+import ApiMusicPlayer from "@/components/ApiMusicPlayer.astro";
 // 引入样式
 import "@/styles/Reset.less";
 import "@/styles/Base.less";
@@ -44,7 +46,7 @@ import "./Layout.less";
 				<section class="main-inner-content">
 					<slot />
 				</section>
-                {/* 关键：Aside 组件不再需要任何 props */}
+                {/* 关键：Aside 组件不再需要任何 props */}
 				<Aside />
 			</section>
 			<BackTop />
@@ -54,6 +56,9 @@ import "./Layout.less";
 		
 		{/* 关键：在页面底部添加目录管理器 */}
 		<TocManager />
+
+		{/* 新增：在这里添加音乐播放器组件 */}
+        <ApiMusicPlayer />
 
 		<script>
 			import InitFn from "@/scripts/Init";
