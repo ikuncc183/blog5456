@@ -2,11 +2,12 @@
 // src/components/MusicPlayer.astro
 // 【最终方案】
 // 结合了自定义按钮方案和强制定位/最小化要求。
+// 通过指定一个更好的第三方 API 来解决歌曲不完整的问题。
 
 // 你可以根据自己的喜好修改这些值
 const server = "netease";       // 音乐平台: netease, tencent, kugou, xiami, baidu
 const type = "playlist";        // 类型: song, playlist, album, search, artist
-const id = "3778678";         // 【已更新】歌单ID
+const id = "3778678";         // 歌单ID
 ---
 
 <!-- 
@@ -32,7 +33,6 @@ const id = "3778678";         // 【已更新】歌单ID
     
     <!-- 
       MetingJS 播放器本体。
-      注意：这里的 fixed="false"，因为我们是手动固定父容器。
       它本身会被下面的脚本隐藏，只在后台工作。
     -->
     <meting-js
@@ -51,8 +51,17 @@ const id = "3778678";         // 【已更新】歌单ID
     </meting-js>
 </div>
 
-<!-- 引入 APlayer 和 MetingJS 的库 -->
-<!-- is:inline 指令对于在 Astro 组件中正确加载外部脚本至关重要 -->
+<!-- 【重要修复】 
+  1. 根据文档，我们先定义全局的 API 地址，指向一个能提供完整歌曲的服务。
+-->
+<script is:inline>
+  var meting_api = 'https://met.liiiu.cn/meting/api?server=:server&type=:type&id=:id';
+</script>
+
+<!-- 
+  2. 然后再引入 APlayer 和 MetingJS 的库。
+  MetingJS 会自动使用我们上面定义的 meting_api。
+-->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" is:inline>
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js" is:inline></script>
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js" is:inline></script>
