@@ -120,6 +120,17 @@
 			.social-icons a.email:hover {
 				color: #d44638;
 			}
+			
+			/* --- 新增：修复底部四个图标的居中问题 --- */
+			.footer-icons {
+				text-align: center;
+				margin: 20px 0; /* 增加一些垂直边距 */
+			}
+			
+			.footer-icons a {
+				margin: 0 5px; /* 给图标之间增加一点间距 */
+			}
+
 
 			/* --- 新增：炫酷备案号样式 --- */
 			.icp-wrapper {
@@ -211,13 +222,20 @@
 				<i class="fas fa-envelope"></i>
 			</a>
 		</div>
-		<p><a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a><a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a><a href="/sitemap-index.xml" target="_blank"><img alt="sitemap" src="/assets/images/footer/sitemap.svg" /></a><a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a></p>
-		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
 		
 		<!-- 
 			这里是修改的核心部分
-			我用下面的 div 结构替换了您原来的 <p> 标签 
+			我给这个 <p> 标签加上了 'footer-icons' 类来实现居中
 		-->
+		<p class="footer-icons">
+			<a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a>
+			<a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a>
+			<a href="/sitemap-index.xml" target="_blank"><img alt="sitemap" src="/assets/images/footer/sitemap.svg" /></a>
+			<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
+		</p>
+
+		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
+		
 		<div class="icp-wrapper">
 			<div class="icp-container">
 				<a href="https.icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
