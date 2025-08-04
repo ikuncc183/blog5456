@@ -1,45 +1,67 @@
 ---
 // src/components/MusicPlayer.astro
-// 【最终方案】
-// 结合了自定义按钮方案和强制定位/最小化要求。
-// 通过指定一个更好的第三方 API 来解决歌曲不完整的问题。
+// 【最终方案 v2】
+// 实现了截图中的胶囊样式，可以显示歌曲名称。
+// 结合了自定义按钮、强制定位和第三方API。
 
 // 你可以根据自己的喜好修改这些值
-const server = "netease";       // 音乐平台: netease, tencent, kugou, xiami, baidu
-const type = "playlist";        // 类型: song, playlist, album, search, artist
-const id = "3778678";         // 歌单ID
+const server = "netease";      // 音乐平台: netease, tencent, kugou, xiami, baidu
+const type = "playlist";       // 类型: song, playlist, album, search, artist
+const id = "3778678";          // 歌单ID
 ---
 
 <!-- 
   播放器容器。
-  我们用一个 style 标签来强制固定它的位置和层级，确保它总在左下角最顶层。
+  现在它本身就是那个可见的、胶囊形状的UI。
+  我们用 flex 布局来排列里面的按钮和文字。
 -->
-<div id="music-player-container">
-    <button  
-        id="custom-play-pause-btn"  
-        aria-label="Play or pause music"
-        class="w-14 h-14 bg-gray-900/70 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-    >
-        </button>
-</div>
-    <!-- 
-      MetingJS 播放器本体。
-      它本身会被下面的脚本隐藏，只在后台工作。
-    -->
-    <meting-js
-        id="meting-player"
-        server={server}
-        type={type}
-        id={id}
-        fixed="false"
-        autoplay="false"
-        loop="all"
-        order="random"
-        preload="auto"
-        list-folded="true"
-        theme="#2d3748"
-    >
-    </meting-js>
+<div 
+  id="music-player-container"
+  class="flex items-center p-2 pr-4 rounded-full bg-white/70 backdrop-blur-md shadow-lg"
+>
+  <!-- 自定义的播放/暂停按钮 -->
+  <button  
+    id="custom-play-pause-btn"  
+    aria-label="Play or pause music"
+    class="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white flex-shrink-0"
+  >
+    <!-- 播放图标 -->
+    <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z"></path>
+    </svg>
+    <!-- 暂停图标 -->
+    <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+    </svg>
+  </button>
+  
+  <!-- 新增：用于显示歌曲名称的元素 -->
+  <span 
+    id="song-title" 
+    class="ml-3 text-sm text-gray-800 font-semibold truncate"
+    title="当前歌曲"
+  >
+    加载中...
+  </span>
+    
+  <!-- 
+    MetingJS 播放器本体。
+    它本身会被下面的脚本隐藏，只在后台工作。
+  -->
+  <meting-js
+    id="meting-player"
+    server={server}
+    type={type}
+    id={id}
+    fixed="false"
+    autoplay="false"
+    loop="all"
+    order="random"
+    preload="auto"
+    list-folded="true"
+    theme="#2d3748"
+  >
+  </meting-js>
 </div>
 
 <!-- 【重要修复】 
@@ -69,6 +91,11 @@ const id = "3778678";         // 歌单ID
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+  
+  /* 歌曲标题最大宽度，防止过长撑开布局 */
+  #song-title {
+    max-width: 150px; /* 你可以根据需要调整这个值 */
+  }
 
   /* 【重要】
     使用 is:global 来确保我们的定位样式能覆盖任何主题自带的样式。
@@ -79,58 +106,73 @@ const id = "3778678";         // 歌单ID
     left: 2rem; /* 32px */
     bottom: 2rem; /* 32px */
     z-index: 2147483647 !important;
+    /* 添加过渡效果，让显示更平滑 */
+    transition: all 0.3s ease-in-out;
   }
 </style>
 
 <script>
-    // 使用 'astro:page-load' 事件确保在客户端路由切换时也能正确执行
-    document.addEventListener('astro:page-load', () => {
-        const customBtn = document.getElementById('custom-play-pause-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
+  // 使用 'astro:page-load' 事件确保在客户端路由切换时也能正确执行
+  document.addEventListener('astro:page-load', () => {
+    const customBtn = document.getElementById('custom-play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const songTitleEl = document.getElementById('song-title'); // 获取标题元素
 
-        if (!customBtn || !playIcon || !pauseIcon) {
-            console.error('Custom player button elements not found.');
-            return;
+    if (!customBtn || !playIcon || !pauseIcon || !songTitleEl) {
+      console.error('Custom player elements not found.');
+      return;
+    }
+
+    // MetingJS 初始化需要一些时间，我们轮询检查 aplayer 实例是否准备好
+    const interval = setInterval(() => {
+      // MetingJS 会在 window 对象上附加 aplayer 实例
+      const ap = (window as any).ap;  
+      if (ap) {
+        clearInterval(interval); // 找到实例，停止轮询
+
+        // 隐藏 MetingJS 默认的播放器 UI，实现“最小化”
+        const metingContainer = document.querySelector('.aplayer');
+        if (metingContainer) {
+          (metingContainer as HTMLElement).style.display = 'none';
         }
 
-        // MetingJS 初始化需要一些时间，我们轮询检查 aplayer 实例是否准备好
-        const interval = setInterval(() => {
-            // MetingJS 会在 window 对象上附加 aplayer 实例
-            const ap = (window as any).ap;  
-            if (ap) {
-                clearInterval(interval); // 找到实例，停止轮询
+        // --- 新功能：一个函数更新所有UI（按钮状态和歌曲标题） ---
+        const updatePlayerInfo = () => {
+          // 更新播放/暂停状态
+          if (ap.audio.paused) {
+            customBtn.classList.remove('playing');
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+          } else {
+            customBtn.classList.add('playing');
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+          }
+          
+          // 更新歌曲标题
+          // ap.list.audios 是播放列表，ap.list.index 是当前歌曲的索引
+          if (ap.list && ap.list.audios[ap.list.index]) {
+            const currentSong = ap.list.audios[ap.list.index];
+            songTitleEl.textContent = currentSong.name;
+            songTitleEl.title = `${currentSong.name} - ${currentSong.artist}`;
+          }
+        };
 
-                // 隐藏 MetingJS 默认的播放器 UI，实现“最小化”
-                const metingContainer = document.querySelector('.aplayer');
-                if (metingContainer) {
-                    (metingContainer as HTMLElement).style.display = 'none';
-                }
+        // 初始化UI
+        updatePlayerInfo();
 
-                const updateUI = () => {
-                    if (ap.audio.paused) {
-                        customBtn.classList.remove('playing');
-                        playIcon.classList.remove('hidden');
-                        pauseIcon.classList.add('hidden');
-                    } else {
-                        customBtn.classList.add('playing');
-                        playIcon.classList.add('hidden');
-                        pauseIcon.classList.remove('hidden');
-                    }
-                };
+        // 监听播放和暂停事件来同步我们的自定义按钮
+        ap.on('play', updatePlayerInfo);
+        ap.on('pause', updatePlayerInfo);
+        // 新增：监听歌曲切换事件来更新标题
+        ap.on('listswitch', updatePlayerInfo);
 
-                // 初始化 UI
-                updateUI();
-
-                // 监听播放和暂停事件来同步我们的自定义按钮
-                ap.on('play', updateUI);
-                ap.on('pause', updateUI);
-
-                // 点击我们的按钮时，调用 aplayer 的 toggle 方法
-                customBtn.addEventListener('click', () => {
-                    ap.toggle();
-                });
-            }
-        }, 100); // 每 100 毫秒检查一次
-    });
+        // 点击我们的按钮时，调用 aplayer 的 toggle 方法
+        customBtn.addEventListener('click', () => {
+          ap.toggle();
+        });
+      }
+    }, 100); // 每 100 毫秒检查一次
+  });
 </script>
