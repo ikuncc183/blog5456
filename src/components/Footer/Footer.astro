@@ -1,166 +1,228 @@
----
-// 基础 样式
-import "./Footer.less";
----
-
+<!-- 这是一个可以直接使用的完整页脚(Footer)代码 -->
 <footer class="vh-footer">
 	<main>
-<!-- 引入 Font Awesome 图标库 -->   
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+		<!-- 引入 Font Awesome 图标库 -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
-  body {
-    background-image: url('https://img.8888.vvvv.ee/file/图片/1750139410480.png');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-  }
+		<style>
+			/* 这里是您原来的样式，我保留了它们。
+			  为了避免冲突，我没有包含 body 背景图的样式，
+			  您可以将它放在您网站全局的 CSS 文件中。
+			*/
+			.welcome-container {
+				display: flex; /* 改为Flex布局 */
+				align-items: center; /* 垂直居中 */
+				justify-content: center; /* 水平居中 */
+				margin-top: 10px;
+			}
 
-  .welcome-container {
-    display: flex; /* 改为Flex布局 */
-    align-items: center; /* 垂直居中 */
-    justify-content: center; /* 水平居中 */
-    margin-top: 10px;
-  }
+			.welcome-gif {
+				width: 200px;
+				height: 40px;
+				object-fit: contain;
+				margin: 8px;
+			}
 
-  .welcome-gif {
-    width: 200px;
-    height: 40px;
-    object-fit: contain;
-    margin: 8px;
-  }
+			.welcome-text {
+				font-size: 16px;
+				color: #007bff;
+				margin: 0 10px;
+			}
 
-  .welcome-text {
-    font-size: 16px;
-    color: #007bff;
-    margin: 0 10px;
-  }
+			.top-icons {
+				text-align: center;
+				margin-bottom: 10px;
+			}
 
-  /* 新增三个图标/文字按钮的样式 */
-  .top-icons {
-    text-align: center;
-    margin-bottom: 10px;
-  }
+			.top-icons a {
+				margin: 0 12px;
+				color: #444;
+				font-size: 16px;
+				text-decoration: none;
+				transition: transform 0.3s, color 0.3s;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 80px;
+				height: 40px;
+				border: 2px solid #ccc;
+				border-radius: 8px;
+				background-color: white;
+				font-weight: 600;
+				user-select: none;
+			}
 
-  .top-icons a {
-    margin: 0 12px;
-    color: #444;
-    font-size: 16px;        /* 字体大小适中 */
-    text-decoration: none;
-    transition: transform 0.3s, color 0.3s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;            /* 宽度变大，适合文字 */
-    height: 40px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background-color: white;
-    font-weight: 600;
-    user-select: none;
-  }
+			.top-icons a:hover {
+				transform: scale(1.1);
+			}
 
-  .top-icons a:hover {
-    transform: scale(1.1);
-  }
+			.top-icons a.tempmail {
+				color: #ff6600;
+				border-color: #ff6600;
+			}
 
-  /* 文字链接颜色区分 */
-  .top-icons a.tempmail {
-    color: #ff6600;
-    border-color: #ff6600;
-  }
+			.top-icons a.tempmail:hover {
+				color: white;
+				background-color: #ff6600;
+			}
 
-  .top-icons a.tempmail:hover {
-    color: white;
-    background-color: #ff6600;
-  }
+			.top-icons a.tempmail2 {
+				color: #3399ff;
+				border-color: #3399ff;
+			}
 
-  .top-icons a.tempmail2 {
-    color: #3399ff;
-    border-color: #3399ff;
-  }
+			.top-icons a.tempmail2:hover {
+				color: white;
+				background-color: #3399ff;
+			}
 
-  .top-icons a.tempmail2:hover {
-    color: white;
-    background-color: #3399ff;
-  }
+			.top-icons a.imgsite {
+				color: #6f42c1;
+				border-color: #6f42c1;
+				font-size: 18px;
+				font-weight: 600;
+			}
 
-  /* 图床图标+文字 */
-  .top-icons a.imgsite {
-    color: #6f42c1;
-    border-color: #6f42c1;
-    font-size: 18px;
-    font-weight: 600;
-  }
+			.top-icons a.imgsite:hover {
+				color: white;
+				background-color: #6f42c1;
+			}
 
-  .top-icons a.imgsite:hover {
-    color: white;
-    background-color: #6f42c1;
-  }
+			.top-icons a.imgsite i {
+				margin-right: 6px;
+			}
 
-  .top-icons a.imgsite i {
-    margin-right: 6px;
-  }
+			.social-icons {
+				text-align: center;
+				margin-top: 10px;
+			}
 
-  /* 原有社交图标样式 */
-  .social-icons {
-    text-align: center;
-    margin-top: 10px;
-  }
+			.social-icons a {
+				margin: 0 12px;
+				color: #444;
+				font-size: 28px;
+				text-decoration: none;
+				transition: transform 0.3s, color 0.3s;
+			}
 
-  .social-icons a {
-    margin: 0 12px;
-    color: #444;
-    font-size: 28px;
-    text-decoration: none;
-    transition: transform 0.3s, color 0.3s;
-  }
+			.social-icons a:hover {
+				transform: scale(1.2);
+			}
 
-  .social-icons a:hover {
-    transform: scale(1.2);
-  }
+			.social-icons a.twitter:hover {
+				color: #1da1f2;
+			}
 
-  .social-icons a.twitter:hover {
-    color: #1da1f2;
-  }
+			.social-icons a.facebook:hover {
+				color: #3b5998;
+			}
 
-  .social-icons a.facebook:hover {
-    color: #3b5998;
-  }
+			.social-icons a.email:hover {
+				color: #d44638;
+			}
 
-  .social-icons a.email:hover {
-    color: #d44638;
-  }
-</style>
+			/* --- 新增：炫酷备案号样式 --- */
+			.icp-wrapper {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 15px 0; /* 增加一些垂直间距 */
+			}
 
-<!-- 修改后的欢迎区域 -->
-<div class="welcome-container">
-  <!-- 左侧新添加的GIF -->
-  <img src="https://img.8888.vvvv.ee/file/图片/1750089446952.gif" alt="左侧GIF" class="welcome-gif" />
-  
-  <!-- 文本区域 -->
-  <div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
-  
-  <!-- 原有的GIF -->
-  <img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="右侧GIF" class="welcome-gif" />
-</div>
-<!-- Twitter, Facebook, Gmail 放在欢迎区域下面 -->
-<div class="social-icons">
-  <a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
-    <i class="fab fa-twitter"></i>
-  </a>
-  <a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
-    <i class="fab fa-facebook"></i>
-  </a>
-  <a href="mailto:admin@204090.xyz" class="email" title="发送邮件">
-    <i class="fas fa-envelope"></i>
-  </a>
-</div>
+			.icp-container {
+				position: relative;
+				/* 为了美观，让它比之前略小一些 */
+				padding: 12px 25px 12px 45px; 
+				border: 2px solid #53a8b6;
+				border-radius: 50px;
+				background-color: rgba(22, 33, 62, 0.7);
+				box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
+										0 0 20px rgba(83, 168, 182, 0.3);
+				backdrop-filter: blur(5px);
+				transition: all 0.3s ease;
+				animation: glow 2.5s infinite alternate;
+			}
+
+			.icp-container a {
+				color: #f0f0f0;
+				text-decoration: none;
+				font-size: 14px; /* 调整字体大小以适应新的 padding */
+				font-weight: 500;
+				letter-spacing: 1px;
+				transition: color 0.3s ease;
+			}
+
+			.icp-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 0 15px rgba(233, 69, 96, 0.6),
+										0 0 30px rgba(233, 69, 96, 0.4);
+				border-color: #e94560;
+			}
+
+			.icp-container:hover a {
+				color: #ffffff;
+			}
+
+			.icp-container::before {
+				content: '♥';
+				position: absolute;
+				left: 18px;
+				top: 50%;
+				transform: translateY(-50%);
+				font-size: 18px; /* 调整图标大小 */
+				color: #e94560;
+				text-shadow: 0 0 8px rgba(233, 69, 96, 0.8);
+			}
+
+			@keyframes glow {
+				from {
+						border-color: #53a8b6;
+						box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
+												0 0 20px rgba(83, 168, 182, 0.3);
+				}
+				to {
+						border-color: #8de2e0;
+						box-shadow: 0 0 20px rgba(141, 226, 224, 0.7),
+												0 0 40px rgba(141, 226, 224, 0.5);
+				}
+			}
+		</style>
+
+		<!-- 修改后的欢迎区域 -->
+		<div class="welcome-container">
+			<!-- 左侧新添加的GIF -->
+			<img src="https://img.8888.vvvv.ee/file/图片/1750089446952.gif" alt="左侧GIF" class="welcome-gif" />
+			
+			<!-- 文本区域 -->
+			<div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
+			
+			<!-- 原有的GIF -->
+			<img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="右侧GIF" class="welcome-gif" />
+		</div>
+		<!-- Twitter, Facebook, Gmail 放在欢迎区域下面 -->
+		<div class="social-icons">
+			<a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
+				<i class="fab fa-twitter"></i>
+			</a>
+			<a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
+				<i class="fab fa-facebook"></i>
+			</a>
+			<a href="mailto:admin@204090.xyz" class="email" title="发送邮件">
+				<i class="fas fa-envelope"></i>
+			</a>
+		</div>
 		<p><a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a><a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a><a href="/sitemap-index.xml" target="_blank"><img alt="sitemap" src="/assets/images/footer/sitemap.svg" /></a><a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a></p>
-	        <script defer src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
-<p style="text-align: center;">
-  <a href="https.icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
-</p>
-        </main>
-</footer>
+		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
+		
+		<!-- 
+			这里是修改的核心部分
+			我用下面的 div 结构替换了您原来的 <p> 标签 
+		-->
+		<div class="icp-wrapper">
+			<div class="icp-container">
+				<a href="https.icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
+			</div>
+		</div>
 
+	</main>
+</footer>
