@@ -14,7 +14,7 @@ type: "links"
 
 ```yaml
 name: IKUN
-link: https://blog.marvel.qzz.io/
+link: https://blog.204090.xyz/
 avatar: https://img.8888.vvvv.ee/file/图片/1751855752412.jpg
 desc: 唱跳rap打篮球
 ```
