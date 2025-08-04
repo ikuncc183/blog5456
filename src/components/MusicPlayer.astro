@@ -1,8 +1,8 @@
 ---
 // src/components/MusicPlayer.astro
-// 【最终方案】
-// 我们现在直接从你网站的 public 目录加载本地音乐文件。
-// 这是最稳定、最可靠的方法，不会有任何网络或权限问题。
+// 【更新】
+// 使用你提供的最新 API 动态加载网易云热歌榜。
+// 这是目前最先进的方案。
 ---
 
 <!-- 1. 引入 APlayer 的 CSS -->
@@ -14,36 +14,58 @@
 <!-- 3. 引入 APlayer 的 JS -->
 <script is:inline src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<!-- 4. 初始化 APlayer -->
+<!-- 4. 初始化 APlayer 的脚本 -->
 <script is:inline>
   document.addEventListener('DOMContentLoaded', function () {
-    const ap = new APlayer({
-      container: document.getElementById('aplayer'),
-      fixed: true,
-      mini: true,
-      theme: '#2980b9',
-      audio: [
-        {
-          name: '爱在西元前', // 改成你的歌曲名
-          artist: '周杰伦', // 改成歌手名
-          url: '/music/爱在西元前 - 周杰伦.mp3', // 【重要】对应 public/music/song1.mp3
-          cover: 'https://iili.io/F4lPWkG.jpg', // 【重要】对应 public/music/cover1.jpg
-        },
-        {
-          name: '曹操',
-          artist: '林俊杰',
-          url: '/music/曹操 - 林俊杰.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Vqd57.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '卜卦(pay姐版1.1x)',
-          artist: 'pay姐（黏苞米糊糊）',
-          url: '/music/卜卦(pay姐版1.1x) - pay姐（黏苞米糊糊）.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4VuGkv.webp', // 【重要】对应 public/music/cover2.png
+    // 你提供的 API 地址
+    const apiUrl = 'https://node.api.xfabe.com/api/wangyi/musicChart?list=%E7%83%AD%E6%AD%8C%E6%A6%9C';
+
+    // 使用 fetch 调用 API
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('网络响应错误');
         }
-        // 你可以按这个格式添加更多歌曲
-      ]
-    });
+        return response.json();
+      })
+      .then(result => {
+        // 检查 API 返回的数据是否有效
+        if (!result || result.code !== 200 || !result.data || result.data.length === 0) {
+          console.error('API 未返回有效的歌曲数据。');
+          return;
+        }
+
+        // 将 API 返回的数据格式化为 APlayer 需要的格式
+        const audioList = result.data.map(song => {
+          // 确保 musicUrl 存在，防止出错
+          if (!song.musicUrl) {
+            return null;
+          }
+          return {
+            name: song.name,
+            artist: song.artists.map(a => a.name).join(' / '),
+            url: song.musicUrl,
+            cover: song.cover,
+          };
+        }).filter(Boolean); // 过滤掉 musicUrl 为空的歌曲
+
+        if (audioList.length === 0) {
+          console.error('处理后的歌曲列表为空。');
+          return;
+        }
+
+        // 初始化 APlayer
+        new APlayer({
+          container: document.getElementById('aplayer'),
+          fixed: true,
+          mini: true,
+          theme: '#2980b9',
+          audio: audioList
+        });
+      })
+      .catch(error => {
+        console.error('获取或处理音乐数据时出错:', error);
+      });
   });
 </script>
 
