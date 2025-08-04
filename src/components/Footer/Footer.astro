@@ -94,7 +94,7 @@
 
 			.social-icons {
 				text-align: center;
-				margin-top: 10px;
+				margin-top: 8px; /* 已减小 */
 			}
 
 			.social-icons a {
@@ -121,10 +121,9 @@
 				color: #d44638;
 			}
 			
-			/* --- 新增：修复底部四个图标的居中问题 --- */
 			.footer-icons {
 				text-align: center;
-				margin: 20px 0; /* 增加一些垂直边距 */
+				margin: 15px 0; /* 已减小 */
 			}
 			
 			.footer-icons a {
@@ -132,17 +131,15 @@
 			}
 
 
-			/* --- 新增：炫酷备案号样式 --- */
 			.icp-wrapper {
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				padding: 15px 0; /* 增加一些垂直间距 */
+				padding: 10px 0; /* 已减小 */
 			}
 
 			.icp-container {
 				position: relative;
-				/* 为了美观，让它比之前略小一些 */
 				padding: 12px 25px 12px 45px; 
 				border: 2px solid #53a8b6;
 				border-radius: 50px;
@@ -157,7 +154,7 @@
 			.icp-container a {
 				color: #f0f0f0;
 				text-decoration: none;
-				font-size: 14px; /* 调整字体大小以适应新的 padding */
+				font-size: 14px;
 				font-weight: 500;
 				letter-spacing: 1px;
 				transition: color 0.3s ease;
@@ -180,7 +177,7 @@
 				left: 18px;
 				top: 50%;
 				transform: translateY(-50%);
-				font-size: 18px; /* 调整图标大小 */
+				font-size: 18px;
 				color: #e94560;
 				text-shadow: 0 0 8px rgba(233, 69, 96, 0.8);
 			}
@@ -223,10 +220,6 @@
 			</a>
 		</div>
 		
-		<!-- 
-			这里是修改的核心部分
-			我给这个 <p> 标签加上了 'footer-icons' 类来实现居中
-		-->
 		<p class="footer-icons">
 			<a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a>
 			<a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a>
