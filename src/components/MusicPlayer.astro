@@ -1,111 +1,136 @@
 ---
 // src/components/MusicPlayer.astro
 // 【最终方案】
-// 我们现在直接从你网站的 public 目录加载本地音乐文件。
-// 这是最稳定、最可靠的方法，不会有任何网络或权限问题。
+// 结合了自定义按钮方案和强制定位/最小化要求。
+
+// 你可以根据自己的喜好修改这些值
+const server = "netease";       // 音乐平台: netease, tencent, kugou, xiami, baidu
+const type = "playlist";        // 类型: song, playlist, album, search, artist
+const id = "3778678";         // 【已更新】歌单ID
 ---
 
-<!-- 1. 引入 APlayer 的 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<!-- 
+  播放器容器。
+  我们用一个 style 标签来强制固定它的位置和层级，确保它总在左下角最顶层。
+-->
+<div id="music-player-container">
+    <!-- 自定义的播放/暂停按钮 -->
+    <button  
+        id="custom-play-pause-btn"  
+        aria-label="Play or pause music"
+        class="w-14 h-14 bg-gray-900/70 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+    >
+        <!-- 播放图标 -->
+        <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"></path>
+        </svg>
+        <!-- 暂停图标 -->
+        <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+        </svg>
+    </button>
+    
+    <!-- 
+      MetingJS 播放器本体。
+      注意：这里的 fixed="false"，因为我们是手动固定父容器。
+      它本身会被下面的脚本隐藏，只在后台工作。
+    -->
+    <meting-js
+        id="meting-player"
+        server={server}
+        type={type}
+        id={id}
+        fixed="false"
+        autoplay="false"
+        loop="all"
+        order="random"
+        preload="auto"
+        list-folded="true"
+        theme="#2d3748"
+    >
+    </meting-js>
+</div>
 
-<!-- 2. APlayer 播放器的挂载点 -->
-<div id="aplayer"></div>
+<!-- 引入 APlayer 和 MetingJS 的库 -->
+<!-- is:inline 指令对于在 Astro 组件中正确加载外部脚本至关重要 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" is:inline>
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js" is:inline></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js" is:inline></script>
 
-<!-- 3. 引入 APlayer 的 JS -->
-<script is:inline src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<!-- 4. 初始化 APlayer -->
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', function () {
-    const ap = new APlayer({
-      container: document.getElementById('aplayer'),
-      fixed: true,
-      mini: true,
-      theme: '#2980b9',
-      audio: [
-        {
-          name: '爱在西元前', // 改成你的歌曲名
-          artist: '周杰伦', // 改成歌手名
-          url: '/music/爱在西元前 - 周杰伦.mp3', // 【重要】对应 public/music/song1.mp3
-          cover: 'https://iili.io/F4lPWkG.jpg', // 【重要】对应 public/music/cover1.jpg
-        },
-        {
-          name: '曹操',
-          artist: '林俊杰',
-          url: '/music/曹操 - 林俊杰.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Vqd57.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '卜卦(pay姐版1.1x)',
-          artist: 'pay姐（黏苞米糊糊）',
-          url: '/music/卜卦(pay姐版1.1x) - pay姐（黏苞米糊糊）.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4VuGkv.webp', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '东风破',
-          artist: '周杰伦',
-          url: '/music/东风破 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4sDn2I.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '句号',
-          artist: 'G.E.M.邓紫棋',
-          url: '/music/句号 - G.E.M.邓紫棋.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4L2N3b.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '搁浅',
-          artist: '周杰伦',
-          url: '/music/搁浅 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4sDQyX.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '红尘客栈',
-          artist: '周杰伦',
-          url: '/music/红尘客栈 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4L9Isa.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '美人鱼',
-          artist: '周杰伦',
-          url: '/music/美人鱼 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4sp5CJ.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '花海',
-          artist: '周杰伦',
-          url: '/music/花海 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4L29Yx.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '稻香',
-          artist: '周杰伦',
-          url: '/music/稻香 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Ld0zP.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '最佳损友',
-          artist: '陈奕迅',
-          url: '/music/最佳损友 - 陈奕迅.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4LBbt4.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '真的爱你',
-          artist: 'Beyond',
-          url: '/music/真的爱你 - Beyond.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Lqcmv.jpg', // 【重要】对应 public/music/cover2.png
-        }
-        // 你可以按这个格式添加更多歌曲
-      ]
-    });
-  });
-</script>
+<style>
+  /* 当按钮有 'playing' 类时，应用旋转动画 */
+  #custom-play-pause-btn.playing {
+    animation: spin 4s linear infinite;
+  }
 
-<style is:global>
-  .aplayer.aplayer-fixed {
+  /* 定义旋转动画 */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* 【重要】
+    使用 is:global 来确保我们的定位样式能覆盖任何主题自带的样式。
+    这就是“强制显示在左下方”的实现。
+  */
+  :global(#music-player-container) {
     position: fixed !important;
-    left: 15px !important;
-    bottom: 15px !important;
+    left: 2rem; /* 32px */
+    bottom: 2rem; /* 32px */
     z-index: 2147483647 !important;
   }
 </style>
+
+<script>
+    // 使用 'astro:page-load' 事件确保在客户端路由切换时也能正确执行
+    document.addEventListener('astro:page-load', () => {
+        const customBtn = document.getElementById('custom-play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+
+        if (!customBtn || !playIcon || !pauseIcon) {
+            console.error('Custom player button elements not found.');
+            return;
+        }
+
+        // MetingJS 初始化需要一些时间，我们轮询检查 aplayer 实例是否准备好
+        const interval = setInterval(() => {
+            // MetingJS 会在 window 对象上附加 aplayer 实例
+            const ap = (window as any).ap;  
+            if (ap) {
+                clearInterval(interval); // 找到实例，停止轮询
+
+                // 隐藏 MetingJS 默认的播放器 UI，实现“最小化”
+                const metingContainer = document.querySelector('.aplayer');
+                if (metingContainer) {
+                    (metingContainer as HTMLElement).style.display = 'none';
+                }
+
+                const updateUI = () => {
+                    if (ap.audio.paused) {
+                        customBtn.classList.remove('playing');
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                    } else {
+                        customBtn.classList.add('playing');
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                    }
+                };
+
+                // 初始化 UI
+                updateUI();
+
+                // 监听播放和暂停事件来同步我们的自定义按钮
+                ap.on('play', updateUI);
+                ap.on('pause', updateUI);
+
+                // 点击我们的按钮时，调用 aplayer 的 toggle 方法
+                customBtn.addEventListener('click', () => {
+                    ap.toggle();
+                });
+            }
+        }, 100); // 每 100 毫秒检查一次
+    });
+</script>
