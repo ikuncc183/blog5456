@@ -391,7 +391,9 @@
 				// 从 worker 获取最新统计数据并更新 UI (作为备用)
 				async displayStatsFallback() {
 					try {
-						const response = await fetch(this.workerUrl, { method: 'GET' });
+						// 添加时间戳作为查询参数以防止缓存
+						const url = `${this.workerUrl}?t=${new Date().getTime()}`;
+						const response = await fetch(url, { method: 'GET' });
 						if (!response.ok) throw new Error(`Worker 响应状态: ${response.status}`);
 						const stats = await response.json();
 						this.updateUi(stats);
@@ -411,8 +413,10 @@
 					const isNewDailyVisitor = lastVisitDate !== today;
 
 					try {
+						// 添加时间戳作为查询参数以防止缓存
+						const url = `${this.workerUrl}?t=${new Date().getTime()}`;
 						// 每次页面加载都发送 POST 请求
-						const response = await fetch(this.workerUrl, {
+						const response = await fetch(url, {
 							method: 'POST',
 							headers: { 'Content-Type': 'application/json' },
 							body: JSON.stringify({ isNewTotalVisitor, isNewDailyVisitor }),
@@ -469,7 +473,7 @@
 				setInterval(updateRuntime, 1000);
 				
 				// !!! 在这里粘贴您自己的 Worker URL !!!
-				const CF_WORKER_URL = "https://counter.yao.bio";
+				const CF_WORKER_URL = "https://my-blog-counter.your-subdomain.workers.dev";
 				new BlogVisitorStats(CF_WORKER_URL);
 
 				// 为“回到顶部”按钮添加点击事件
