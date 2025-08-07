@@ -43,21 +43,6 @@
 			.footer-icons a {
 				margin: 0 5px;
 			}
-
-			/* --- 访客统计样式 --- */
-			.visitor-stats {
-				text-align: center;
-				margin: 15px 0;
-				font-size: 14px;
-				color: #e94560; /* 使用一个醒目的红色 */
-				font-weight: bold;
-				text-shadow: 0 0 8px rgba(233, 69, 96, 0.7);
-			}
-
-			.visitor-stats .stat-item {
-				margin: 0 10px;
-				display: inline-block;
-			}
 			
 			/* --- 用于将计时器和备案号放在同一行的容器 --- */
 			.bottom-info-row {
@@ -67,6 +52,7 @@
 				flex-wrap: wrap; /* 在小屏幕上自动换行 */
 				gap: 20px; /* 两个元素之间的间距 */
 				padding: 8px 0;
+				margin-top: 15px; /* 增加一点上边距 */
 			}
 
 			/* --- 炫酷边框通用样式 --- */
@@ -163,24 +149,17 @@
 			<a href="/sitemap-index.xml" target="_blank"><img alt="sitemap" src="/assets/images/footer/sitemap.svg" /></a>
 			<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
 		</p>
-		
-		<!-- 访客统计 -->
-		<div class="visitor-stats">
-			<span class="stat-item">本站总访问量: <span id="busuanzi_value_site_pv"></span>次</span>
-			<span class="stat-item">本站总访客数: <span id="busuanzi_value_site_uv"></span>人</span>
-			<span class="stat-item">本页访问量: <span id="busuanzi_value_page_pv"></span>次</span>
-		</div>
 
 		<!-- 备案号和计时器容器 -->
 		<div class="bottom-info-row">
 			<!-- 备案号 -->
 			<div id="icp-container" class="cool-box-container">
-				<a href="https.icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
+				<a href="https://icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
 			</div>
 			
 			<!-- 站点存活时间 -->
 			<div id="runtime-container" class="cool-box-container">
-				<span id="runtime-display">正在加载...</span>
+				<span id="runtime-display">正在加载中...</span>
 			</div>
 		</div>
 
@@ -188,7 +167,7 @@
 			// 站点存活时间计时器
 			function updateRuntime() {
 				// !!! 请在这里修改为您站点的建立日期 !!!
-				const startDate = new Date('2023-10-01T00:00:00'); 
+				const startDate = new Date('2025-07-01T12:00:00'); 
 				
 				const now = new Date();
 				const diff = now - startDate;
@@ -200,7 +179,7 @@
 
 				const runtimeDisplay = document.getElementById('runtime-display');
 				if (runtimeDisplay) {
-					runtimeDisplay.textContent = `本站已运行: ${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+					runtimeDisplay.textContent = `本站已苟活: ${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
 				}
 			}
 
@@ -210,9 +189,7 @@
 		</script>
 		
 		<!-- 网站分析脚本 -->
-		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
-		<!-- 不蒜子统计脚本 -->
-		<script async src="https://cdn.jsdelivr.net/npm/busuanzi@2.3/bsz.pure.mini.js"></script>
+		<script der src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
 
 	</main>
 </footer>
