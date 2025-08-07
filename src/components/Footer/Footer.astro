@@ -1,4 +1,4 @@
-<!-- 这是一个可以直接使用的完整页脚(Footer)代码 -->
+<!-- 这是一个可以直接使用的完整页脚(Footer)代码，已集成访问统计功能 -->
 <footer class="vh-footer">
 	<main>
 		<!-- 引入 Font Awesome 图标库 -->
@@ -43,7 +43,43 @@
 			.footer-icons a {
 				margin: 0 5px;
 			}
-			
+
+			/* --- 访问统计样式 --- */
+			.visitor-stats {
+				text-align: center;
+				margin: 20px 0;
+				padding: 15px;
+				background: rgba(22, 33, 62, 0.3);
+				border-radius: 15px;
+				backdrop-filter: blur(3px);
+			}
+
+			.stats-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 12px;
+			}
+
+			.stat-item {
+				color: #f0f0f0;
+				font-size: 13px;
+				font-weight: 400;
+				letter-spacing: 0.5px;
+			}
+
+			.stat-number {
+				color: #8de2e0;
+				font-weight: 600;
+				text-shadow: 0 0 8px rgba(141, 226, 224, 0.6);
+			}
+
+			.stat-separator {
+				color: #53a8b6;
+				font-weight: 300;
+			}
+
 			/* --- 用于将计时器和备案号放在同一行的容器 --- */
 			.bottom-info-row {
 				display: flex;
@@ -127,6 +163,50 @@
 												0 0 40px rgba(141, 226, 224, 0.5);
 				}
 			}
+
+			/* --- 响应式设计 --- */
+			@media (max-width: 768px) {
+				.stats-container {
+					gap: 8px;
+				}
+				
+				.stat-item {
+					font-size: 12px;
+				}
+				
+				.bottom-info-row {
+					gap: 15px;
+				}
+				
+				.cool-box-container {
+					padding: 10px 20px 10px 40px;
+				}
+				
+				.cool-box-container a,
+				.cool-box-container span {
+					font-size: 13px;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.visitor-stats {
+					padding: 12px;
+					margin: 15px 0;
+				}
+				
+				.stats-container {
+					flex-direction: column;
+					gap: 6px;
+				}
+				
+				.stat-separator {
+					display: none;
+				}
+				
+				.stat-item {
+					font-size: 11px;
+				}
+			}
 		</style>
 
 		<!-- Twitter, Facebook, Gmail 图标 -->
@@ -150,6 +230,27 @@
 			<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
 		</p>
 
+		<!-- 访问统计 -->
+		<div class="visitor-stats">
+			<div class="stats-container">
+				<span class="stat-item">
+					本日访问量 <span class="stat-number" id="dailyVisits">-</span> 次
+				</span>
+				<span class="stat-separator">|</span>
+				<span class="stat-item">
+					访客数 <span class="stat-number" id="dailyVisitors">-</span> 人
+				</span>
+				<span class="stat-separator">|</span>
+				<span class="stat-item">
+					本站总访问量 <span class="stat-number" id="totalVisits">-</span> 次
+				</span>
+				<span class="stat-separator">|</span>
+				<span class="stat-item">
+					总访客数 <span class="stat-number" id="totalVisitors">-</span> 人
+				</span>
+			</div>
+		</div>
+
 		<!-- 备案号和计时器容器 -->
 		<div class="bottom-info-row">
 			<!-- 备案号 -->
@@ -164,7 +265,7 @@
 		</div>
 
 		<script>
-			// 站点存活时间计时器
+			// === 站点存活时间计时器 ===
 			function updateRuntime() {
 				// !!! 请在这里修改为您站点的建立日期 !!!
 				const startDate = new Date('2025-07-01T12:00:00'); 
@@ -183,9 +284,132 @@
 				}
 			}
 
+			// === 访问统计功能 ===
+			class BlogVisitorStats {
+				constructor() {
+					this.storageKey = 'ikun-blog-visitor-stats';
+					this.visitorKey = 'ikun-blog-visitor-id';
+					this.init();
+				}
+
+				init() {
+					this.loadStats();
+					this.updateStats();
+					this.displayStats();
+				}
+
+				loadStats() {
+					const saved = localStorage.getItem(this.storageKey);
+					const today = this.getToday();
+					
+					this.stats = saved ? JSON.parse(saved) : {
+						totalVisits: 0,
+						totalVisitors: 0,
+						dailyStats: {}
+					};
+
+					// 初始化今日统计
+					if (!this.stats.dailyStats[today]) {
+						this.stats.dailyStats[today] = {
+							visits: 0,
+							visitors: 0,
+							visitorIds: []
+						};
+					}
+
+					// 清理30天前的数据
+					this.cleanOldData();
+				}
+
+				updateStats() {
+					const today = this.getToday();
+					const visitorId = this.getVisitorId();
+					const todayStats = this.stats.dailyStats[today];
+
+					// 更新访问次数
+					this.stats.totalVisits++;
+					todayStats.visits++;
+
+					// 更新访客数
+					if (!todayStats.visitorIds.includes(visitorId)) {
+						todayStats.visitorIds.push(visitorId);
+						todayStats.visitors++;
+						
+						// 检查是否是新访客
+						const isNewVisitor = !this.isReturningVisitor(visitorId, today);
+						if (isNewVisitor) {
+							this.stats.totalVisitors++;
+						}
+					}
+
+					this.saveStats();
+				}
+
+				displayStats() {
+					const today = this.getToday();
+					const todayStats = this.stats.dailyStats[today];
+
+					this.updateElement('dailyVisits', todayStats.visits);
+					this.updateElement('dailyVisitors', todayStats.visitors);
+					this.updateElement('totalVisits', this.stats.totalVisits);
+					this.updateElement('totalVisitors', this.stats.totalVisitors);
+				}
+
+				getVisitorId() {
+					let visitorId = localStorage.getItem(this.visitorKey);
+					if (!visitorId) {
+						visitorId = 'ikun_visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+						localStorage.setItem(this.visitorKey, visitorId);
+					}
+					return visitorId;
+				}
+
+				isReturningVisitor(visitorId, excludeDate) {
+					for (const [date, stats] of Object.entries(this.stats.dailyStats)) {
+						if (date !== excludeDate && stats.visitorIds.includes(visitorId)) {
+							return true;
+						}
+					}
+					return false;
+				}
+
+				updateElement(id, value) {
+					const element = document.getElementById(id);
+					if (element) {
+						element.textContent = value.toLocaleString();
+					}
+				}
+
+				getToday() {
+					return new Date().toISOString().split('T')[0];
+				}
+
+				cleanOldData() {
+					const today = new Date();
+					const cutoffDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000)
+						.toISOString().split('T')[0];
+
+					for (const date in this.stats.dailyStats) {
+						if (date < cutoffDate) {
+							delete this.stats.dailyStats[date];
+						}
+					}
+				}
+
+				saveStats() {
+					localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
+				}
+			}
+
 			// 页面加载完成后执行
-			updateRuntime();
-			setInterval(updateRuntime, 1000);
+			document.addEventListener('DOMContentLoaded', () => {
+				// 初始化运行时间
+				updateRuntime();
+				setInterval(updateRuntime, 1000);
+				
+				// 初始化访问统计
+				new BlogVisitorStats();
+			});
 		</script>
 		
 		<!-- 网站分析脚本 -->
