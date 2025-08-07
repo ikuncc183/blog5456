@@ -44,14 +44,11 @@
 				margin: 0 5px;
 			}
 
-			/* --- 访问统计样式 --- */
+			/* --- 访问统计样式 (已修改) --- */
 			.visitor-stats {
 				text-align: center;
 				margin: 20px 0;
-				padding: 15px;
-				background: rgba(22, 33, 62, 0.3);
-				border-radius: 15px;
-				backdrop-filter: blur(3px);
+				/* 移除了 background, border-radius, backdrop-filter 和 padding 来去掉框框 */
 			}
 
 			.stats-container {
@@ -63,13 +60,15 @@
 			}
 
 			.stat-item {
-				color: #f0f0f0;
-				font-size: 13px;
-				font-weight: 400;
+				color: #ff4747; /* 修改为高亮红色 */
+				font-size: 16px; /* 字体调大 */
+				font-weight: 500; /* 让字体稍微加粗 */
 				letter-spacing: 0.5px;
+				text-shadow: 0 0 5px rgba(255, 71, 71, 0.7); /* 添加红色辉光效果 */
 			}
 
 			.stat-number {
+				/* 统计数字的颜色保持不变 */
 				color: #8de2e0;
 				font-weight: 600;
 				text-shadow: 0 0 8px rgba(141, 226, 224, 0.6);
@@ -94,7 +93,7 @@
 			/* --- 炫酷边框通用样式 --- */
 			.cool-box-container {
 				position: relative;
-				padding: 12px 25px 12px 45px; 
+				padding: 12px 25px 12px 45px; 
 				border: 2px solid #53a8b6;
 				border-radius: 50px;
 				background-color: rgba(22, 33, 62, 0.7);
@@ -171,7 +170,7 @@
 				}
 				
 				.stat-item {
-					font-size: 12px;
+					font-size: 14px; /* 响应式调整 */
 				}
 				
 				.bottom-info-row {
@@ -190,13 +189,12 @@
 
 			@media (max-width: 480px) {
 				.visitor-stats {
-					padding: 12px;
 					margin: 15px 0;
 				}
 				
 				.stats-container {
 					flex-direction: column;
-					gap: 6px;
+					gap: 8px; /* 调整垂直间距 */
 				}
 				
 				.stat-separator {
@@ -204,7 +202,7 @@
 				}
 				
 				.stat-item {
-					font-size: 11px;
+					font-size: 13px; /* 响应式调整 */
 				}
 			}
 		</style>
@@ -268,7 +266,7 @@
 			// === 站点存活时间计时器 ===
 			function updateRuntime() {
 				// !!! 请在这里修改为您站点的建立日期 !!!
-				const startDate = new Date('2025-07-01T12:00:00'); 
+				const startDate = new Date('2025-07-01T12:00:00'); 
 				
 				const now = new Date();
 				const diff = now - startDate;
@@ -413,7 +411,7 @@
 		</script>
 		
 		<!-- 网站分析脚本 -->
-		<script defer src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
+		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
 
 	</main>
 </footer>
