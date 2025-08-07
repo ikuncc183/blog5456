@@ -14,12 +14,15 @@ recommend: true
 
 
 ## 如何为你的网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
+
 本教程将指导你如何为任何网站添加一个精准、稳定、且跨设备共享的访问量统计功能。我们将使用 Cloudflare Workers 和 KV 数据库来实现这个功能，完全免费。
 
 最终效果如下：
 
 ### 第一步：添加 HTML 结构
+
 首先，在你想要显示访问统计的地方（比如页脚` <footer>`），粘贴以下 HTML 代码。
+
 ```
 <!-- 访问统计显示区域 -->
 <div class="visitor-stats">
@@ -44,7 +47,9 @@ recommend: true
 ```
 
 ### 第二步：添加 CSS 样式
+
 接下来，将下面的 CSS 代码添加到你的网站样式表 `<style> `标签中，用于美化统计信息的显示。
+
 ```
 /* --- 访问统计样式 --- */
 .visitor-stats {
@@ -92,13 +97,13 @@ recommend: true
 ```
 
 ### 第三步：创建 Cloudflare 后端服务
+
 这是最关键的一步，我们将创建一个免费的后端服务来存储和计算访问数据。
 
-1.登录 Cloudflare 仪表盘，在左侧菜单进入 Workers & Pages。
+- 登录 Cloudflare 仪表盘，在左侧菜单进入 Workers & Pages。
+- 点击 创建应用程序 > 创建 Worker。可以给它取一个你喜欢的名字（例如 my-site-counter），然后点击 部署。
+- 部署成功后，点击 编辑代码。将编辑器里原有的代码全部删除，然后粘贴以下完整的 Worker 脚本。这个版本已经配置为按北京时间重置。
 
-2.点击 创建应用程序 > 创建 Worker。可以给它取一个你喜欢的名字（例如 my-site-counter），然后点击 部署。
-
-3.部署成功后，点击 编辑代码。将编辑器里原有的代码全部删除，然后粘贴以下完整的 Worker 脚本。这个版本已经配置为按北京时间重置。
 ```
 /**
  * Cloudflare Worker for a simple, privacy-friendly site view counter. (Version 3 - Beijing Time)
@@ -197,24 +202,23 @@ async function updateStats(kv, payload) {
   return stats;
 }
 ```
+
 4.创建并绑定 KV 数据库：
 
-(1)、回到你的 Worker 页面，点击 设置 > 变量。
-
-(2)、找到 KV Namespace 绑定，点击 添加绑定。
-
-(3)、变量名称 必须填写 STATS_KV。
-
-(4)、在 KV namespace 栏位，点击下拉框并选择 创建新的命名空间。给它起个名字，比如 SITE_STATS，然后点击创建。
-
-(5)、最后，点击页面底部的 保存并部署。
+- 回到你的 Worker 页面，点击 设置 > 变量。
+- 找到 KV Namespace 绑定，点击 添加绑定。
+- 变量名称 必须填写 STATS_KV。
+- 在 KV namespace 栏位，点击下拉框并选择 创建新的命名空间。给它起个名字，比如 SITE_STATS，然后点击创建。
+- 最后，点击页面底部的 保存并部署。
 
 5.获取你的 Worker URL：回到你的 Worker 主页，URL 会显示在顶部（格式为 你的worker名.你的子域.workers.dev）。复制这个 URL，下一步要用。
 
 ### 第四步：添加前端 JavaScript 逻辑
+
 最后，将下面的 JavaScript 代码添加到你网站的 <script> 标签中。
 
 重要提示： 请务必将代码中的 `CF_WORKER_URL` 变量的值替换为你上一步复制的你自己的 `Worker URL`。
+
 ```
 // === 访问统计功能 (Cloudflare Worker 版本) ===
 class BlogVisitorStats {
@@ -322,5 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 ```
+
 恭喜！完成以上所有步骤后，你的网站就拥有了一个功能完善的、并按北京时间重置的访问量统计器。
 
