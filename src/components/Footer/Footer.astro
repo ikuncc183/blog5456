@@ -369,122 +369,95 @@
 				}
 			}
 
-			// === 访问统计功能 ===
+			// === 访问统计功能 (已更新为使用 Cloudflare Worker) ===
 			class BlogVisitorStats {
-				constructor() {
-					this.storageKey = 'ikun-blog-visitor-stats';
-					this.visitorKey = 'ikun-blog-visitor-id';
+				constructor(workerUrl) {
+					this.workerUrl = workerUrl; 
+					this.visitorIdKey = 'ikun-blog-visitor-id';
+					this.lastVisitKey = 'ikun-blog-last-visit';
+					
+					if (!this.workerUrl) {
+						console.error("Worker URL 未设置。访客统计功能将无法工作。");
+						return;
+					}
 					this.init();
 				}
 
-				init() {
-					this.loadStats();
-					this.updateStats();
-					this.displayStats();
+				async init() {
+					this.displayStats(); // 立即尝试获取并显示统计数据
+					this.trackVisit();   // 追踪当前访问
 				}
 
-
-
-				loadStats() {
-					const saved = localStorage.getItem(this.storageKey);
-					const today = this.getToday();
-					
-					this.stats = saved ? JSON.parse(saved) : {
-						totalVisits: 0,
-						totalVisitors: 0,
-						dailyStats: {}
-					};
-
-					// 初始化今日统计
-					if (!this.stats.dailyStats[today]) {
-						this.stats.dailyStats[today] = {
-							visits: 0,
-							visitors: 0,
-							visitorIds: []
-						};
-					}
-
-					// 清理30天前的数据
-					this.cleanOldData();
-				}
-
-				updateStats() {
-					const today = this.getToday();
-					const visitorId = this.getVisitorId();
-					const todayStats = this.stats.dailyStats[today];
-
-					// 更新访问次数
-					this.stats.totalVisits++;
-					todayStats.visits++;
-
-					// 更新访客数
-					if (!todayStats.visitorIds.includes(visitorId)) {
-						todayStats.visitorIds.push(visitorId);
-						todayStats.visitors++;
+				// 从 worker 获取最新统计数据并更新 UI
+				async displayStats() {
+					try {
+						const response = await fetch(this.workerUrl, { method: 'GET' });
+						if (!response.ok) throw new Error(`Worker 响应状态: ${response.status}`);
+						const stats = await response.json();
 						
-						// 检查是否是新访客
-						const isNewVisitor = !this.isReturningVisitor(visitorId, today);
-						if (isNewVisitor) {
-							this.stats.totalVisitors++;
+						this.updateElement('dailyVisits', stats.dailyVisits || 0);
+						this.updateElement('dailyVisitors', stats.dailyVisitors || 0);
+						this.updateElement('totalVisits', stats.totalVisits || 0);
+						this.updateElement('totalVisitors', stats.totalVisitors || 0);
+					} catch (error) {
+						console.error("获取访客统计失败:", error);
+					}
+				}
+
+				// 通过向 worker 发送数据来追踪访问
+				async trackVisit() {
+					const visitorId = this.getVisitorId();
+					const lastVisit = localStorage.getItem(this.lastVisitKey);
+					const today = new Date().toISOString().split('T')[0];
+
+					const isNewVisitor = !localStorage.getItem(this.visitorIdKey);
+					const isNewDailyVisitor = lastVisit !== today;
+
+					// 仅当这是该用户今天的新访问时，才发送 POST 请求
+					if (isNewDailyVisitor) {
+						try {
+							const response = await fetch(this.workerUrl, {
+								method: 'POST',
+								headers: { 'Content-Type': 'application/json' },
+								body: JSON.stringify({ isNewVisitor, isNewDailyVisitor }),
+							});
+							if (!response.ok) throw new Error(`Worker 响应状态: ${response.status}`);
+							
+							// 成功发送 POST 请求后，更新本地标志
+							if (isNewVisitor) {
+								localStorage.setItem(this.visitorIdKey, visitorId);
+							}
+							localStorage.setItem(this.lastVisitKey, today);
+							
+							// 追踪后立即刷新页面上的统计数据
+							const updatedStats = await response.json();
+							this.updateElement('dailyVisits', updatedStats.dailyVisits);
+							this.updateElement('dailyVisitors', updatedStats.dailyVisitors);
+							this.updateElement('totalVisits', updatedStats.totalVisits);
+							this.updateElement('totalVisitors', updatedStats.totalVisitors);
+
+						} catch (error) {
+							console.error("追踪访问失败:", error);
 						}
 					}
-
-					this.saveStats();
 				}
-
-				displayStats() {
-					const today = this.getToday();
-					const todayStats = this.stats.dailyStats[today];
-
-					this.updateElement('dailyVisits', todayStats.visits);
-					this.updateElement('dailyVisitors', todayStats.visitors);
-					this.updateElement('totalVisits', this.stats.totalVisits);
-					this.updateElement('totalVisitors', this.stats.totalVisitors);
-				}
-
+				
+				// 从 localStorage 获取或创建一个唯一的浏览器 ID
 				getVisitorId() {
-					let visitorId = localStorage.getItem(this.visitorKey);
-					if (!visitorId) {
-						visitorId = 'ikun_visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-						localStorage.setItem(this.visitorKey, visitorId);
+					let id = localStorage.getItem(this.visitorIdKey);
+					if (!id) {
+						id = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+						// 注意：我们在这里还不保存它，只在第一次成功追踪后才保存。
 					}
-					return visitorId;
+					return id;
 				}
 
-				isReturningVisitor(visitorId, excludeDate) {
-					for (const [date, stats] of Object.entries(this.stats.dailyStats)) {
-						if (date !== excludeDate && stats.visitorIds.includes(visitorId)) {
-							return true;
-						}
-					}
-					return false;
-				}
-
+				// 更新页面元素的文本内容的辅助函数
 				updateElement(id, value) {
 					const element = document.getElementById(id);
 					if (element) {
 						element.textContent = value.toLocaleString();
 					}
-				}
-
-				getToday() {
-					return new Date().toISOString().split('T')[0];
-				}
-
-				cleanOldData() {
-					const today = new Date();
-					const cutoffDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000)
-						.toISOString().split('T')[0];
-
-					for (const date in this.stats.dailyStats) {
-						if (date < cutoffDate) {
-							delete this.stats.dailyStats[date];
-						}
-					}
-				}
-
-				saveStats() {
-					localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
 				}
 			}
 
@@ -494,10 +467,11 @@
 				updateRuntime();
 				setInterval(updateRuntime, 1000);
 				
-				// 初始化访问统计
-				new BlogVisitorStats();
+				// !!! 在这里粘贴您自己的 Worker URL !!!
+				const CF_WORKER_URL = "https://counter.yao.bio";
+				new BlogVisitorStats(CF_WORKER_URL);
 
-				// 新增：为“回到顶部”按钮添加点击事件
+				// 为“回到顶部”按钮添加点击事件
 				const backToTopButton = document.getElementById('back-to-top');
 				if(backToTopButton) {
 						backToTopButton.addEventListener('click', () => {
