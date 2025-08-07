@@ -154,7 +154,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				flex-wrap: wrap; 
+				flex-wrap: wrap;
 				gap: 20px;
 				padding: 8px 0;
 				margin-top: 15px;
@@ -163,7 +163,7 @@
 			/* --- 炫酷边框通用样式 --- */
 			.cool-box-container {
 				position: relative;
-				padding: 12px 25px 12px 45px; 
+				padding: 12px 25px 12px 45px;
 				border: 2px solid #53a8b6;
 				border-radius: 50px;
 				background-color: rgba(22, 33, 62, 0.7);
@@ -353,7 +353,7 @@
 			// === 站点存活时间计时器 ===
 			function updateRuntime() {
 				// !!! 请在这里修改为您站点的建立日期 !!!
-				const startDate = new Date('2025-07-01T12:00:00'); 
+				const startDate = new Date('2025-07-01T12:00:00');
 				
 				const now = new Date();
 				const diff = now - startDate;
@@ -382,6 +382,8 @@
 					this.updateStats();
 					this.displayStats();
 				}
+
+
 
 				loadStats() {
 					const saved = localStorage.getItem(this.storageKey);
