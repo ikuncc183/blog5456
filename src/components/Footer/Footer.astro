@@ -44,7 +44,7 @@
 				margin: 0 5px;
 			}
 
-			/* --- 新增：访客统计样式 --- */
+			/* --- 访客统计样式 --- */
 			.visitor-stats {
 				text-align: center;
 				margin: 15px 0;
@@ -164,11 +164,11 @@
 			<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
 		</p>
 		
-		<!-- 新增：访客统计 -->
+		<!-- 修改：访客统计，去掉了“本页访问量”，增加了“本站总字数” -->
 		<div class="visitor-stats">
 			<span class="stat-item">本站总访问量: <span id="busuanzi_value_site_pv"></span>次</span>
 			<span class="stat-item">本站总访客数: <span id="busuanzi_value_site_uv"></span>人</span>
-			<span class="stat-item">本页访问量: <span id="busuanzi_value_page_pv"></span>次</span>
+			<span class="stat-item">本站总字数: <span id="busuanzi_value_site_wc"></span>字</span>
 		</div>
 
 		<!-- 备案号和计时器容器 -->
@@ -215,7 +215,7 @@
 		<script async src="https://cdn.jsdelivr.net/npm/busuanzi@2.3/bsz.pure.mini.js"></script>
 		
 		<!-- 
-			新增：修复SPA页面切换后“本页访问量”不更新的问题。
+			修复SPA页面切换后统计数据不更新的问题。
 			这段代码会监听Astro的页面切换事件，并手动调用不蒜子的更新函数。
 		-->
 		<script>
