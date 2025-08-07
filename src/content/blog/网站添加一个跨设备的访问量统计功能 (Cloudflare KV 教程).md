@@ -1,7 +1,7 @@
 ---
 title: 网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
 date: 2025-08-08 00:00:00
-categories: Code
+categories: code
 tags:
   - WebAnalytics
   - Cloudflare Workers
