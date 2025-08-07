@@ -7,12 +7,16 @@
 		<style>
 			/* 这里是您原来的样式，我保留了它们。*/
 			.social-icons {
-				text-align: center;
+				display: flex; /* 使用 Flexbox 布局 */
+				justify-content: center; /* 水平居中 */
+				align-items: center; /* 垂直居中 */
+				flex-wrap: wrap; /* 在小屏幕上换行 */
+				gap: 15px; /* 设置项目之间的间距 */
 				margin-top: 8px;
 			}
 
 			.social-icons a {
-				margin: 0 12px;
+				margin: 0; /* 移除旧的 margin，使用 gap 代替 */
 				color: #444;
 				font-size: 28px;
 				text-decoration: none;
@@ -47,10 +51,65 @@
 			.social-icons a.discord:hover {
 				color: #5865F2;
 			}
+
+			/* --- 新增：回到顶部按钮样式 --- */
+			.back-to-top-circle {
+				position: relative; /* 用于箭头图标的绝对定位 */
+				width: 50px; /* 调整大小以更好地对齐 */
+				height: 50px;
+				border-radius: 50%; /* 保证是圆形 */
+				background-color: #ccc; /* 图片加载失败时的备用颜色 */
+				/* !!! 在这里替换为您自己的图片链接 !!! */
+				background-image: url('https://img.8888.vvvv.ee/file/图片/1751855752412.jpg');
+				background-size: cover;
+				background-position: center;
+				cursor: pointer;
+				margin: 0; /* 移除旧的 margin，使用 gap 代替 */
+				transition: all 0.4s ease;
+				overflow: hidden; /* 隐藏可能溢出的内容 */
+				border: 2px solid #53a8b6;
+				flex-shrink: 0; /* 防止在 flex 布局中被压缩 */
+			}
+
+			.back-to-top-circle .arrow-icon {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				color: white;
+				font-size: 24px; /* 调整箭头大小 */
+				opacity: 0; /* 默认隐藏箭头 */
+				transition: opacity 0.4s ease;
+			}
+
+			.back-to-top-circle:hover {
+				transform: translateY(-5px); /* 鼠标悬浮时轻微上移 */
+				box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+				border-color: #e94560;
+			}
+
+			/* 鼠标悬浮时，通过伪元素添加一个半透明遮罩层 */
+			.back-to-top-circle:hover::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5); /* 深色遮罩 */
+				border-radius: 50%;
+				z-index: 1; /* 确保遮罩在背景图之上 */
+			}
+
+			/* 鼠标悬浮时显示箭头 */
+			.back-to-top-circle:hover .arrow-icon {
+				opacity: 1; /* 显示箭头 */
+				z-index: 2; /* 确保箭头在遮罩之上 */
+			}
 			
 			.footer-icons {
 				text-align: center;
-				margin: 15px 0;
+				margin: 25px 0 15px; /* 调整间距 */
 			}
 			
 			.footer-icons a {
@@ -61,7 +120,6 @@
 			.visitor-stats {
 				text-align: center;
 				margin: 20px 0;
-				/* 移除了 background, border-radius, backdrop-filter 和 padding 来去掉框框 */
 			}
 
 			.stats-container {
@@ -81,7 +139,6 @@
 			}
 
 			.stat-number {
-				/* 统计数字的颜色保持不变 */
 				color: #8de2e0;
 				font-weight: 600;
 				text-shadow: 0 0 8px rgba(141, 226, 224, 0.6);
@@ -97,10 +154,10 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				flex-wrap: wrap; /* 在小屏幕上自动换行 */
-				gap: 20px; /* 两个元素之间的间距 */
+				flex-wrap: wrap; 
+				gap: 20px;
 				padding: 8px 0;
-				margin-top: 15px; /* 增加一点上边距 */
+				margin-top: 15px;
 			}
 
 			/* --- 炫酷边框通用样式 --- */
@@ -115,7 +172,7 @@
 				backdrop-filter: blur(5px);
 				transition: all 0.3s ease;
 				animation: glow 2.5s infinite alternate;
-				white-space: nowrap; /* 防止文字换行 */
+				white-space: nowrap;
 			}
 			
 			.cool-box-container a,
@@ -183,7 +240,7 @@
 				}
 				
 				.stat-item {
-					font-size: 14px; /* 响应式调整 */
+					font-size: 14px;
 				}
 				
 				.bottom-info-row {
@@ -207,7 +264,7 @@
 				
 				.stats-container {
 					flex-direction: column;
-					gap: 8px; /* 调整垂直间距 */
+					gap: 8px;
 				}
 				
 				.stat-separator {
@@ -215,13 +272,14 @@
 				}
 				
 				.stat-item {
-					font-size: 13px; /* 响应式调整 */
+					font-size: 13px;
 				}
 			}
 		</style>
 
-		<!-- 社交图标 (已添加 GitLab) -->
+		<!-- 社交图标与回到顶部按钮 -->
 		<div class="social-icons">
+			<!-- 左边三个图标 -->
 			<a href="https://github.com/gdydg" class="github" target="_blank" title="GitHub">
 				<i class="fab fa-github"></i>
 			</a>
@@ -231,6 +289,13 @@
 			<a href="https://discord.gg/8DQyvHP2" class="discord" target="_blank" title="Discord">
 				<i class="fab fa-discord"></i>
 			</a>
+			
+			<!-- 中间的回到顶部按钮 -->
+			<div id="back-to-top" class="back-to-top-circle" title="回到顶部">
+				<i class="fas fa-arrow-up arrow-icon"></i>
+			</div>
+			
+			<!-- 右边三个图标 -->
 			<a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
 				<i class="fab fa-twitter"></i>
 			</a>
@@ -241,7 +306,7 @@
 				<i class="fas fa-envelope"></i>
 			</a>
 		</div>
-		
+
 		<!-- Astro, Theme 等图标 -->
 		<p class="footer-icons">
 			<a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a>
@@ -429,6 +494,17 @@
 				
 				// 初始化访问统计
 				new BlogVisitorStats();
+
+				// 新增：为“回到顶部”按钮添加点击事件
+				const backToTopButton = document.getElementById('back-to-top');
+				if(backToTopButton) {
+						backToTopButton.addEventListener('click', () => {
+								window.scrollTo({
+										top: 0,
+										behavior: 'smooth' // 平滑滚动效果
+								});
+						});
+				}
 			});
 		</script>
 		
