@@ -211,11 +211,21 @@
 		
 		<!-- 网站分析脚本 -->
 		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
-		<!-- 
-			修改：将不蒜子脚本源更换为更稳定的CDN地址
-			旧地址: //busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
-		-->
+		<!-- 不蒜子统计脚本 -->
 		<script async src="https://cdn.jsdelivr.net/npm/busuanzi@2.3/bsz.pure.mini.js"></script>
+		
+		<!-- 
+			新增：修复SPA页面切换后“本页访问量”不更新的问题。
+			这段代码会监听Astro的页面切换事件，并手动调用不蒜子的更新函数。
+		-->
+		<script>
+			document.addEventListener('astro:after-swap', () => {
+				// 确保不蒜子脚本已加载并可用
+				if (window.bsz) {
+					window.bsz.fetch();
+				}
+			});
+		</script>
 
 	</main>
 </footer>
