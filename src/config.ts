@@ -46,7 +46,7 @@ export default {
   },
   // 博客主题配置
   Theme: {
-    "--vh-main-color": "#01C4B6",
+    "--vh-main-color": "#FFE4E1",
     "--vh-font-color": "#34495e",
     "--vh-aside-width": "318px",
     "--vh-main-radius": "0.88rem",
