@@ -373,8 +373,9 @@
 			class BlogVisitorStats {
 				constructor(workerUrl) {
 					this.workerUrl = workerUrl; 
-					this.visitorIdKey = 'ikun-blog-visitor-id';
-					this.lastVisitKey = 'ikun-blog-last-visit';
+					// 已更新: 使用新的 key 来避免旧数据冲突
+					this.visitorIdKey = 'ikun-blog-visitor-id-v2';
+					this.lastVisitKey = 'ikun-blog-last-visit-v2';
 					
 					if (!this.workerUrl) {
 						console.error("Worker URL 未设置。访客统计功能将无法工作。");
