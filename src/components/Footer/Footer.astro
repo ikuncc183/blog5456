@@ -5,96 +5,10 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 		<style>
-			/* 这里是您原来的样式，我保留了它们。
-			  为了避免冲突，我没有包含 body 背景图的样式，
-			  您可以将它放在您网站全局的 CSS 文件中。
-			*/
-			.welcome-container {
-				display: flex; /* 改为Flex布局 */
-				align-items: center; /* 垂直居中 */
-				justify-content: center; /* 水平居中 */
-				margin-top: 10px;
-			}
-
-			.welcome-gif {
-				width: 200px;
-				height: 40px;
-				object-fit: contain;
-				margin: 8px;
-			}
-
-			.welcome-text {
-				font-size: 16px;
-				color: #007bff;
-				margin: 0 10px;
-			}
-
-			.top-icons {
-				text-align: center;
-				margin-bottom: 10px;
-			}
-
-			.top-icons a {
-				margin: 0 12px;
-				color: #444;
-				font-size: 16px;
-				text-decoration: none;
-				transition: transform 0.3s, color 0.3s;
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				width: 80px;
-				height: 40px;
-				border: 2px solid #ccc;
-				border-radius: 8px;
-				background-color: white;
-				font-weight: 600;
-				user-select: none;
-			}
-
-			.top-icons a:hover {
-				transform: scale(1.1);
-			}
-
-			.top-icons a.tempmail {
-				color: #ff6600;
-				border-color: #ff6600;
-			}
-
-			.top-icons a.tempmail:hover {
-				color: white;
-				background-color: #ff6600;
-			}
-
-			.top-icons a.tempmail2 {
-				color: #3399ff;
-				border-color: #3399ff;
-			}
-
-			.top-icons a.tempmail2:hover {
-				color: white;
-				background-color: #3399ff;
-			}
-
-			.top-icons a.imgsite {
-				color: #6f42c1;
-				border-color: #6f42c1;
-				font-size: 18px;
-				font-weight: 600;
-			}
-
-			.top-icons a.imgsite:hover {
-				color: white;
-				background-color: #6f42c1;
-			}
-
-			.top-icons a.imgsite i {
-				margin-right: 6px;
-			}
-
+			/* 这里是您原来的样式，我保留了它们。*/
 			.social-icons {
 				text-align: center;
-				margin-top: 8px; /* 已减小 */
+				margin-top: 8px;
 			}
 
 			.social-icons a {
@@ -123,22 +37,25 @@
 			
 			.footer-icons {
 				text-align: center;
-				margin: 15px 0; /* 已减小 */
+				margin: 15px 0;
 			}
 			
 			.footer-icons a {
-				margin: 0 5px; /* 给图标之间增加一点间距 */
+				margin: 0 5px;
 			}
 
-
-			.icp-wrapper {
+			/* --- 新增：用于将计时器和备案号放在同一行的容器 --- */
+			.bottom-info-row {
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				padding: 10px 0; /* 已减小 */
+				flex-wrap: wrap; /* 在小屏幕上自动换行 */
+				gap: 20px; /* 两个元素之间的间距 */
+				padding: 8px 0;
 			}
 
-			.icp-container {
+			/* --- 炫酷边框通用样式 --- */
+			.cool-box-container {
 				position: relative;
 				padding: 12px 25px 12px 45px; 
 				border: 2px solid #53a8b6;
@@ -149,9 +66,11 @@
 				backdrop-filter: blur(5px);
 				transition: all 0.3s ease;
 				animation: glow 2.5s infinite alternate;
+				white-space: nowrap; /* 防止文字换行 */
 			}
-
-			.icp-container a {
+			
+			.cool-box-container a,
+			.cool-box-container span {
 				color: #f0f0f0;
 				text-decoration: none;
 				font-size: 14px;
@@ -160,18 +79,20 @@
 				transition: color 0.3s ease;
 			}
 
-			.icp-container:hover {
+			.cool-box-container:hover {
 				transform: translateY(-3px);
 				box-shadow: 0 0 15px rgba(233, 69, 96, 0.6),
 										0 0 30px rgba(233, 69, 96, 0.4);
 				border-color: #e94560;
 			}
 
-			.icp-container:hover a {
+			.cool-box-container:hover a,
+			.cool-box-container:hover span {
 				color: #ffffff;
 			}
-
-			.icp-container::before {
+			
+			/* --- 备案号和计时器的特定图标 --- */
+			#icp-container::before {
 				content: '♥';
 				position: absolute;
 				left: 18px;
@@ -180,6 +101,17 @@
 				font-size: 18px;
 				color: #e94560;
 				text-shadow: 0 0 8px rgba(233, 69, 96, 0.8);
+			}
+			
+			#runtime-container::before {
+				content: '⏳'; /* 沙漏图标 */
+				position: absolute;
+				left: 18px;
+				top: 50%;
+				transform: translateY(-50%);
+				font-size: 18px;
+				color: #8de2e0; /* 匹配辉光动画的颜色 */
+				text-shadow: 0 0 8px rgba(141, 226, 224, 0.8);
 			}
 
 			@keyframes glow {
@@ -196,18 +128,7 @@
 			}
 		</style>
 
-		<!-- 修改后的欢迎区域 -->
-		<div class="welcome-container">
-			<!-- 左侧新添加的GIF -->
-			<img src="https://img.8888.vvvv.ee/file/图片/1750089446952.gif" alt="左侧GIF" class="welcome-gif" />
-			
-			<!-- 文本区域 -->
-			<div class="welcome-text">欢迎各位IKUNS来到我的博客！</div>
-			
-			<!-- 原有的GIF -->
-			<img src="https://img.8888.vvvv.ee/file/图片/1750064706928.gif" alt="右侧GIF" class="welcome-gif" />
-		</div>
-		<!-- Twitter, Facebook, Gmail 放在欢迎区域下面 -->
+		<!-- Twitter, Facebook, Gmail 图标 -->
 		<div class="social-icons">
 			<a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
 				<i class="fab fa-twitter"></i>
@@ -220,6 +141,7 @@
 			</a>
 		</div>
 		
+		<!-- Astro, Theme 等图标 -->
 		<p class="footer-icons">
 			<a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a>
 			<a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a>
@@ -227,13 +149,45 @@
 			<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
 		</p>
 
-		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
-		
-		<div class="icp-wrapper">
-			<div class="icp-container">
-				<a href="https://icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
+		<!-- 备案号和计时器容器 -->
+		<div class="bottom-info-row">
+			<!-- 备案号 -->
+			<div id="icp-container" class="cool-box-container">
+				<a href="https.icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
+			</div>
+			
+			<!-- 站点存活时间 -->
+			<div id="runtime-container" class="cool-box-container">
+				<span id="runtime-display">正在加载...</span>
 			</div>
 		</div>
+
+		<script>
+			// 站点存活时间计时器
+			function updateRuntime() {
+				// !!! 请在这里修改为您站点的建立日期 !!!
+				const startDate = new Date('2025-7-01T00:00:00'); 
+				
+				const now = new Date();
+				const diff = now - startDate;
+
+				const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+				const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+				const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+				const runtimeDisplay = document.getElementById('runtime-display');
+				if (runtimeDisplay) {
+					runtimeDisplay.textContent = `本站已苟活: ${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+				}
+			}
+
+			// 立即运行一次，然后每秒更新一次
+			updateRuntime();
+			setInterval(updateRuntime, 1000);
+		</script>
+		
+		<script src="https://hananalytics-2qg.pages.dev/tracker.min.js" data-website-id="IKUN-BLOG"></script>
 
 	</main>
 </footer>
