@@ -12,7 +12,6 @@ recommend: true
 ---
 
 
-
 ## 如何为你的网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
 
 本教程将指导你如何为任何网站添加一个精准、稳定、且跨设备共享的访问量统计功能。我们将使用 Cloudflare Workers 和 KV 数据库来实现这个功能，完全免费。
@@ -23,7 +22,7 @@ recommend: true
 
 首先，在你想要显示访问统计的地方（比如页脚` <footer>`），粘贴以下 HTML 代码。
 
-```
+```html
 <!-- 访问统计显示区域 -->
 <div class="visitor-stats">
     <div class="stats-container">
@@ -50,7 +49,7 @@ recommend: true
 
 接下来，将下面的 CSS 代码添加到你的网站样式表 `<style> `标签中，用于美化统计信息的显示。
 
-```
+```css
 /* --- 访问统计样式 --- */
 .visitor-stats {
     text-align: center;
@@ -104,7 +103,7 @@ recommend: true
 - 点击 创建应用程序 > 创建 Worker。可以给它取一个你喜欢的名字（例如 my-site-counter），然后点击 部署。
 - 部署成功后，点击 编辑代码。将编辑器里原有的代码全部删除，然后粘贴以下完整的 Worker 脚本。这个版本已经配置为按北京时间重置。
 
-```
+```javascript
 /**
  * Cloudflare Worker for a simple, privacy-friendly site view counter. (Version 3 - Beijing Time)
  *
@@ -219,15 +218,15 @@ async function updateStats(kv, payload) {
 
 重要提示： 请务必将代码中的 `CF_WORKER_URL` 变量的值替换为你上一步复制的你自己的 `Worker URL`。
 
-```
+```javascript
 // === 访问统计功能 (Cloudflare Worker 版本) ===
 class BlogVisitorStats {
     constructor(workerUrl) {
-        this.workerUrl = workerUrl; 
+        this.workerUrl = workerUrl;
         // 使用 v2 版本的 key 来避免旧数据冲突
         this.visitorIdKey = 'ikun-blog-visitor-id-v2';
         this.lastVisitKey = 'ikun-blog-last-visit-v2';
-        
+
         if (!this.workerUrl) {
             console.error("Worker URL 未设置。访客统计功能将无法工作。");
             return;
@@ -275,7 +274,7 @@ class BlogVisitorStats {
             });
 
             if (!response.ok) throw new Error(`Worker 响应状态: ${response.status}`);
-            
+
             const stats = await response.json();
             this.updateUi(stats); // 使用来自 worker 的最新数据更新 UI
 
@@ -291,7 +290,7 @@ class BlogVisitorStats {
             this.displayStatsFallback();
         }
     }
-    
+
     // 从 localStorage 获取或创建一个唯一的浏览器 ID
     getVisitorId() {
         let id = localStorage.getItem(this.visitorIdKey);
@@ -321,11 +320,9 @@ class BlogVisitorStats {
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', () => {
     // !!! 在这里粘贴你自己的 Worker URL !!!
-    const CF_WORKER_URL = "https://你的worker名.你的子域.workers.dev";
+    const CF_WORKER_URL = "[https://你的worker名.你的子域.workers.dev](https://你的worker名.你的子域.workers.dev)";
     new BlogVisitorStats(CF_WORKER_URL);
 });
-
 ```
 
 恭喜！完成以上所有步骤后，你的网站就拥有了一个功能完善的、并按北京时间重置的访问量统计器。
-
