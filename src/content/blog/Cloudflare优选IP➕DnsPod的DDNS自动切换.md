@@ -1,17 +1,16 @@
 ---
-title: 【开源】Cloudflare优选IP➕DnsPod的DDNS自动切换
-date: 2025-08-27 15:24:10
-categories: Code
+title: '网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)'
+date: '2025-08-08 00:00:00'
+categories: 'code'
 tags:
-  - Cloudflare
-  - 优选IP
-  - DnsPod
-  - DDNS
-
-id: cloudflare-ip-dnspod-ddns
-cover: https://i0.wp.com/uxiaohan.github.io/v2/2024/08/1724744026.webp
+  - 'WebAnalytics'
+  - 'Cloudflare Workers'
+  - 'KV'
+id: 'erhrehtrjtr'
+cover: 'https://iili.io/FitsZSS.png'
 recommend: true
 ---
+
 
 :::note
 CloudFlare是一个非常优秀的CDN服务，但是CloudFlare也有一个大的毛病——大陆访问速度很慢。国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的IP并不友好（延迟高、丢包多、速度慢）。
