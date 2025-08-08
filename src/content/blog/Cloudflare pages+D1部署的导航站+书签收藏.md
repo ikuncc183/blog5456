@@ -11,7 +11,9 @@ cover: https://iili.io/FSaorxa.png
 recommend: true
 ---
 
-
+:::note
+使用`Cloudflare pages`部署导航站收藏页
+:::
 
 
 # 关于项目
