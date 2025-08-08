@@ -1,15 +1,17 @@
 ---
-title: cloudflare中转调用API数据
-date: 2025-08-08 14:52:10
-categories: code
+title: "cloudflare中转调用API数据"
+categories: Cloudflare
 tags:
-  - Cloudflare
   - API
-
-id: cloudflare-API
-cover: https://i0.wp.com/uxiaohan.github.io/v2/2024/08/1724744026.webp
-recommend: true
+  - Cloudflare
+id: "cloudflare中转调用API数据"
+date: 2025-08-08 14:52:10
+cover: "https://i0.wp.com/uxiaohan.github.io/v2/2024/08/1724744026.webp"
 ---
+
+:::note
+使用`Cloudflare Workers`和中转调用API服务
+:::
 
 最近给博客加入了一个访客IP信息的组件，但是组件在调用ip.sb的API的时候被广告拦截工具拦截禁止访问了（ip.sb被拉黑了），但是这个广告拦截插件是不可能关的，于是探索了好几个办法，觉得用cloudflare中转网站对API数据请求是最好的，分享一下。在前端开发中，我们经常需要调用第三方 API。但这个过程总是伴随着各种烦恼：
 
