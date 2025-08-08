@@ -1,16 +1,16 @@
 ---
-title: 网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
-date: 2025-08-08 00:00:00
-categories: code
+title: '网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)'
+date: '2025-08-08 00:00:00'
+categories: 'code'
 tags:
-  - WebAnalytics
-  - Cloudflare Workers
-  - KV
-
-id: "erhrehtrjtr"
-cover: "https://iili.io/FitsZSS.png"
+  - 'WebAnalytics'
+  - 'Cloudflare Workers'
+  - 'KV'
+id: 'erhrehtrjtr'
+cover: 'https://iili.io/FitsZSS.png'
 recommend: true
 ---
+
 
 
 ## 如何为你的网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
