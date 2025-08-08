@@ -154,7 +154,7 @@
     };
 
     const apiEndpoints = [
-        { name: 'ip.sb', url: 'https://api.ip.sb/geoip', parser: data => ({ ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.organization, lat: data.latitude, lon: data.longitude }) },
+        { name: 'ip.skymail.bio', url: 'https://ip.skymail.bio', parser: data => ({ ip: data.ip, location: `${data.country || ''}, ${data.city || ''}`, isp: data.isp, lat: data.latitude, lon: data.longitude }) },
         { name: 'vvhan.com', url: 'https://api.vvhan.com/api/ipInfo?type=json', parser: data => data.success ? { ip: data.ip, location: `${data.info.country || ''}, ${data.info.city || ''}`, isp: data.info.isp } : null },
         { 
             name: 'ipinfo.io', 
