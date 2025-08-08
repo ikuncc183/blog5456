@@ -6,7 +6,7 @@ tags:
   - Cloudflare
 id: "cloudflare中转调用API数据"
 date: 2025-08-08 14:52:10
-cover: "https://i0.wp.com/uxiaohan.github.io/v2/2024/08/1724744026.webp"
+cover: "https://iili.io/FsMi4Dv.png"
 ---
 
 :::note
