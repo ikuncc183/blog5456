@@ -11,6 +11,9 @@ cover: 'https://iili.io/FitsZSS.png'
 recommend: true
 ---
 
+:::note
+网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
+:::
 
 ## 如何为你的网站添加一个跨设备的访问量统计功能 (Cloudflare KV 教程)
 
