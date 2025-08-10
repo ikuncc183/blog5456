@@ -22,6 +22,12 @@ export default {
       "descr": "柳影曳曳，清酒孤灯，扬笔撒墨，心境如霜"
     },
     {
+      "name": "二叉树树",
+      "link": "https://2x.nz/",
+      "avatar": "https://favicon.im/2x.nz?larger=true",
+      "descr": "爱你所爱~ ❤"
+    },
+    {
       "name": "NodeSeek",
       "link": "https://www.nodeseek.com",
       "avatar": "https://img.8888.vvvv.ee/file/图片/1753631267680.ico",
