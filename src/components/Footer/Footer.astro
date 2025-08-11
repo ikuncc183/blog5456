@@ -7,18 +7,16 @@
 		<style>
 			/* --- 新增：页脚整体容器样式 --- */
 			.footer-wrapper {
-				/* 移除了 max-width 和左右的 auto margin，使其占满全宽 */
-				margin: 20px 0 0; /* 已修改：移除了底部 margin，使其紧贴页面下部 */
-				padding: 25px 30px; /* 内部留白 */
-				border-radius: 0; /* 移除圆角 */
-				background-color: rgba(22, 33, 62, 0.7);
-				border-top: 2px solid #53a8b6; /* 改为上下边框 */
-				border-bottom: 2px solid #53a8b6;
-				box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
-										0 0 20px rgba(83, 168, 182, 0.3);
-				backdrop-filter: blur(5px);
+				margin: 20px 0 0;
+				padding: 25px 30px;
+				border-radius: 0;
+				/* 已修改：亮银色（偏淡金色）主题 */
+				background: #fefdf5; /* 已修改：比边框更淡的奶油金色背景 */
+				border-top: 2px solid #e0c56e; /* 淡金色边框 */
+				border-bottom: 2px solid #e0c56e;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 配合浅色背景的柔和阴影 */
 				transition: all 0.3s ease;
-				animation: glow 2.5s infinite alternate;
+				animation: none; /* 移除了不适用于浅色主题的辉光动画 */
 			}
 
 			/* 这里是您原来的样式，我保留了它们。*/
@@ -33,7 +31,7 @@
 
 			.social-icons a {
 				margin: 0; /* 移除旧的 margin，使用 gap 代替 */
-				color: #f0f0f0; /* 已修改：将图标颜色改为浅色以适应深色背景 */
+				color: #555; /* 已修改：改为深灰色以保证对比度 */
 				font-size: 28px;
 				text-decoration: none;
 				transition: transform 0.3s, color 0.3s;
@@ -57,11 +55,11 @@
 			
 			/* 新增社交图标的悬停颜色 */
 			.social-icons a.github:hover {
-				color: #ffffff;
+				color: #000;
 			}
 			
 			.social-icons a.gitlab:hover {
-				color: #e24329; /* GitLab 品牌颜色 */
+				color: #e24329;
 			}
 
 			.social-icons a.discord:hover {
@@ -70,21 +68,20 @@
 
 			/* --- 新增：回到顶部按钮样式 --- */
 			.back-to-top-circle {
-				position: relative; /* 用于箭头图标的绝对定位 */
-				width: 50px; /* 调整大小以更好地对齐 */
+				position: relative;
+				width: 50px;
 				height: 50px;
-				border-radius: 50%; /* 保证是圆形 */
-				background-color: #ccc; /* 图片加载失败时的备用颜色 */
-				/* !!! 在这里替换为您自己的图片链接 !!! */
+				border-radius: 50%;
+				background-color: #ccc;
 				background-image: url('https://img.8888.vvvv.ee/file/图片/1751855752412.jpg');
 				background-size: cover;
 				background-position: center;
 				cursor: pointer;
-				margin: 0; /* 移除旧的 margin，使用 gap 代替 */
+				margin: 0;
 				transition: all 0.4s ease;
-				overflow: hidden; /* 隐藏可能溢出的内容 */
-				border: 2px solid #53a8b6;
-				flex-shrink: 0; /* 防止在 flex 布局中被压缩 */
+				overflow: hidden;
+				border: 2px solid #ccc; /* 已修改：边框颜色适应浅色主题 */
+				flex-shrink: 0;
 			}
 
 			.back-to-top-circle .arrow-icon {
@@ -93,18 +90,17 @@
 				left: 50%;
 				transform: translate(-50%, -50%);
 				color: white;
-				font-size: 24px; /* 调整箭头大小 */
-				opacity: 0; /* 默认隐藏箭头 */
+				font-size: 24px;
+				opacity: 0;
 				transition: opacity 0.4s ease;
 			}
 
 			.back-to-top-circle:hover {
-				transform: translateY(-5px); /* 鼠标悬浮时轻微上移 */
+				transform: translateY(-5px);
 				box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-				border-color: #e94560;
+				border-color: #e0c56e; /* 已修改：悬停时边框变为淡金色 */
 			}
 
-			/* 鼠标悬浮时，通过伪元素添加一个半透明遮罩层 */
 			.back-to-top-circle:hover::before {
 				content: '';
 				position: absolute;
@@ -112,27 +108,26 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				background-color: rgba(0, 0, 0, 0.5); /* 深色遮罩 */
+				background-color: rgba(0, 0, 0, 0.5);
 				border-radius: 50%;
-				z-index: 1; /* 确保遮罩在背景图之上 */
+				z-index: 1;
 			}
 
-			/* 鼠标悬浮时显示箭头 */
 			.back-to-top-circle:hover .arrow-icon {
-				opacity: 1; /* 显示箭头 */
-				z-index: 2; /* 确保箭头在遮罩之上 */
+				opacity: 1;
+				z-index: 2;
 			}
 			
 			.footer-icons {
 				text-align: center;
-				margin: 25px 0 15px; /* 调整间距 */
+				margin: 25px 0 15px;
 			}
 			
 			.footer-icons a {
 				margin: 0 5px;
 			}
 
-			/* --- 访问统计样式 (已修改) --- */
+			/* --- 访问统计样式 --- */
 			.visitor-stats {
 				text-align: center;
 				margin: 20px 0;
@@ -147,21 +142,21 @@
 			}
 
 			.stat-item {
-				color: #ff4747; /* 修改为高亮红色 */
-				font-size: 16px; /* 字体调大 */
-				font-weight: 500; /* 让字体稍微加粗 */
+				color: #d9534f; /* 已修改：改为更深的红色 */
+				font-size: 16px;
+				font-weight: 500;
 				letter-spacing: 0.5px;
-				text-shadow: 0 0 5px rgba(255, 71, 71, 0.7); /* 添加红色辉光效果 */
+				text-shadow: none; /* 移除了不适用于浅色背景的辉光 */
 			}
 
 			.stat-number {
-				color: #8de2e0;
+				color: #1a8a88; /* 已修改：改为更深的青色 */
 				font-weight: 600;
-				text-shadow: 0 0 8px rgba(141, 226, 224, 0.6);
+				text-shadow: none;
 			}
 
 			.stat-separator {
-				color: #53a8b6;
+				color: #aaa; /* 已修改：改为中灰色 */
 				font-weight: 300;
 			}
 
@@ -180,19 +175,18 @@
 			.cool-box-container {
 				position: relative;
 				padding: 12px 25px 12px 45px;
-				border: 2px solid #53a8b6;
+				border: 1px solid #ccc; /* 已修改：边框变细 */
 				border-radius: 50px;
-				background-color: rgba(22, 33, 62, 0.9); /* 稍微加深背景以突出 */
-				box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
-										0 0 20px rgba(83, 168, 182, 0.3);
-				backdrop-filter: blur(5px);
+				background-color: #e9e9e9; /* 已修改：适应浅色主题的背景 */
+				box-shadow: none; /* 已修改：移除阴影 */
+				backdrop-filter: none; /* 已修改：移除滤镜 */
 				transition: all 0.3s ease;
-				animation: none; /* 已修改：移除动画，因为外层容器已有 */
+				animation: none;
 			}
 			
 			.cool-box-container a,
 			.cool-box-container span {
-				color: #f0f0f0;
+				color: #333; /* 已修改：改为深色文字 */
 				text-decoration: none;
 				font-size: 14px;
 				font-weight: 500;
@@ -202,14 +196,13 @@
 
 			.cool-box-container:hover {
 				transform: translateY(-3px);
-				box-shadow: 0 0 15px rgba(233, 69, 96, 0.6),
-										0 0 30px rgba(233, 69, 96, 0.4);
-				border-color: #e94560;
+				border-color: #e0c56e;
+				box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 			}
 
 			.cool-box-container:hover a,
 			.cool-box-container:hover span {
-				color: #ffffff;
+				color: #000;
 			}
 			
 			/* --- 备案号和计时器的特定图标 --- */
@@ -221,55 +214,37 @@
 				transform: translateY(-50%);
 				font-size: 18px;
 				color: #e94560;
-				text-shadow: 0 0 8px rgba(233, 69, 96, 0.8);
+				text-shadow: none;
 			}
 			
 			#runtime-container::before {
-				content: '⏳'; /* 沙漏图标 */
+				content: '⏳';
 				position: absolute;
 				left: 18px;
 				top: 50%;
 				transform: translateY(-50%);
 				font-size: 18px;
-				color: #8de2e0; /* 匹配辉光动画的颜色 */
-				text-shadow: 0 0 8px rgba(141, 226, 224, 0.8);
-			}
-
-			@keyframes glow {
-				from {
-						border-color: #53a8b6;
-						box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
-												0 0 20px rgba(83, 168, 182, 0.3);
-				}
-				to {
-						border-color: #8de2e0;
-						box-shadow: 0 0 20px rgba(141, 226, 224, 0.7),
-												0 0 40px rgba(141, 226, 224, 0.5);
-				}
+				color: #1a8a88;
+				text-shadow: none;
 			}
 
 			/* --- 响应式设计 --- */
 			@media (max-width: 768px) {
 				.footer-wrapper {
 					padding: 20px;
-					/* 移除了 max-width: 95% */
 				}
 				.stats-container {
 					gap: 8px;
 				}
-				
 				.stat-item {
 					font-size: 14px;
 				}
-				
 				.bottom-info-row {
 					gap: 15px;
 				}
-				
 				.cool-box-container {
 					padding: 10px 20px 10px 40px;
 				}
-				
 				.cool-box-container a,
 				.cool-box-container span {
 					font-size: 13px;
@@ -280,16 +255,13 @@
 				.visitor-stats {
 					margin: 15px 0;
 				}
-				
 				.stats-container {
 					flex-direction: column;
 					gap: 8px;
 				}
-				
 				.stat-separator {
 					display: none;
 				}
-				
 				.stat-item {
 					font-size: 13px;
 				}
