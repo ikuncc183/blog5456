@@ -5,6 +5,22 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 		<style>
+			/* --- 新增：页脚整体容器样式 --- */
+			.footer-wrapper {
+				/* 移除了 max-width 和左右的 auto margin，使其占满全宽 */
+				margin: 20px 0; 
+				padding: 25px 30px; /* 内部留白 */
+				border-radius: 0; /* 移除圆角 */
+				background-color: rgba(22, 33, 62, 0.7);
+				border-top: 2px solid #53a8b6; /* 改为上下边框 */
+				border-bottom: 2px solid #53a8b6;
+				box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
+										0 0 20px rgba(83, 168, 182, 0.3);
+				backdrop-filter: blur(5px);
+				transition: all 0.3s ease;
+				animation: glow 2.5s infinite alternate;
+			}
+
 			/* 这里是您原来的样式，我保留了它们。*/
 			.social-icons {
 				display: flex; /* 使用 Flexbox 布局 */
@@ -17,7 +33,7 @@
 
 			.social-icons a {
 				margin: 0; /* 移除旧的 margin，使用 gap 代替 */
-				color: #444;
+				color: #f0f0f0; /* 已修改：将图标颜色改为浅色以适应深色背景 */
 				font-size: 28px;
 				text-decoration: none;
 				transition: transform 0.3s, color 0.3s;
@@ -41,7 +57,7 @@
 			
 			/* 新增社交图标的悬停颜色 */
 			.social-icons a.github:hover {
-				color: #333;
+				color: #ffffff;
 			}
 			
 			.social-icons a.gitlab:hover {
@@ -166,13 +182,12 @@
 				padding: 12px 25px 12px 45px;
 				border: 2px solid #53a8b6;
 				border-radius: 50px;
-				background-color: rgba(22, 33, 62, 0.7);
+				background-color: rgba(22, 33, 62, 0.9); /* 稍微加深背景以突出 */
 				box-shadow: 0 0 10px rgba(83, 168, 182, 0.5),
 										0 0 20px rgba(83, 168, 182, 0.3);
 				backdrop-filter: blur(5px);
 				transition: all 0.3s ease;
-				animation: glow 2.5s infinite alternate;
-				white-space: nowrap;
+				animation: none; /* 已修改：移除动画，因为外层容器已有 */
 			}
 			
 			.cool-box-container a,
@@ -235,6 +250,10 @@
 
 			/* --- 响应式设计 --- */
 			@media (max-width: 768px) {
+				.footer-wrapper {
+					padding: 20px;
+					/* 移除了 max-width: 95% */
+				}
 				.stats-container {
 					gap: 8px;
 				}
@@ -277,75 +296,77 @@
 			}
 		</style>
 
-		<!-- 社交图标与回到顶部按钮 -->
-		<div class="social-icons">
-			<!-- 左边三个图标 -->
-			<a href="https://github.com/gdydg" class="github" target="_blank" title="GitHub">
-				<i class="fab fa-github"></i>
-			</a>
-			<a href="https://gitlab.com/gdydg" class="gitlab" target="_blank" title="GitLab">
-				<i class="fab fa-gitlab"></i>
-			</a>
-			<a href="https://discord.gg/8DQyvHP2" class="discord" target="_blank" title="Discord">
-				<i class="fab fa-discord"></i>
-			</a>
-			
-			<!-- 中间的回到顶部按钮 -->
-			<div id="back-to-top" class="back-to-top-circle" title="回到顶部">
-				<i class="fas fa-arrow-up arrow-icon"></i>
+		<div class="footer-wrapper">
+			<!-- 社交图标与回到顶部按钮 -->
+			<div class="social-icons">
+				<!-- 左边三个图标 -->
+				<a href="https://github.com/gdydg" class="github" target="_blank" title="GitHub">
+					<i class="fab fa-github"></i>
+				</a>
+				<a href="https://gitlab.com/gdydg" class="gitlab" target="_blank" title="GitLab">
+					<i class="fab fa-gitlab"></i>
+				</a>
+				<a href="https://discord.gg/8DQyvHP2" class="discord" target="_blank" title="Discord">
+					<i class="fab fa-discord"></i>
+				</a>
+				
+				<!-- 中间的回到顶部按钮 -->
+				<div id="back-to-top" class="back-to-top-circle" title="回到顶部">
+					<i class="fas fa-arrow-up arrow-icon"></i>
+				</div>
+				
+				<!-- 右边三个图标 -->
+				<a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
+					<i class="fab fa-twitter"></i>
+				</a>
+				<a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
+					<i class="fab fa-facebook"></i>
+				</a>
+				<a href="mailto:admin@204090.xyz" class="email" title="发送邮件">
+					<i class="fas fa-envelope"></i>
+				</a>
 			</div>
-			
-			<!-- 右边三个图标 -->
-			<a href="https://twitter.com/ikun202491" class="twitter" target="_blank" title="Twitter">
-				<i class="fab fa-twitter"></i>
-			</a>
-			<a href="https://facebook.com/profile.php?id=61552671213764" class="facebook" target="_blank" title="Facebook">
-				<i class="fab fa-facebook"></i>
-			</a>
-			<a href="mailto:admin@204090.xyz" class="email" title="发送邮件">
-				<i class="fas fa-envelope"></i>
-			</a>
-		</div>
 
-		<!-- Astro, Theme 等图标 -->
-		<p class="footer-icons">
-			<a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a>
-			<a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a>
-			<a href="/sitemap-index.xml" target="_blank"><img alt="sitemap" src="/assets/images/footer/sitemap.svg" /></a>
-			<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
-		</p>
+			<!-- Astro, Theme 等图标 -->
+			<p class="footer-icons">
+				<a href="https://astro.build/" target="_blank" rel="noopener noreferrer"><img alt="Astro" src="/assets/images/footer/astro.svg" /></a>
+				<a href="https://github.com/uxiaohan/vhAstro-Theme" target="_blank" rel="noopener noreferrer"><img alt="vhAstro-Theme" src="/assets/images/footer/theme.svg" /></a>
+				<a href="/sitemap-index.xml" target="_blank"><img alt="sitemap" src="/assets/images/footer/sitemap.svg" /></a>
+				<a href="/rss.xml" target="_blank"><img alt="rss" src="/assets/images/footer/rss.svg" /></a>
+			</p>
 
-		<!-- 访问统计 -->
-		<div class="visitor-stats">
-			<div class="stats-container">
-				<span class="stat-item">
-					本日访问量 <span class="stat-number" id="dailyVisits">-</span> 次
-				</span>
-				<span class="stat-separator">|</span>
-				<span class="stat-item">
-					本日访客数 <span class="stat-number" id="dailyVisitors">-</span> 人
-				</span>
-				<span class="stat-separator">|</span>
-				<span class="stat-item">
-					本站总访问量 <span class="stat-number" id="totalVisits">-</span> 次
-				</span>
-				<span class="stat-separator">|</span>
-				<span class="stat-item">
-					总访客数 <span class="stat-number" id="totalVisitors">-</span> 人
-				</span>
+			<!-- 访问统计 -->
+			<div class="visitor-stats">
+				<div class="stats-container">
+					<span class="stat-item">
+						本日访问量 <span class="stat-number" id="dailyVisits">-</span> 次
+					</span>
+					<span class="stat-separator">|</span>
+					<span class="stat-item">
+						本日访客数 <span class="stat-number" id="dailyVisitors">-</span> 人
+					</span>
+					<span class="stat-separator">|</span>
+					<span class="stat-item">
+						本站总访问量 <span class="stat-number" id="totalVisits">-</span> 次
+					</span>
+					<span class="stat-separator">|</span>
+					<span class="stat-item">
+						总访客数 <span class="stat-number" id="totalVisitors">-</span> 人
+					</span>
+				</div>
 			</div>
-		</div>
 
-		<!-- 备案号和计时器容器 -->
-		<div class="bottom-info-row">
-			<!-- 备案号 -->
-			<div id="icp-container" class="cool-box-container">
-				<a href="https://icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
-			</div>
-			
-			<!-- 站点存活时间 -->
-			<div id="runtime-container" class="cool-box-container">
-				<span id="runtime-display">正在加载中...</span>
+			<!-- 备案号和计时器容器 -->
+			<div class="bottom-info-row">
+				<!-- 备案号 -->
+				<div id="icp-container" class="cool-box-container">
+					<a href="https://icp.gov.moe/?keyword=20258860" target="_blank">萌ICP备20258860号</a>
+				</div>
+				
+				<!-- 站点存活时间 -->
+				<div id="runtime-container" class="cool-box-container">
+					<span id="runtime-display">正在加载中...</span>
+				</div>
 			</div>
 		</div>
 
@@ -388,27 +409,13 @@
 					// 页面加载时，总是尝试追踪访问并更新统计
 					this.trackVisit();
 				}
-
-				// 从 worker 获取最新统计数据并更新 UI (作为备用)
-				async displayStatsFallback() {
-					try {
-						// 添加时间戳作为查询参数以防止缓存
-						const url = `${this.workerUrl}?t=${new Date().getTime()}`;
-						const response = await fetch(url, { method: 'GET' });
-						if (!response.ok) throw new Error(`Worker 响应状态: ${response.status}`);
-						const stats = await response.json();
-						this.updateUi(stats);
-					} catch (error) {
-						console.error("获取访客统计失败:", error);
-					}
-				}
-
+				
 				// 通过向 worker 发送数据来追踪访问
 				async trackVisit() {
 					const visitorId = this.getVisitorId();
 					const lastVisitDate = localStorage.getItem(this.lastVisitKey);
 					
-					// 已更新: 客户端同样使用北京时间来判断日期
+					// 客户端同样使用北京时间来判断日期，以确保与服务器同步
 					const beijingTimeNow = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
 					const today = beijingTimeNow.toISOString().split('T')[0];
 
@@ -435,15 +442,12 @@
 						if (isNewTotalVisitor) {
 							localStorage.setItem(this.visitorIdKey, visitorId);
 						}
-						// 只有在是新的一天访问时，才更新本地存储的日期
 						if (isNewDailyVisitor) {
 							localStorage.setItem(this.lastVisitKey, today);
 						}
 
 					} catch (error) {
 						console.error("追踪访问失败:", error);
-						// 如果追踪失败，至少尝试获取并显示当前的统计数据
-						this.displayStatsFallback();
 					}
 				}
 				
