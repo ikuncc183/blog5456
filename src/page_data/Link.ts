@@ -22,6 +22,12 @@ export default {
       "descr": "柳影曳曳，清酒孤灯，扬笔撒墨，心境如霜"
     },
     {
+      "name": "CM喂饭",
+      "link": "https://blog.cmliussss.com/",
+      "avatar": "https://avatars.githubusercontent.com/u/24787744?v=4",
+      "descr": "CM喂饭干货满满"
+    },
+    {
       "name": "二叉树树",
       "link": "https://2x.nz/",
       "avatar": "https://favicon.im/2x.nz?larger=true",
