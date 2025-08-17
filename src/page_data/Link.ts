@@ -64,6 +64,12 @@ export default {
       "descr": "难离难舍，想抱紧些"
     },
     {
+      "name": "焕昭君",
+      "link": "https://blog.huan666.de/",
+      "avatar": "https://blog.huan666.de/img/author.webp",
+      "descr": "知行合一，日拱一卒"
+    },
+    {
       "name": "無名小栈",
       "link": "https://blog.imsyy.top",
       "avatar": "https://pic.imgdb.cn/item/65bc52b0871b83018a06699d.png",
