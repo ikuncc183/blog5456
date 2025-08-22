@@ -97,8 +97,8 @@ export default {
     },
     // Waline 评论
     Waline: {
-      enable: true,
-      serverURL: 'https://comment.yao.bio'
+      enable: false,
+      serverURL: ''
     }
   },
   // Han Analytics 统计
