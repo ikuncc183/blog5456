@@ -90,7 +90,7 @@ export default {
   // 评论组件
   Comment: {
     Twikoo: { enable: false, envId: '' },
-    Waline: { enable: true, serverURL: 'https://comment.alina123.ggff.net' }
+    Waline: { enable: true, serverURL: 'https://comment.yao.bio' }
   },
   // Han Analytics 统计
   HanAnalytics: { enable: true, server: 'https://analytic.idrive.qzz.io', siteId: 'Hello-HanHexoBlog' },
