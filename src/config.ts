@@ -88,9 +88,18 @@ export default {
   // 博客音乐组件解析接口
   vhMusicApi: 'https://vh-api.4ce.cn/blog/meting',
   // 评论组件
+  // 评论组件（只允许同时开启一个）
   Comment: {
-    Twikoo: { enable: false, envId: '' },
-    Waline: { enable: true, serverURL: 'https://comment.yao.bio' }
+    // Twikoo 评论
+    Twikoo: {
+      enable: false,
+      envId: ''
+    },
+    // Waline 评论
+    Waline: {
+      enable: true,
+      serverURL: 'https://comment.yao.bio'
+    }
   },
   // Han Analytics 统计
   HanAnalytics: { enable: true, server: 'https://analytic.idrive.qzz.io', siteId: 'Hello-HanHexoBlog' },
